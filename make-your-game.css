@@ -1,0 +1,38 @@
+:root {
+    --background: hsl(0, 0%, 12%);
+    --overlay: rgba(0, 0, 0, 0.767);
+    --text: hsl(0, 0%, 80%);
+    --clear: hsl(0, 0%, 65%);
+    --disabled: hsl(0, 0%, 35%);
+    --purple: #975aa7;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto Mono", monospace;
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--background);
+}
+
+#svg-container {
+    background-color: aliceblue;
+}
+
+#fps-display {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 18px; /* Font size */
+    color: red; /* Text color */
+    padding: 5px 10px; /* Padding around the text */
+    z-index: 10; /* Ensure it is above other elements */
+  }

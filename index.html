@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>make-your-game</title>
+  <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;,">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="./make-your-game.css">
+  <style>
+    /* Optional: You can move some styles inline here if you'd like */
+  </style>
+</head>
+
+<body>
+    <span id="fps-display"></span>
+  <!-- SVG container for the game -->
+  <svg id="svg-container">
+    <!-- Game objects will be added here -->
+  </svg>
+
+  <!-- External JavaScript -->
+  <script type="module" src="main.js"></script>
+
+  <!-- Inline or optional: Init function might be inside the script -->
+  <script type="module">
+    import { main } from './main.js';
+    main();
+  </script>
+</body>
+
+</html>
