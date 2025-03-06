@@ -11,19 +11,6 @@ function getRandomLetter() {
     return letters[randomIndex];
 }
 
-function getMoveParameter(){    
-    const m = (Math.random() * 700) - 50;
-    const c = (Math.random() * 0.7) - 0.05;
-    const x = Math.random() * (svgContainerSize.width - 40) + 15;
-    return {
-        m: m,
-        c: c,
-        x: x,
-        y: m + (x*c),
-        direction: Math.random() < 0.5 ? 1 : -1,
-    }
-}
-
 let targets = [];
 const targetCount = 10;
 const template = document.getElementById('hidden-template');
@@ -32,17 +19,15 @@ export function createTargets(){
     for (let i = targets.length; i < targetCount; i++){
         const circle = template.getElementById('template-circle').cloneNode();
         const text = template.getElementById('template-text').cloneNode();
-        const moveParameter = getMoveParameter();
 
         const target = {
             circle: circle,
             text: text,
-            x: moveParameter.x,
-            y: moveParameter.y,
-            m: moveParameter.m,
-            c: moveParameter.c,
-            r: 15,
-            direction: moveParameter.direction,
+            x: Math.random() * (svgContainerSize.width - 100) + 50,
+            y: Math.random() * (svgContainerSize.height - 100) + 50,
+            dx: (Math.random() * 6) - 3,
+            dy: (Math.random() * 6) - 3,
+            r: 20,
             letter: getRandomLetter(),
             speed: (Math.random() * 2) + 1,
         }
@@ -64,19 +49,22 @@ export function createTargets(){
 
 export async function moveTargets() {
     targets.forEach(t => {
-        t.x += t.direction * t.speed;
-        t.y = t.m + (t.c * t.x);
+        t.x += t.dx;
+        t.y += t.dy;
 
-        if (t.x > svgContainerSize.width + 30 || t.x < -30){
-            t.direction = Math.random() < 0.5 ? 1 : -1;
-            t.speed = (t.direction < 0) ? -t.speed : t.speed;
-            t.x = (t.speed < 0) ? svgContainerSize.width + 30 : -30;
-            t.m = (Math.random() * 660) -30;
-            t.c = (Math.random() * 0.7) -0.05;
+        if (t.x > svgContainerSize.width+40 || t.x < -40) {
+            const randomDX = (Math.random() * 2.25)+0.75;
+            const randomDY = (Math.random() * 2.25)+0.75;
+            t.dx = (t.dx > 0) ? -randomDX : randomDX ;
+            t.dy = (t.dy > 0) ? randomDY : -randomDY ;
         };
 
-        if (t.y > svgContainerSize.height + 30) {t.y = -30;}
-        if (t.y < -30)t.y = svgContainerSize.height + 30;
+        if (t.y > svgContainerSize.height+40 || t.y < -40) {
+            const randomDX = (Math.random() * 2.25)+0.75;
+            const randomDY = (Math.random() * 2.25)+0.75;
+            t.dx = (t.dx > 0) ? randomDX : -randomDX ;
+            t.dy = (t.dy > 0) ? -randomDX : randomDX ;
+        }
 
         t.circle.setAttribute("cx", t.x);
         t.circle.setAttribute("cy", t.y);
