@@ -15,10 +15,11 @@ const speedVar = {
     yRange: 4.5
 }
 
-function getRandomLetter() {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const randomIndex = Math.floor(Math.random() * letters.length);
-    return letters[randomIndex];
+let validAnswers = []; // This will store all the missing letters from each wordList
+
+export function setValidAnswers(answers) {
+    validAnswers = answers;
+    //console.log("Valid answers set: ", validAnswers);
 }
 
 let targets = [];
@@ -31,36 +32,43 @@ export function initTargets(){
     createTargets();
 }
 
-function createTargets(){
-    for (let i = targets.length; i < targetCount; i++){
-        const circle = template.getElementById('template-circle').cloneNode();
-        const text = template.getElementById('template-text').cloneNode();
-
-        const target = {
-            circle: circle,
-            text: text,
-            x: Math.random() * (svgContainerSize.width - 100) + 50,
-            y: Math.random() * (svgContainerSize.height - 100) + 50,
-            dx: (Math.random() * speedVar.xRange) + speedVar.xMin,
-            dy: (Math.random() * speedVar.yRange) + speedVar.yMin,
-            r: 20,
-            letter: getRandomLetter(),
-            speed: (Math.random() * 2) + 1,
-        }
-        circle.setAttribute('cx', target.x);
-        circle.setAttribute('cy', target.y);
-        circle.setAttribute('fill', 'red');
-        
-        text.setAttribute('x', target.x);
-        text.setAttribute('y', target.y+10);
-        text.textContent = target.letter;
-
-        targetsLayer.appendChild(circle);
-        targetsLayer.appendChild(text);
-        circle.classList.add('target-fade-in');
-        text.classList.add('target-fade-in');
-        targets.push(target);
+let currentIndex = 0;
+export function createTargets(){
+    for (let i = 0; i < validAnswers.length; i++) {
+        const letter = validAnswers[i];
+        createTarget(letter);
+        i++;
     }
+}
+
+function createTarget(letter) {
+    const circle = template.getElementById('template-circle').cloneNode();
+    const text = template.getElementById('template-text').cloneNode();
+
+    const target = {
+        circle: circle,
+        text: text,
+        x: Math.random() * (svgContainerSize.width - 100) + 50,
+        y: Math.random() * (svgContainerSize.height - 100) + 50,
+        dx: (Math.random() * speedVar.xRange) + speedVar.xMin,
+        dy: (Math.random() * speedVar.yRange) + speedVar.yMin,
+        r: 20,
+        letter: letter,
+        speed: (Math.random() * 2) + 1,
+    }
+    circle.setAttribute('cx', target.x);
+    circle.setAttribute('cy', target.y);
+    circle.setAttribute('fill', 'red');
+    
+    text.setAttribute('x', target.x);
+    text.setAttribute('y', target.y+10);
+    text.textContent = target.letter;
+
+    targetsLayer.appendChild(circle);
+    targetsLayer.appendChild(text);
+    circle.classList.add('target-fade-in');
+    text.classList.add('target-fade-in');
+    targets.push(target);
 }
 
 export async function moveTargets() {

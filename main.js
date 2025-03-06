@@ -1,13 +1,25 @@
 import * as p from './player.js';
 import * as t from './target.js';
 import * as u from './ui.js';
-const timeDuration = 30;
+import { generateWordList, displayWordsSequentially, collectMissingLetters } from './words.js';
+const timeDuration = 60;
+
 
 //--------------- initialize and start gameLoop ---------------//
 export async function main() {
     p.initPlayer();
-    t.initTargets();
     u.initTimer(timeDuration);
+
+    // Generate word list and display words
+    const questOneWordList = await generateWordList('questOne');
+    displayWordsSequentially(questOneWordList);
+
+    //Collect the missing letters and set them as valid answers
+    const missingLetters = await collectMissingLetters(questOneWordList);
+    
+    t.setValidAnswers(missingLetters);
+    t.initTargets();
+
     requestAnimationFrame(gameLoop);
 }
 
