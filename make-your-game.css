@@ -24,7 +24,18 @@ body {
 }
 
 #svg-container {
-    background-color: aliceblue;
+    background-color: white;
+}
+
+.horizontal, .vertical {
+    stroke: green;
+    stroke-width: 1;
+}
+
+.crosshair-circle {
+    stroke: green;
+    stroke-width: 2;
+    fill: transparent;
 }
 
 #fps-display {
@@ -35,4 +46,19 @@ body {
     color: red; /* Text color */
     padding: 5px 10px; /* Padding around the text */
     z-index: 10; /* Ensure it is above other elements */
-  }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(200px);
+    }
+}
+
+.target-removal {
+    animation: fadeOut 1s forwards;  /* Fade out and scale down in 0.5s */
+}

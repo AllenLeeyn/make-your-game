@@ -10,16 +10,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="./make-your-game.css">
-  <style>
-    /* Optional: You can move some styles inline here if you'd like */
-  </style>
 </head>
 
 <body>
-    <span id="fps-display"></span>
+  <div id="fps-display"></div>
   <!-- SVG container for the game -->
-  <svg id="svg-container">
+  <svg id="svg-container" width="800" height="600">
     <!-- Game objects will be added here -->
+     <g id="targetsLayer"></g>
+     <g id="playerLayer"></g>
+     <g id="ui"></g>
   </svg>
 
   <!-- External JavaScript -->
