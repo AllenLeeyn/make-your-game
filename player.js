@@ -27,7 +27,7 @@ export const keysPressed = {
 export function updatePlayerPosition() {
     if (keysPressed['ArrowUp']) {
         const newY = player.y - player.speed;
-        player.y = (newY < player.radius) ? player.radius : newY;
+        player.y = (newY < player.radius+60) ? player.radius+60 : newY;
     };
     if (keysPressed['ArrowDown']) {
         const newY = player.y + player.speed;
@@ -45,26 +45,27 @@ export function updatePlayerPosition() {
 
     player.yAxis.setAttribute('y1', player.y);
     player.yAxis.setAttribute('y2', player.y);
-
     player.xAxis.setAttribute('x1', player.x);
     player.xAxis.setAttribute('x2', player.x);
-
     player.circle.setAttribute('cx', player.x);
     player.circle.setAttribute('cy', player.y); 
 }
 
 // Function to initialize the player
 export function initPlayer() {
+    player.y = 300;
+    player.x = 400;
+    
     player.yAxis.setAttribute('x1', 0);
     player.yAxis.setAttribute('y1', player.y);
-    player.yAxis.setAttribute('x2', window.innerWidth);
+    player.yAxis.setAttribute('x2', svgContainerSize.width);
     player.yAxis.setAttribute('y2', player.y);
     player.yAxis.classList.add('vertical');
 
     player.xAxis.setAttribute('x1', player.x);
     player.xAxis.setAttribute('y1', 0);
     player.xAxis.setAttribute('x2', player.x);
-    player.xAxis.setAttribute('y2', window.innerHeight);
+    player.xAxis.setAttribute('y2', svgContainerSize.height);
     player.xAxis.classList.add('horizontal');
 
     player.circle.setAttribute('cx', player.x);
@@ -76,5 +77,3 @@ export function initPlayer() {
     playerLayer.appendChild(player.yAxis);
     playerLayer.appendChild(player.circle);
 }
-
-console.log(player.radius + 15)

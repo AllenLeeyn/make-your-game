@@ -48,6 +48,12 @@ body {
     z-index: 10; /* Ensure it is above other elements */
 }
 
+/* Optional: Styling for the top bar */
+#ui rect {
+        stroke: gray;  /* White border for the top bar (optional) */
+        stroke-width: 5px;  /* Optional: border thickness */
+}
+
 @keyframes fadeIn {
     0% {
         opacity: 0;

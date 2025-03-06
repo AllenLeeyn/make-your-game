@@ -1,26 +1,32 @@
 import * as p from './player.js';
 import * as t from './target.js';
-
-const uiLayer = document.getElementById('uiLayer')
+import * as u from './ui.js';
+const timeDuration = 30;
 
 //--------------- initialize and start gameLoop ---------------//
 export async function main() {
-    t.createTargets();
     p.initPlayer();
+    t.initTargets();
+    u.initTimer(timeDuration);
     requestAnimationFrame(gameLoop);
 }
 
 //--------------- game logic ---------------//
 function gameLoop(timestamp) {
-    p.updatePlayerPosition(); // Update player position
-    t.moveTargets();           // Update target positions
+    if (!u.isTimeUp){
+        p.updatePlayerPosition(); // Update player position
+        t.moveTargets();           // Update target positions
 
-    renderFps(timestamp);
+        renderFps(timestamp);
+    } else {
+        p.initPlayer();
+        t.initTargets();
+        u.initTimer(timeDuration);
+    }
     requestAnimationFrame(gameLoop); // Keep the game loop running
 }
 
 //--------------- FPS counter ---------------//
-
 // Create an SVG element to show FPS
 const fpsDisplay = document.getElementById("fps-display");
 
@@ -42,7 +48,7 @@ async function renderFps(timestamp) {
     fpsDisplay.textContent = `FPS: ${currentFPS}`;
 }
 
-//--------------- event handlers ---------------//
+//--------------- player input ---------------//
 // Handle keydown events
 function handleKeyDown(event) {
     if (event.key in p.keysPressed) {
