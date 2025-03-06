@@ -5,46 +5,61 @@ const svgContainerSize = {
     width: 800
 };
 
+let validAnswers = []; // This will store all the missing letters from each wordList
+
+export function setValidAnswers(answers) {
+    validAnswers = answers;
+    //console.log("Valid answers set: ", validAnswers);
+}
+
 function getRandomLetter() {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const randomIndex = Math.floor(Math.random() * letters.length);
-    return letters[randomIndex];
+    const combinedLetters = [...letters, ...validAnswers]; // Combine random letters with valid answers
+    const randomIndex = Math.floor(Math.random() * combinedLetters.length);
+    return combinedLetters[randomIndex];
 }
 
 let targets = [];
 const targetCount = 10;
 const template = document.getElementById('hidden-template');
+let currentIndex = 0;
 
 export function createTargets(){
-    for (let i = targets.length; i < targetCount; i++){
-        const circle = template.getElementById('template-circle').cloneNode();
-        const text = template.getElementById('template-text').cloneNode();
-
-        const target = {
-            circle: circle,
-            text: text,
-            x: Math.random() * (svgContainerSize.width - 100) + 50,
-            y: Math.random() * (svgContainerSize.height - 100) + 50,
-            dx: (Math.random() * 6) - 3,
-            dy: (Math.random() * 6) - 3,
-            r: 20,
-            letter: getRandomLetter(),
-            speed: (Math.random() * 2) + 1,
-        }
-        circle.setAttribute('cx', target.x);
-        circle.setAttribute('cy', target.y);
-        circle.setAttribute('fill', 'red');
-        
-        text.setAttribute('x', target.x);
-        text.setAttribute('y', target.y+10);
-        text.textContent = target.letter;
-
-        targetsLayer.appendChild(circle);
-        targetsLayer.appendChild(text);
-        circle.classList.add('target-fade-in');
-        text.classList.add('target-fade-in');
-        targets.push(target);
+    for (let i = 0; i < validAnswers.length; i++) {
+        const letter = validAnswers[i];
+        createTarget(letter);
+        i++;
     }
+}
+
+function createTarget(letter) {
+    const circle = template.getElementById('template-circle').cloneNode();
+    const text = template.getElementById('template-text').cloneNode();
+
+    const target = {
+        circle: circle,
+        text: text,
+        x: Math.random() * (svgContainerSize.width - 100) + 50,
+        y: Math.random() * (svgContainerSize.height - 100) + 50,
+        dx: (Math.random() * 1) - 0.5,
+        dy: (Math.random() * 1) - 0.5,
+        r: 20,
+        letter: letter,
+        speed: (Math.random() * 2) + 1,
+    }
+    circle.setAttribute('cx', target.x);
+    circle.setAttribute('cy', target.y);
+    circle.setAttribute('fill', 'red');
+    
+    text.setAttribute('x', target.x);
+    text.setAttribute('y', target.y+10);
+    text.textContent = target.letter;
+
+    targetsLayer.appendChild(circle);
+    targetsLayer.appendChild(text);
+    circle.classList.add('target-fade-in');
+    text.classList.add('target-fade-in');
+    targets.push(target);
 }
 
 export async function moveTargets() {
@@ -53,15 +68,15 @@ export async function moveTargets() {
         t.y += t.dy;
 
         if (t.x > svgContainerSize.width+40 || t.x < -40) {
-            const randomDX = (Math.random() * 2.25)+0.75;
-            const randomDY = (Math.random() * 2.25)+0.75;
+            const randomDX = (Math.random() * 1)+0;
+            const randomDY = (Math.random() * 1)+0;
             t.dx = (t.dx > 0) ? -randomDX : randomDX ;
             t.dy = (t.dy > 0) ? randomDY : -randomDY ;
         };
 
         if (t.y > svgContainerSize.height+40 || t.y < -40) {
-            const randomDX = (Math.random() * 2.25)+0.75;
-            const randomDY = (Math.random() * 2.25)+0.75;
+            const randomDX = (Math.random() * 2)+0;
+            const randomDY = (Math.random() * 2)+0;
             t.dx = (t.dx > 0) ? randomDX : -randomDX ;
             t.dy = (t.dy > 0) ? -randomDX : randomDX ;
         }

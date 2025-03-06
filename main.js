@@ -1,13 +1,23 @@
 import * as p from './player.js';
 import * as t from './target.js';
+import { generateWordList, displayWordsSequentially, collectMissingLetters } from './words.js';
 
 const uiLayer = document.getElementById('uiLayer')
+const wordListContainer = document.getElementById('wordListContainer');
 
 //--------------- initialize and start gameLoop ---------------//
 export async function main() {
     t.createTargets();
     p.initPlayer();
     requestAnimationFrame(gameLoop);
+    // Generate word list and display words
+    const questOneWordList = await generateWordList('questOne');
+    displayWordsSequentially(questOneWordList);
+
+    //Collect the missing letters and set them as valid answers
+    const missingLetters = await collectMissingLetters(questOneWordList);
+    
+    t.setValidAnswers(missingLetters);
 }
 
 //--------------- game logic ---------------//
@@ -61,3 +71,5 @@ function handleKeyUp(event) {
 // Add event listeners for keydown and keyup
 document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
+
+document.addEventListener('DOMContentLoaded', main);
