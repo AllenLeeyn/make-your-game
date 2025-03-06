@@ -48,6 +48,19 @@ body {
     z-index: 10; /* Ensure it is above other elements */
 }
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.target-fade-in {
+    animation: fadeIn 1s ease-out forwards; /* Fade in over 1 second */
+}
+
 @keyframes fadeOut {
     0% {
         opacity: 1;
@@ -60,5 +73,5 @@ body {
 }
 
 .target-removal {
-    animation: fadeOut 1s forwards;  /* Fade out and scale down in 0.5s */
+    animation: fadeOut 1s forwards;
 }
