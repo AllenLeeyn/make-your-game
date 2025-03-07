@@ -1,44 +1,57 @@
 import * as p from './player.js';
 import * as t from './target.js';
 import * as u from './ui.js';
-import { generateWordList, displayWordsSequentially, collectMissingLetters } from './words.js';
-const timeDuration = 60;
+import { getWordsAndTargets } from './words.js';
 
+export const gameState = {
+    timeDuration: 100,
+    wordList: [],
+    currentWordIndex: 0,
+    targetList: [],
+    state: 'atStart',
+};
 
 //--------------- initialize and start gameLoop ---------------//
 export async function main() {
     // show main menu
+
     // prepare game parameters and data
+    [gameState.wordList, gameState.targetList] = await getWordsAndTargets('questOne');
+    //create all targets
+    t.createTargets();
+
     // initalize game 
     p.initPlayer();
-    u.initTimer(timeDuration);
-
-    // Generate word list and display words
-    const questOneWordList = await generateWordList('questOne');
-    displayWordsSequentially(questOneWordList);
-
-    //Collect the missing letters and set them as valid answers
-    const missingLetters = await collectMissingLetters(questOneWordList);
-    
-    t.setValidAnswers(missingLetters);
     t.initTargets();
-
+    u.initTimer(gameState.timeDuration);
+    u.initWordDisplay();
+    
+    gameState.state = 'running';
     requestAnimationFrame(gameLoop);
 }
 
 //--------------- game logic ---------------//
 function gameLoop(timestamp) {
-    if (!u.isTimeUp){
+    if (gameState.state === 'running'){
         p.updatePlayerPosition(); // Update player position
+        t.addTargets();
         t.moveTargets();           // Update target positions
 
         renderFps(timestamp);
-    } else {
+        requestAnimationFrame(gameLoop); // Keep the game loop running
+    } 
+    if (gameState.state === 'timeIsUp') {
+        console.log('Time is up');
+        // show gameover menu
+    }
+    if (gameState.state === 'retry') {
+        t.createTargets();
         p.initPlayer();
         t.initTargets();
-        u.initTimer(timeDuration);
+        u.initTimer(gameState.timeDuration);
+        gameState.state = 'running';
+        requestAnimationFrame(gameLoop);
     }
-    requestAnimationFrame(gameLoop); // Keep the game loop running
 }
 
 //--------------- FPS counter ---------------//
@@ -69,7 +82,19 @@ function handleKeyDown(event) {
     if (event.key in p.keysPressed) {
       p.keysPressed[event.key] = true; // Mark the key as pressed
     }
-    if (event.key === ' ') t.checkTargetHit(p);
+    if (event.key === ' ' && gameState.state === 'running') t.checkTargetHit(p);
+    if (event.key === 'Escape') {
+        if (gameState.state === 'running') {
+            gameState.state = 'paused';
+        } else if (gameState.state === 'paused') {
+            gameState.state = 'running';
+        };
+        if (gameState.state === 'timeIsUp') {
+            gameState.state = 'retry';
+        };
+        console.log(gameState.state)
+        requestAnimationFrame(gameLoop);
+    }
 }
   
 // Handle keyup events
