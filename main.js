@@ -7,6 +7,9 @@ const timeDuration = 60;
 
 //--------------- initialize and start gameLoop ---------------//
 export async function main() {
+    // show main menu
+    // prepare game parameters and data
+    // initalize game 
     p.initPlayer();
     u.initTimer(timeDuration);
 

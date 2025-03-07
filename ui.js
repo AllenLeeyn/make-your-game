@@ -10,6 +10,7 @@ export function initTimer(timeDuration){
     isTimeUp = false;
     timerInterval = setInterval(updateTimer, 1000);  // Update the timer every second
 }
+
 // Function to update the timer display
 function updateTimer() {
     if (timerValue > 0) {

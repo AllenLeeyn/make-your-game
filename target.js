@@ -1,3 +1,5 @@
+import { player } from "./player.js";
+
 const targetsLayer = document.getElementById('targetsLayer')
 const template = document.getElementById('hidden-template');
 
@@ -101,6 +103,9 @@ export async function moveTargets() {
 };
 
 export function checkTargetHit(p) {
+    console.log('bang')
+    const bulletCircle = addBulletHole(player.x, player.y);
+
     targets.forEach(target => {
         const dx = p.player.x - target.x;
         const dy = p.player.y - target.y;
@@ -109,14 +114,31 @@ export function checkTargetHit(p) {
         if (distance <= p.player.radius + 1) {
             console.log("Hit target: ", target.letter);
             targets = targets.filter(t => t !== target);
+            bulletCircle.classList.add('target-removal');
             target.circle.classList.add('target-removal');
             target.text.classList.add('target-removal');
 
             setTimeout(() => {
-                // Remove the target from the SVG after the timeout
                 targetsLayer.removeChild(target.circle);
                 targetsLayer.removeChild(target.text);
-            }, 1000); // 500ms delay (0.5s)
+            }, 1000);
         }
     });
+}
+
+function addBulletHole(x, y) {
+    const bulletCircle = document.getElementById('bullet-circle').cloneNode();
+    
+    bulletCircle.classList.remove('target-removal');
+
+    bulletCircle.setAttribute('cx', x);
+    bulletCircle.setAttribute('cy', y);
+
+    targetsLayer.appendChild(bulletCircle);
+
+    setTimeout(() => {
+        targetsLayer.removeChild(bulletCircle);
+    }, 1000);
+
+    return bulletCircle;
 }
