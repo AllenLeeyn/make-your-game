@@ -31,7 +31,7 @@ export function updatePlayerPosition() {
     };
     if (keysPressed['ArrowDown']) {
         const newY = player.y + player.speed;
-        player.y = (newY > svgContainerSize.height-player.radius) ? svgContainerSize.height-player.radius : newY;
+        player.y = (newY > svgContainerSize.height-player.radius-60) ? svgContainerSize.height-player.radius-60 : newY;
 
     };
     if (keysPressed['ArrowLeft']) {
@@ -55,7 +55,6 @@ export function updatePlayerPosition() {
 export function initPlayer() {
     player.y = 300;
     player.x = 400;
-    
     player.yAxis.setAttribute('x1', 0);
     player.yAxis.setAttribute('y1', player.y);
     player.yAxis.setAttribute('x2', svgContainerSize.width);
