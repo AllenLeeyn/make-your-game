@@ -81,3 +81,22 @@ body {
 .target-removal {
     animation: fadeOut 1s forwards;
 }
+
+/* Pause Menu */
+#pause-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}

@@ -1,8 +1,11 @@
 import * as p from './player.js';
 import * as t from './target.js';
 import * as u from './ui.js';
+import * as m from './menu.js';
 import { generateWordList, displayWordsSequentially, collectMissingLetters } from './words.js';
 const timeDuration = 60;
+let isGamePaused = false;
+
 
 
 //--------------- initialize and start gameLoop ---------------//
@@ -28,7 +31,7 @@ export async function main() {
 
 //--------------- game logic ---------------//
 function gameLoop(timestamp) {
-    if (!u.isTimeUp){
+    if (!u.isTimeUp && !isGamePaused) {
         p.updatePlayerPosition(); // Update player position
         t.moveTargets();           // Update target positions
 
@@ -70,13 +73,41 @@ function handleKeyDown(event) {
       p.keysPressed[event.key] = true; // Mark the key as pressed
     }
     if (event.key === ' ') t.checkTargetHit(p);
+    if (event.key === 'b') {
+        if (isGamePaused) {
+            resumeGameLoop();
+        } else {
+            pauseGameLoop();
+        }
+    }
 }
-  
+
 // Handle keyup events
 function handleKeyUp(event) {
     if (event.key in p.keysPressed) {
       p.keysPressed[event.key] = false; // Mark the key as released
     }
+}
+
+//--------------- Pause Menu ------------------//
+
+function pauseGameLoop() {
+    isGamePaused = true;
+    m.showPauseMenu(); 
+}
+export function resumeGameLoop() {
+    isGamePaused = false;
+    m.hidePauseMenu();
+}
+
+function restartGameLoop() {
+    isGamePaused = false;
+    m.hidePauseMenu();
+    
+    // Logic to restart the game (e.g., reset player position, targets, timer)
+    p.initPlayer();
+    t.initTargets();
+    u.initTimer(timeDuration);
 }
 
 // Add event listeners for keydown and keyup
