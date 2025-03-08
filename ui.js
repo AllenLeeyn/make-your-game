@@ -30,7 +30,7 @@ function updateTimer() {
 
 let timerInterval;
 
-export function initWordDisplay() {
-    const [word] = Object.keys(m.gameState.wordList[0]);
+export function showNextWord() {
+    const [word] = Object.keys(m.gameState.wordList[m.gameState.currentWordIndex]);
     wordDisplay.textContent = word;
 }

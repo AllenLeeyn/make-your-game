@@ -1,5 +1,6 @@
 import { player } from "./player.js";
 import { gameState } from "./main.js";
+import { showNextWord } from "./ui.js";
 
 const targetsLayer = document.getElementById('targetsLayer')
 const wordDisplay = document.getElementById('word-display');
@@ -21,7 +22,7 @@ const randomDX = () => (Math.random() * speedVar.xRange) + speedVar.xMin;
 const randomDY = () => (Math.random() * speedVar.yRange) + speedVar.yMin;
 
 let targets = [];
-let lastWordIndex = 0;
+let lastTargetIndex = 0;
 
 export function createTargets(){
     targets.forEach(t=>{
@@ -31,7 +32,7 @@ export function createTargets(){
     targets = [];
     for (let i = 0; i < gameState.targetList.length; i++) {
         const letter = gameState.targetList[i];
-        createTarget(letter);
+        createTarget(letter, i);
     }
 }
 
@@ -42,29 +43,44 @@ export function initTargets(){
         t.text.setAttribute('y', -100);
     });
     gameState.currentWordIndex = 0;
-    lastWordIndex = 0;
+    lastTargetIndex = 0;
     addTargets();
 }
 
 export function addTargets(){
-    if (lastWordIndex >= targets.length) return;
-    for (let i = lastWordIndex; lastWordIndex < gameState.currentWordIndex+10; i++) {
-        targets[i].x = Math.random() * (svgContainerSize.width - 100) + 50,
-        targets[i].y = Math.random() * (svgContainerSize.height - 100) + 50,
-        targets[i].circle.setAttribute('cy', targets[i].y);
-        targets[i].text.setAttribute('y', targets[i].y+10);
-        targets[i].circle.classList.add('target-fade-in');
-        targets[i].text.classList.add('target-fade-in');
-        targets[i].state = true;
-        lastWordIndex = i+1;
+    if (lastTargetIndex >= targets.length) return;
+    for (let i = lastTargetIndex; lastTargetIndex < gameState.currentWordIndex+10; i++) {
+        addTarget(i);
+        lastTargetIndex = i+1;
     };
 }
 
-function createTarget(letter) {
+function addTarget(i){
+    console.log(`${targets[i].index}: ${targets[i].letter} added`)
+    targets[i].x = Math.random() * (svgContainerSize.width - 100) + 50,
+    targets[i].y = Math.random() * (svgContainerSize.height - 100) + 50,
+    targets[i].circle.setAttribute('cy', targets[i].y);
+    targets[i].text.setAttribute('y', targets[i].y+10);
+    targets[i].circle.classList.remove('target-removal');
+    targets[i].text.classList.remove('target-removal');
+    targets[i].circle.classList.add('target-fade-in');
+    targets[i].text.classList.add('target-fade-in');
+    targets[i].state = true;
+}
+
+function hideTarget(i) {
+    console.log(`${targets[i].index}: ${targets[i].letter} hide`)
+    targets[i].state = false;
+    targets[i].circle.setAttribute('cy', -100);
+    targets[i].text.setAttribute('y', -100);
+}
+
+export function createTarget(letter, i) {
     const circle = template.getElementById('template-circle').cloneNode();
     const text = template.getElementById('template-text').cloneNode();
 
     const target = {
+        index: i,
         state: false,
         circle: circle,
         text: text,
@@ -107,6 +123,9 @@ export async function moveTargets() {
     });
 
 };
+const HIT = 'hit';
+const MISS = 'miss';
+const BIM = 'bim';
 
 export function checkTargetHit(p) {
     console.log('bang')
@@ -118,47 +137,56 @@ export function checkTargetHit(p) {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance <= p.player.radius + 1) {
-            console.log("Hit target: ", target.letter);
-            targets = targets.filter(t => t !== target);
+            console.log(`${target.index}: ${target.letter} hit`)
             bulletCircle.classList.add('target-removal');
             target.circle.classList.add('target-removal');
             target.text.classList.add('target-removal');
-            checkWordCompletion(target.letter);
-            //gameState.currentWordIndex++;
+            const result = checkWordCompletion(target.letter);
+
+            console.log(result)
+            if (result === BIM) {
+                gameState.currentWordIndex++;
+                showNextWord()
+            }
 
             setTimeout(() => {
-                targetsLayer.removeChild(target.circle);
-                targetsLayer.removeChild(target.text);
+                hideTarget(target.index);
             }, 1000);
+
+            if (result === MISS) {
+                setTimeout(() => {
+                    addTarget(target.index);
+                }, 2000);
+            }
         }
     });
 }
 
 function checkWordCompletion(letter){
     const wordObj = gameState.wordList[gameState.currentWordIndex];
+    let [key, value] = Object.entries(wordObj)[0];
     const word = wordDisplay.textContent;
     const parts = word.split(/(?=[_A-Z])|(?<=[_A-Z])/);
     
     let underscoreCount = 0;
-    for (let key in wordObj) {
-        const value = wordObj[key];
-        for (let i = 0; i < value.length; i++) {
-            if (value[i] === letter){
-                for (let j = 0; j < parts.length; j++) {
-                    if(parts[j] === '_') underscoreCount++;
+    for (let i = 0; i < value.length; i++) {
+        if (value[i] === letter){
+            for (let j = 0; j < parts.length; j++) {
+                if(parts[j] === '_') underscoreCount++;
 
-                    if (underscoreCount === i+1){
-                        parts[j] = letter;
-                        break;
-                    }
+                if (underscoreCount === i+1){
+                    parts[j] = letter;
+                    break;
                 }
-                console.log(parts);
-                wordDisplay.textContent = parts.join('');
-                gameState.wordList[gameState.currentWordIndex] = value.filter((v) => v !== letter)
-                console.log(gameState.wordList[gameState.currentWordIndex])
             }
+            wordDisplay.textContent = parts.join('');
+            value = value.filter((v) => v !== letter);
+            gameState.wordList[gameState.currentWordIndex][key] = value;
+            if (value.length === 0) return BIM;
+            return HIT;
         }
     }
+    return MISS
 }
 
 function addBulletHole(x, y) {

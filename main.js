@@ -12,9 +12,13 @@ export const gameState = {
 };
 
 //--------------- initialize and start gameLoop ---------------//
-export async function main() {
+export function main() {
     // show main menu
 
+    initGame();
+}
+
+async function initGame() {
     // prepare game parameters and data
     [gameState.wordList, gameState.targetList] = await getWordsAndTargets('questOne');
     //create all targets
@@ -24,7 +28,7 @@ export async function main() {
     p.initPlayer();
     t.initTargets();
     u.initTimer(gameState.timeDuration);
-    u.initWordDisplay();
+    u.showNextWord();
     
     gameState.state = 'running';
     requestAnimationFrame(gameLoop);
@@ -34,7 +38,6 @@ export async function main() {
 function gameLoop(timestamp) {
     if (gameState.state === 'running'){
         p.updatePlayerPosition(); // Update player position
-        t.addTargets();
         t.moveTargets();           // Update target positions
 
         renderFps(timestamp);
@@ -45,12 +48,7 @@ function gameLoop(timestamp) {
         // show gameover menu
     }
     if (gameState.state === 'retry') {
-        t.createTargets();
-        p.initPlayer();
-        t.initTargets();
-        u.initTimer(gameState.timeDuration);
-        gameState.state = 'running';
-        requestAnimationFrame(gameLoop);
+        initGame();
     }
 }
 
