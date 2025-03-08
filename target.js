@@ -129,6 +129,7 @@ const BIM = 'bim';
 
 export function checkTargetHit(p) {
     console.log('bang')
+    p.player.bullets -= 1;
     const bulletCircle = addBulletHole(player.x, player.y);
 
     targets.forEach(target => {

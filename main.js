@@ -28,10 +28,11 @@ async function initGame() {
     p.initPlayer();
     t.initTargets();
     u.initTimer(gameState.timeDuration);
+    p.addBulletCount();
     u.showNextWord();
     
     gameState.state = 'running';
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(gameLoop); 
 }
 
 //--------------- game logic ---------------//
@@ -39,10 +40,13 @@ function gameLoop(timestamp) {
     if (gameState.state === 'running'){
         p.updatePlayerPosition(); // Update player position
         t.moveTargets();           // Update target positions
-
+        p.addBulletCount();     // Update bullet count
         renderFps(timestamp);
         requestAnimationFrame(gameLoop); // Keep the game loop running
     } 
+    if (p.player.bullets <= 0) {
+        gameState.state = 'timeIsUp';
+    }
     if (gameState.state === 'timeIsUp') {
         console.log('Time is up');
         // show gameover menu

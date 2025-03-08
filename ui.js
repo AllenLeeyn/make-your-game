@@ -30,6 +30,22 @@ function updateTimer() {
 
 let timerInterval;
 
+const bulletCountElement = document.getElementById('bulletCount');
+export function shoot() {
+    const bulletCount = player.bullets;
+    if (bulletCount > 0) {
+        bulletCount--;
+        bulletCountElement.textContent = `Bullets: ${player.bullets}`;
+        console.log(`Bullet remaining: ${player.bullets}`);
+        //player.bulletElement.textContent = player.bullets;
+    } else {
+        bulletCountElement.textContent = 'No bullets left!';
+        isTimeUp = true;
+        console.log('No bullets left! Game over.');
+    }
+}
+
+
 export function showNextWord() {
     const [word] = Object.keys(m.gameState.wordList[m.gameState.currentWordIndex]);
     wordDisplay.textContent = word;
