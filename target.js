@@ -1,9 +1,10 @@
 import { player } from "./player.js";
+import { gameState } from "./main.js";
+import { showNextWord } from "./ui.js";
 
 const targetsLayer = document.getElementById('targetsLayer')
+const wordDisplay = document.getElementById('word-display');
 const template = document.getElementById('hidden-template');
-
-const targetCount = 10;
 
 const svgContainerSize = {
     height: 600,
@@ -13,94 +14,133 @@ const svgContainerSize = {
 const speedVar = {
     xMin: 1,
     yMin: 0.5,
-    xRange: 4,
-    yRange: 4.5
+    xRange: 1,
+    yRange: 0.5,
 }
 
-let validAnswers = []; // This will store all the missing letters from each wordList
-
-export function setValidAnswers(answers) {
-    validAnswers = answers;
-    //console.log("Valid answers set: ", validAnswers);
-}
+const randomDX = () => (Math.random() * speedVar.xRange) + speedVar.xMin;
+const randomDY = () => (Math.random() * speedVar.yRange) + speedVar.yMin;
 
 let targets = [];
-export function initTargets(){
+let lastTargetIndex = 0;
+
+function getRandomLetter() {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const randomIndex = Math.floor(Math.random() * letters.length);
+    return letters[randomIndex];
+}
+
+export function createTargets(){
     targets.forEach(t=>{
         targetsLayer.removeChild(t.circle);
         targetsLayer.removeChild(t.text);
     });
     targets = [];
-    createTargets();
-}
 
-let currentIndex = 0;
-export function createTargets(){
-    for (let i = 0; i < validAnswers.length; i++) {
-        const letter = validAnswers[i];
-        createTarget(letter);
-        i++;
+    // insert 5 random letters into target list 
+    for (let i = 0; i < 5; i++) {
+        const letter = getRandomLetter();
+        createTarget(letter, i);
+    }
+
+    for (let i = 0; i < gameState.targetList.length; i++) {
+        const letter = gameState.targetList[i];
+        createTarget(letter, i+5);
     }
 }
 
-function createTarget(letter) {
+export function createTarget(letter, i) {
     const circle = template.getElementById('template-circle').cloneNode();
     const text = template.getElementById('template-text').cloneNode();
 
     const target = {
+        index: i,
+        state: false,
         circle: circle,
         text: text,
-        x: Math.random() * (svgContainerSize.width - 100) + 50,
-        y: Math.random() * (svgContainerSize.height - 100) + 50,
         dx: (Math.random() * speedVar.xRange) + speedVar.xMin,
         dy: (Math.random() * speedVar.yRange) + speedVar.yMin,
         r: 20,
         letter: letter,
         speed: (Math.random() * 2) + 1,
     }
-    circle.setAttribute('cx', target.x);
-    circle.setAttribute('cy', target.y);
-    circle.setAttribute('fill', 'red');
-    
-    text.setAttribute('x', target.x);
-    text.setAttribute('y', target.y+10);
     text.textContent = target.letter;
 
     targetsLayer.appendChild(circle);
     targetsLayer.appendChild(text);
-    circle.classList.add('target-fade-in');
-    text.classList.add('target-fade-in');
     targets.push(target);
+}
+
+export function initTargets(){
+    targets.forEach(t=>{
+        t.state = false;
+        t.circle.setAttribute('cy', -100);
+        t.text.setAttribute('y', -100);
+    });
+    gameState.currentWordIndex = 0;
+    gameState.currentTargetIndex = 0;
+    lastTargetIndex = 0;
+    addTargets();
+}
+
+export function addTargets(){
+    if (lastTargetIndex >= targets.length) return;
+    for (let i = lastTargetIndex; lastTargetIndex < gameState.currentTargetIndex+10; i++) {
+        addTarget(i);
+        lastTargetIndex = i+1;
+    };
+}
+
+function addTarget(i){
+    console.log(`${targets[i].index}: ${targets[i].letter} added`)
+    targets[i].x = Math.random() * (svgContainerSize.width - 100) + 50,
+    targets[i].y = Math.random() * (svgContainerSize.height - 100) + 50,
+    targets[i].circle.setAttribute('cy', targets[i].y);
+    targets[i].text.setAttribute('y', targets[i].y+10);
+    targets[i].circle.classList.remove('target-removal');
+    targets[i].text.classList.remove('target-removal');
+    targets[i].circle.classList.add('target-fade-in');
+    targets[i].text.classList.add('target-fade-in');
+    targets[i].state = true;
+}
+
+function hideTarget(i) {
+    console.log(`${targets[i].index}: ${targets[i].letter} hide`)
+    targets[i].state = false;
+    targets[i].circle.setAttribute('cy', -100);
+    targets[i].text.setAttribute('y', -100);
 }
 
 export async function moveTargets() {
     targets.forEach(t => {
-        t.x += t.dx;
-        t.y += t.dy;
+        if (t.state) {
+            t.x += t.dx;
+            t.y += t.dy;
 
-        if (t.x > svgContainerSize.width-15 || t.x < 20) {
-            const randomDX = (Math.random() * speedVar.xRange) + speedVar.xMin;
-            const randomDY = (Math.random() * speedVar.yRange) + speedVar.yMin;
-            t.dx = (t.dx > 0) ? -randomDX : randomDX ;
-            t.dy = (t.dy > 0) ? randomDY : -randomDY ;
-            t.x = (t.x < 20) ? 20 : svgContainerSize.width-20;
+            if (t.x > svgContainerSize.width-15 || t.x < 20) {
+                t.dx = (t.dx > 0) ? -randomDX() : randomDX() ;
+                t.dy = (t.dy > 0) ? randomDY() : -randomDY() ;
+                t.x = (t.x < 20) ? 20 : svgContainerSize.width-20;
+            };
+
+            if (t.y > svgContainerSize.height-72 || t.y < 72) {
+                t.dx = (t.dx > 0) ? randomDX() : -randomDX() ;
+                t.dy = (t.dy > 0) ? -randomDY() : randomDY() ;
+                t.y = (t.y < 72) ? 72 : svgContainerSize.height-72;
+            }
+
+            t.circle.setAttribute("cx", t.x);
+            t.circle.setAttribute("cy", t.y);
+            t.text.setAttribute("x", t.x);
+            t.text.setAttribute("y", t.y+10);
         };
-
-        if (t.y > svgContainerSize.height-72 || t.y < 72) {
-            const randomDX = (Math.random() * speedVar.xRange) + speedVar.xMin;
-            const randomDY = (Math.random() * speedVar.yRange) + speedVar.yMin;
-            t.dx = (t.dx > 0) ? randomDX : -randomDX ;
-            t.dy = (t.dy > 0) ? -randomDY : randomDY ;
-            t.y = (t.y < 72) ? 72 : svgContainerSize.height-72;
-        }
-
-        t.circle.setAttribute("cx", t.x);
-        t.circle.setAttribute("cy", t.y);
-        t.text.setAttribute("x", t.x);
-        t.text.setAttribute("y", t.y+10);
     });
 
 };
+
+const HIT = 'hit';
+const MISS = 'miss';
+const BIM = 'bim';
 
 export function checkTargetHit(p) {
     console.log('bang')
@@ -112,23 +152,65 @@ export function checkTargetHit(p) {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance <= p.player.radius + 1) {
-            console.log("Hit target: ", target.letter);
-            targets = targets.filter(t => t !== target);
+            target.state = false;
+            console.log(`${target.index}: ${target.letter} hit`)
             bulletCircle.classList.add('target-removal');
             target.circle.classList.add('target-removal');
             target.text.classList.add('target-removal');
+            const result = checkWordCompletion(target.letter);
+
+            console.log(result)
 
             setTimeout(() => {
-                targetsLayer.removeChild(target.circle);
-                targetsLayer.removeChild(target.text);
+                hideTarget(target.index);
             }, 1000);
+
+            showNextWord(result)
+            if (result === MISS) {
+                setTimeout(() => {
+                    addTarget(target.index);
+                }, 1100);
+            } else {
+                gameState.currentTargetIndex++;
+            }
+
         }
     });
 }
 
+function checkWordCompletion(letter){
+    const wordObj = gameState.wordList[gameState.currentWordIndex];
+    let [key, value] = Object.entries(wordObj)[0];
+    const word = wordDisplay.textContent;
+    const parts = word.split(/(?=[_A-Z])|(?<=[_A-Z])/);
+    
+    let underscoreCount = 0;
+    for (let i = 0; i < value.length; i++) {
+        if (value[i] === letter){
+            for (let j = 0; j < parts.length; j++) {
+                if(parts[j] === '_') underscoreCount++;
+
+                if (underscoreCount === i+1){
+                    parts[j] = letter;
+                    break;
+                }
+            }
+            wordDisplay.textContent = parts.join('');
+            const index = value.indexOf(letter);
+            if (index !== -1) {
+                value.splice(index, 1);
+            }
+            gameState.wordList[gameState.currentWordIndex][key] = value;
+            console.log(wordDisplay.textContent)
+            if (value.length === 0) return BIM;
+            return HIT;
+        }
+    }
+    return MISS
+}
+
 function addBulletHole(x, y) {
     const bulletCircle = document.getElementById('bullet-circle').cloneNode();
-    
     bulletCircle.classList.remove('target-removal');
 
     bulletCircle.setAttribute('cx', x);

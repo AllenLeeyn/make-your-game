@@ -1,50 +1,65 @@
 import * as p from './player.js';
 import * as t from './target.js';
 import * as u from './ui.js';
-import * as m from './showMenu.js';
-import { generateWordList, displayWordsSequentially, collectMissingLetters } from './words.js';
+import { getWordsAndTargets } from './words.js';
 
-const timeDuration = 60;
-let isGamePaused = false;
+// Constants for game states
+export const AT_START = 'atStart';    // Game is in the start state (before gameplay)
+export const RUNNING = 'running';     // Game is currently running
+export const PAUSED = 'paused';       // Game is paused
+export const GAME_OVER = 'gameover';  // Game is over
+export const COMPLETE = 'complete';   // Game is complete (successfully finished)
 
-
+export const gameState = {
+    timeDuration: 120,
+    wordList: [],
+    currentQuest: 'questOne',
+    currentWordIndex: 0,
+    currentTargetIndex: 0,
+    targetList: [],
+    state: AT_START,
+};
 
 //--------------- initialize and start gameLoop ---------------//
-export async function main() {
+export function main() {
     // show main menu
-    m.createPauseMenu();
+
+    initGame();
+}
+
+async function initGame() {
     // prepare game parameters and data
+    [gameState.wordList, gameState.targetList] = await getWordsAndTargets(gameState.currentQuest);
+
+    //create all targets and bullet holes
+    t.createTargets();
+
     // initalize game 
     p.initPlayer();
-    u.initTimer(timeDuration);
-
-    // Generate word list and display words
-    const questOneWordList = await generateWordList('questOne');
-    displayWordsSequentially(questOneWordList);
-
-    //Collect the missing letters and set them as valid answers
-    const missingLetters = await collectMissingLetters(questOneWordList);
-    
-    t.setValidAnswers(missingLetters);
     t.initTargets();
-
+    u.initTimer(gameState.timeDuration);
+    u.showNextWord();
+    
+    gameState.state = RUNNING;
     requestAnimationFrame(gameLoop);
 }
 
 //--------------- game logic ---------------//
 function gameLoop(timestamp) {
-    if (!u.isTimeUp && !isGamePaused) {
+    if (gameState.state === RUNNING){
         p.updatePlayerPosition(); // Update player position
         t.moveTargets();           // Update target positions
-
+        t.addTargets();
         renderFps(timestamp);
+        requestAnimationFrame(gameLoop); // Keep the game loop running
     } 
-    // else {
-    //     p.initPlayer();
-    //     t.initTargets();
-    //     u.initTimer(timeDuration);
-    // }
-    requestAnimationFrame(gameLoop); // Keep the game loop running
+    if (gameState.state === GAME_OVER) {
+        console.log(GAME_OVER);
+        // show gameover menu
+    }
+    if (gameState.state === COMPLETE) {
+        console.log(COMPLETE)
+    }
 }
 
 //--------------- FPS counter ---------------//
@@ -75,13 +90,21 @@ function handleKeyDown(event) {
     if (event.key in p.keysPressed) {
       p.keysPressed[event.key] = true; // Mark the key as pressed
     }
-    if (event.key === ' ') t.checkTargetHit(p);
-    if (event.key === 'b') {
-        if (isGamePaused) {
-            resumeGameLoop();
-        } else {
-            pauseGameLoop();
-        }
+    if (event.key === ' ' && gameState.state === RUNNING) {
+        t.checkTargetHit(p)
+        u.shoot();
+    };
+    if (event.key === 'Escape') {
+        if (gameState.state === RUNNING) {
+            gameState.state = PAUSED;
+        } else if (gameState.state === PAUSED) {
+            gameState.state = RUNNING;
+            requestAnimationFrame(gameLoop);
+        };
+        if (gameState.state === GAME_OVER) {
+            initGame();
+        };
+        console.log(gameState.state)
     }
 }
 

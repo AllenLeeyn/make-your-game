@@ -24,21 +24,36 @@
           </pattern>
       </defs>
 
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#dot-pattern)" />
-   
-      <!-- Game objects will be added here -->
-        <g id="targetsLayer"></g>
-        <g id="playerLayer"></g>
-        <g id="ui">
-          <rect x="0" y="0" width="100%" height="50" fill="dark" />
-          <text id="timer" x="50%" y="40" text-anchor="middle" font-size="30" fill="red"></text>
-          <rect x="0" y="550" width="100%" height="50" fill="dark" />
-          <text id="word-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red">
-              let_there_be_words
-          </text>
-      </g>
-    </svg>
-    <!-- Pause Menu Dynamically Generated thru JS. -->
+  <!-- <svg id="svg-container" width="100%" height="100%" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">-->
+  <svg id="svg-container" width="800" height="600">
+    <!-- Define the dot pattern -->
+    <defs>
+        <pattern id="dot-pattern" patternUnits="userSpaceOnUse" width="30" height="30">
+            <rect x="0" y="0" width="30" height="30" fill="#333" />
+            <circle cx="15" cy="15" r="2" fill="darkgreen" />
+        </pattern>
+    </defs>
+
+    <rect x="0" y="0" width="100%" height="100%" fill="url(#dot-pattern)" />
+ 
+    <!-- Game objects will be added here -->
+      <g id="targetsLayer"></g>
+      <g id="playerLayer"></g>
+      <g id="ui">
+        <rect x="0" y="0" width="100%" height="50" fill="dark" />
+        <text id="timer" x="50%" y="40" text-anchor="middle" font-size="30" fill="red"></text>
+        <text id="bulletCount" x="90%" y="40" text-anchor="end" font-size="30" fill="red">15</text>
+        <rect x="0" y="550" width="100%" height="50" fill="dark" />
+        <text id="word-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red">
+            let_there_be_words
+        </text>
+    </g>
+
+    <g id="menuLayer">
+    </g>
+
+  </svg>
+    
   </div>
   <svg id="hidden-template" style="display: none;">
     <!-- This is a hidden template, you can define any SVG elements here -->

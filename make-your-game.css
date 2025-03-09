@@ -50,8 +50,8 @@ body {
 
 /* Optional: Styling for the top bar */
 #ui rect {
-        stroke: gray;  
-        stroke-width: 5px;  
+        stroke: gray;  /* White border for the top bar (optional) */
+        stroke-width: 1px;  /* Optional: border thickness */
 }
 
 @keyframes fadeIn {
