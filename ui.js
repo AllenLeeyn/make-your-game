@@ -1,4 +1,5 @@
 import * as m from './main.js';
+import * as p from './player.js';
 
 const wordDisplay = document.getElementById('word-display');
 const timerElement = document.getElementById('timer');
@@ -15,13 +16,13 @@ export function initTimer(){
 
 // Function to update the timer display
 function updateTimer() {
-    if (m.gameState.state === 'running') {
+    if (m.gameState.state === m.RUNNING) {
         if (timerValue > 0) {
             timerValue--;
             timerElement.textContent = timerValue;  // Update the text content of the timer
         } else {
             isTimeUp = true;
-            m.gameState.state = 'timeIsUp';
+            m.gameState.state = m.GAME_OVER;
             clearInterval(timerInterval);  // Stop the timer once it reaches 0
             // Additional logic to handle game over can go here
         }
@@ -31,22 +32,46 @@ function updateTimer() {
 let timerInterval;
 
 const bulletCountElement = document.getElementById('bulletCount');
+
 export function shoot() {
-    const bulletCount = player.bullets;
-    if (bulletCount > 0) {
-        bulletCount--;
-        bulletCountElement.textContent = `Bullets: ${player.bullets}`;
-        console.log(`Bullet remaining: ${player.bullets}`);
-        //player.bulletElement.textContent = player.bullets;
+    p.player.bullets--;
+    bulletCountElement.textContent = `Bullets: ${p.player.bullets}`;
+
+    if (p.player.bullets > 0) {
+        console.log(`Bullet remaining: ${p.player.bullets}`);
     } else {
-        bulletCountElement.textContent = 'No bullets left!';
-        isTimeUp = true;
+        m.gameState.state = m.GAME_OVER
         console.log('No bullets left! Game over.');
     }
 }
 
+const HIT = 'hit';
+const MISS = 'miss';
+const BIM = 'bim';
+export function showNextWord(result) {
+    console.log(result)
+    if (result === undefined) {
+        const [word] = Object.keys(m.gameState.wordList[0]);
+        wordDisplay.textContent = word;
+    }
 
-export function showNextWord() {
-    const [word] = Object.keys(m.gameState.wordList[m.gameState.currentWordIndex]);
-    wordDisplay.textContent = word;
+    if (result === MISS){
+        
+    }
+
+    if (result === HIT){
+
+    }
+
+    if (result === BIM){
+        m.gameState.currentWordIndex++;
+
+
+        if (m.gameState.currentWordIndex >= m.gameState.wordList.length){
+            m.gameState.state = m.COMPLETE;
+            return;
+        };
+        const [word] = Object.keys(m.gameState.wordList[m.gameState.currentWordIndex]);
+        wordDisplay.textContent = word;
+    }
 }
