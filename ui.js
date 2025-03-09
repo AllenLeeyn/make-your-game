@@ -15,13 +15,13 @@ export function initTimer(){
 
 // Function to update the timer display
 function updateTimer() {
-    if (m.gameState.state === 'running') {
+    if (m.gameState.state === m.RUNNING) {
         if (timerValue > 0) {
             timerValue--;
             timerElement.textContent = timerValue;  // Update the text content of the timer
         } else {
             isTimeUp = true;
-            m.gameState.state = 'timeIsUp';
+            m.gameState.state = m.GAME_OVER;
             clearInterval(timerInterval);  // Stop the timer once it reaches 0
             // Additional logic to handle game over can go here
         }
@@ -30,7 +30,32 @@ function updateTimer() {
 
 let timerInterval;
 
-export function showNextWord() {
-    const [word] = Object.keys(m.gameState.wordList[m.gameState.currentWordIndex]);
-    wordDisplay.textContent = word;
+const HIT = 'hit';
+const MISS = 'miss';
+const BIM = 'bim';
+export function showNextWord(result) {
+    console.log(result)
+    if (result === undefined) {
+        const [word] = Object.keys(m.gameState.wordList[0]);
+        wordDisplay.textContent = word;
+    }
+
+    if (result === MISS){
+        
+    }
+
+    if (result === HIT){
+
+    }
+
+    if (result === BIM){
+        m.gameState.currentWordIndex++;
+
+        if (m.gameState.currentWordIndex >= m.gameState.wordList.length){
+            m.gameState.state = m.COMPLETE;
+            return;
+        };
+        const [word] = Object.keys(m.gameState.wordList[m.gameState.currentWordIndex]);
+        wordDisplay.textContent = word;
+    }
 }

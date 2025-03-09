@@ -30,7 +30,7 @@ async function createWordObject(questName) {
 async function generateWordList(questName) {
     const wordList = [];
     
-    for (let i = 0; i < 12; i++) {  // Generate 12 words for each round
+    for (let i = 0; i < 6; i++) {  // Generate 12 words for each round
         const wordObject = await createWordObject(questName);
         wordList.push(wordObject);
     }
@@ -51,7 +51,7 @@ async function collectMissingLetters(wordList) {
 
 export async function getWordsAndTargets(questName){
     // Generate word list and display words
-    const wordList = await generateWordList('questOne');
+    const wordList = await generateWordList(questName);
 
     //Collect the missing letters and set them as valid answers
     const targetList = await collectMissingLetters(wordList);

@@ -24,16 +24,51 @@ const randomDY = () => (Math.random() * speedVar.yRange) + speedVar.yMin;
 let targets = [];
 let lastTargetIndex = 0;
 
+function getRandomLetter() {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const randomIndex = Math.floor(Math.random() * letters.length);
+    return letters[randomIndex];
+}
+
 export function createTargets(){
     targets.forEach(t=>{
         targetsLayer.removeChild(t.circle);
         targetsLayer.removeChild(t.text);
     });
     targets = [];
-    for (let i = 0; i < gameState.targetList.length; i++) {
-        const letter = gameState.targetList[i];
+
+    // insert 5 random letters into target list 
+    for (let i = 0; i < 5; i++) {
+        const letter = getRandomLetter();
         createTarget(letter, i);
     }
+
+    for (let i = 0; i < gameState.targetList.length; i++) {
+        const letter = gameState.targetList[i];
+        createTarget(letter, i+5);
+    }
+}
+
+export function createTarget(letter, i) {
+    const circle = template.getElementById('template-circle').cloneNode();
+    const text = template.getElementById('template-text').cloneNode();
+
+    const target = {
+        index: i,
+        state: false,
+        circle: circle,
+        text: text,
+        dx: (Math.random() * speedVar.xRange) + speedVar.xMin,
+        dy: (Math.random() * speedVar.yRange) + speedVar.yMin,
+        r: 20,
+        letter: letter,
+        speed: (Math.random() * 2) + 1,
+    }
+    text.textContent = target.letter;
+
+    targetsLayer.appendChild(circle);
+    targetsLayer.appendChild(text);
+    targets.push(target);
 }
 
 export function initTargets(){
@@ -43,13 +78,14 @@ export function initTargets(){
         t.text.setAttribute('y', -100);
     });
     gameState.currentWordIndex = 0;
+    gameState.currentTargetIndex = 0;
     lastTargetIndex = 0;
     addTargets();
 }
 
 export function addTargets(){
     if (lastTargetIndex >= targets.length) return;
-    for (let i = lastTargetIndex; lastTargetIndex < gameState.currentWordIndex+10; i++) {
+    for (let i = lastTargetIndex; lastTargetIndex < gameState.currentTargetIndex+10; i++) {
         addTarget(i);
         lastTargetIndex = i+1;
     };
@@ -73,28 +109,6 @@ function hideTarget(i) {
     targets[i].state = false;
     targets[i].circle.setAttribute('cy', -100);
     targets[i].text.setAttribute('y', -100);
-}
-
-export function createTarget(letter, i) {
-    const circle = template.getElementById('template-circle').cloneNode();
-    const text = template.getElementById('template-text').cloneNode();
-
-    const target = {
-        index: i,
-        state: false,
-        circle: circle,
-        text: text,
-        dx: (Math.random() * speedVar.xRange) + speedVar.xMin,
-        dy: (Math.random() * speedVar.yRange) + speedVar.yMin,
-        r: 20,
-        letter: letter,
-        speed: (Math.random() * 2) + 1,
-    }
-    text.textContent = target.letter;
-
-    targetsLayer.appendChild(circle);
-    targetsLayer.appendChild(text);
-    targets.push(target);
 }
 
 export async function moveTargets() {
@@ -123,6 +137,7 @@ export async function moveTargets() {
     });
 
 };
+
 const HIT = 'hit';
 const MISS = 'miss';
 const BIM = 'bim';
@@ -137,6 +152,7 @@ export function checkTargetHit(p) {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance <= p.player.radius + 1) {
+            target.state = false;
             console.log(`${target.index}: ${target.letter} hit`)
             bulletCircle.classList.add('target-removal');
             target.circle.classList.add('target-removal');
@@ -144,20 +160,20 @@ export function checkTargetHit(p) {
             const result = checkWordCompletion(target.letter);
 
             console.log(result)
-            if (result === BIM) {
-                gameState.currentWordIndex++;
-                showNextWord()
-            }
 
             setTimeout(() => {
                 hideTarget(target.index);
             }, 1000);
 
+            showNextWord(result)
             if (result === MISS) {
                 setTimeout(() => {
                     addTarget(target.index);
-                }, 2000);
+                }, 1100);
+            } else {
+                gameState.currentTargetIndex++;
             }
+
         }
     });
 }
@@ -180,8 +196,12 @@ function checkWordCompletion(letter){
                 }
             }
             wordDisplay.textContent = parts.join('');
-            value = value.filter((v) => v !== letter);
+            const index = value.indexOf(letter);
+            if (index !== -1) {
+                value.splice(index, 1);
+            }
             gameState.wordList[gameState.currentWordIndex][key] = value;
+            console.log(wordDisplay.textContent)
             if (value.length === 0) return BIM;
             return HIT;
         }
@@ -191,7 +211,6 @@ function checkWordCompletion(letter){
 
 function addBulletHole(x, y) {
     const bulletCircle = document.getElementById('bullet-circle').cloneNode();
-    
     bulletCircle.classList.remove('target-removal');
 
     bulletCircle.setAttribute('cx', x);
