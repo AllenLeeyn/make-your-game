@@ -81,3 +81,26 @@ body {
 .target-removal {
     animation: fadeOut 1s forwards;
 }
+
+@keyframes fadeInOutUp {
+    0% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+    33% {
+        opacity: 1;
+        transform: translateY(-45px);
+    }
+    66% {
+        opacity: 0.5;
+        transform: translateY(-45px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(0px);
+    }
+}
+
+.fade-in-out-up {
+    animation: fadeInOutUp 1s ease-out forwards;  
+}

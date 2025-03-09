@@ -2,6 +2,9 @@ import * as m from './main.js';
 import * as p from './player.js';
 
 const wordDisplay = document.getElementById('word-display');
+const missDisplay = document.getElementById('miss-display');
+const hitDisplay = document.getElementById('hit-display');
+const bimDisplay = document.getElementById('bim-display');
 const timerElement = document.getElementById('timer');
 
 let timerValue;
@@ -31,47 +34,41 @@ function updateTimer() {
 
 let timerInterval;
 
-const bulletCountElement = document.getElementById('bulletCount');
-
-export function shoot() {
-    p.player.bullets--;
-    bulletCountElement.textContent = `Bullets: ${p.player.bullets}`;
-
-    if (p.player.bullets > 0) {
-        console.log(`Bullet remaining: ${p.player.bullets}`);
-    } else {
-        m.gameState.state = m.GAME_OVER
-        console.log('No bullets left! Game over.');
-    }
+export function updateWordDisplay() {
+    if (m.gameState.currentWordIndex >= m.gameState.wordList.length){
+        m.gameState.state = m.COMPLETE;
+        return;
+    };
+    const [word] = Object.keys(m.gameState.wordList[m.gameState.currentWordIndex]);
+    wordDisplay.textContent = word;
 }
 
-const HIT = 'hit';
-const MISS = 'miss';
-const BIM = 'bim';
-export function showNextWord(result) {
-    console.log(result)
-    if (result === undefined) {
-        const [word] = Object.keys(m.gameState.wordList[0]);
-        wordDisplay.textContent = word;
+export function showFeedback(result) {
+    if (result === 'miss'){
+        missDisplay.style.display = 'block';
+        missDisplay.classList.add('fade-in-out-up');
+        setTimeout(() => {
+            missDisplay.style.display = 'none';
+            missDisplay.classList.remove('fade-in-out-up');
+        }, 1000);
     }
-
-    if (result === MISS){
-        
+    if (result === 'hit'){
+        hitDisplay.style.display = 'block';
+        hitDisplay.classList.add('fade-in-out-up');
+        setTimeout(() => {
+            hitDisplay.style.display = 'none';
+            hitDisplay.classList.remove('fade-in-out-up');
+        }, 1000);
     }
-
-    if (result === HIT){
-
-    }
-
-    if (result === BIM){
-        m.gameState.currentWordIndex++;
-
-
-        if (m.gameState.currentWordIndex >= m.gameState.wordList.length){
-            m.gameState.state = m.COMPLETE;
-            return;
-        };
-        const [word] = Object.keys(m.gameState.wordList[m.gameState.currentWordIndex]);
-        wordDisplay.textContent = word;
+    if (result === 'bim'){
+        wordDisplay.setAttribute('fill', 'green');
+        bimDisplay.style.display = 'block';
+        bimDisplay.classList.add('fade-in-out-up');
+        setTimeout(() => {
+            bimDisplay.style.display = 'none';
+            bimDisplay.classList.remove('fade-in-out-up');
+            wordDisplay.setAttribute('fill', 'red');
+            updateWordDisplay();
+        }, 1000);
     }
 }

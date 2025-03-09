@@ -31,14 +31,11 @@ async function initGame() {
     // prepare game parameters and data
     [gameState.wordList, gameState.targetList] = await getWordsAndTargets(gameState.currentQuest);
 
-    //create all targets and bullet holes
-    t.createTargets();
-
     // initalize game 
     p.initPlayer();
     t.initTargets();
     u.initTimer(gameState.timeDuration);
-    u.showNextWord();
+    u.updateWordDisplay();
     
     gameState.state = RUNNING;
     requestAnimationFrame(gameLoop);
@@ -46,6 +43,9 @@ async function initGame() {
 
 //--------------- game logic ---------------//
 function gameLoop(timestamp) {
+    if (gameState.state === COMPLETE) {
+        console.log(COMPLETE)
+    }
     if (gameState.state === RUNNING){
         p.updatePlayerPosition(); // Update player position
         t.moveTargets();           // Update target positions
@@ -54,11 +54,9 @@ function gameLoop(timestamp) {
         requestAnimationFrame(gameLoop); // Keep the game loop running
     } 
     if (gameState.state === GAME_OVER) {
+        console.log('damn');
         console.log(GAME_OVER);
         // show gameover menu
-    }
-    if (gameState.state === COMPLETE) {
-        console.log(COMPLETE)
     }
 }
 
@@ -91,8 +89,7 @@ function handleKeyDown(event) {
       p.keysPressed[event.key] = true; // Mark the key as pressed
     }
     if (event.key === ' ' && gameState.state === RUNNING) {
-        t.checkTargetHit(p)
-        u.shoot();
+        t.shoot(p);
     };
     if (event.key === 'Escape') {
         if (gameState.state === RUNNING) {

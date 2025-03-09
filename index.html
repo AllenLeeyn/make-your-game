@@ -26,9 +26,10 @@
         </pattern>
     </defs>
 
-    <rect x="0" y="0" width="100%" height="100%" fill="url(#dot-pattern)" />
- 
     <!-- Game objects will be added here -->
+    <g id="bgLayer">
+        <rect x="0" y="0" width="100%" height="100%" fill="url(#dot-pattern)" />
+    </g>
      <g id="targetsLayer"></g>
      <g id="playerLayer"></g>
      <g id="ui">
@@ -36,6 +37,15 @@
         <text id="timer" x="50%" y="40" text-anchor="middle" font-size="30" fill="red"></text>
         <text id="bulletCount" x="90%" y="40" text-anchor="end" font-size="30" fill="red">15</text>
         <rect x="0" y="550" width="100%" height="50" fill="dark" />
+        <text id="miss-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red" style="display: none;">
+            MISS!
+        </text>
+        <text id="hit-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="green" style="display: none;">
+            HIT!
+        </text>
+        <text id="bim-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="green" style="display: none;">
+            BIM!
+        </text>
         <text id="word-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red">
             let_there_be_words
         </text>
@@ -43,10 +53,7 @@
 
     <g id="menuLayer">
     </g>
-
   </svg>
-    
-  </div>
 
   <svg id="hidden-template" style="display: none;">
     <!-- This is a hidden template, you can define any SVG elements here -->
