@@ -1,5 +1,7 @@
 // Function to create the start screen menu
 
+import { restartGameLoop, resumeGameLoop } from "./main.js";
+
 export function createStartScreenMenu() {
     const startMenu = document.createElement('div');
     startMenu.id = 'start-menu';
@@ -23,26 +25,31 @@ export function hideStartScreenMenu() {
 export function createPauseMenu() {
     const pauseMenu = document.createElement('div');
     pauseMenu.id = 'pause-menu';
-    pauseMenu.style.display = 'none'; // Initially hidden
+    pauseMenu.classList.add('hidden')
+
+    const pauseMessage = document.createElement('h2');
+    pauseMessage.textContent = 'Game Paused';
 
     // Add menu items (e.g., resume, restart, quit)
     const resumeButton = document.createElement('button');
     resumeButton.textContent = 'Resume';
-    resumeButton.onclick = resumeGame;
+    resumeButton.onclick = resumeGameLoop;
 
     const restartButton = document.createElement('button');
     restartButton.textContent = 'Restart';
-    restartButton.onclick = restartGame;
+    restartButton.onclick = restartGameLoop;
+    //pauseMenu.classList.remove('hidden')
 
-    const quitButton = document.createElement('button');
-    quitButton.textContent = 'Quit';
-    quitButton.onclick = quitGame;
+    // const quitButton = document.createElement('button');
+    // quitButton.textContent = 'Quit';
+    // quitButton.onclick = quitGame;
 
+    pauseMenu.appendChild(pauseMessage);
     pauseMenu.appendChild(resumeButton);
     pauseMenu.appendChild(restartButton);
-    pauseMenu.appendChild(quitButton); 
+   // pauseMenu.appendChild(quitButton); 
 
-    document.body.appendChild(pauseMenu);
+    document.getElementById('game-container').appendChild(pauseMenu);
 }
 
 
@@ -51,12 +58,9 @@ export function showPauseMenu() {
 }
 
 export function hidePauseMenu() {
+    console.log('Hiding pause menu...');
     document.getElementById('pause-menu').classList.add('hidden');
 }
-
-document.getElementById('continue-btn').addEventListener('click', resumeGameLoop);
-document.getElementById('restart-btn').addEventListener('click', restartGameLoop);
-
 
 
 // ----

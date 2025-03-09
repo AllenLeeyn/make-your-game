@@ -1,8 +1,9 @@
 import * as p from './player.js';
 import * as t from './target.js';
 import * as u from './ui.js';
-import * as m from './menu.js';
+import * as m from './showMenu.js';
 import { generateWordList, displayWordsSequentially, collectMissingLetters } from './words.js';
+
 const timeDuration = 60;
 let isGamePaused = false;
 
@@ -11,6 +12,7 @@ let isGamePaused = false;
 //--------------- initialize and start gameLoop ---------------//
 export async function main() {
     // show main menu
+    m.createPauseMenu();
     // prepare game parameters and data
     // initalize game 
     p.initPlayer();
@@ -36,11 +38,12 @@ function gameLoop(timestamp) {
         t.moveTargets();           // Update target positions
 
         renderFps(timestamp);
-    } else {
-        p.initPlayer();
-        t.initTargets();
-        u.initTimer(timeDuration);
-    }
+    } 
+    // else {
+    //     p.initPlayer();
+    //     t.initTargets();
+    //     u.initTimer(timeDuration);
+    // }
     requestAnimationFrame(gameLoop); // Keep the game loop running
 }
 
@@ -100,7 +103,7 @@ export function resumeGameLoop() {
     m.hidePauseMenu();
 }
 
-function restartGameLoop() {
+export function restartGameLoop() {
     isGamePaused = false;
     m.hidePauseMenu();
     
@@ -108,6 +111,17 @@ function restartGameLoop() {
     p.initPlayer();
     t.initTargets();
     u.initTimer(timeDuration);
+
+    p.initPlayer();
+    t.initTargets();
+    u.initTimer(timeDuration);
+
+    generateWordList('questOne').then((wordList) => {
+        displayWordsSequentially(wordList);
+        collectMissingLetters(wordList).then((missingLetters) => {
+            t.setValidAnswers(missingLetters);
+        });
+    });
 }
 
 // Add event listeners for keydown and keyup
