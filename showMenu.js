@@ -1,6 +1,6 @@
 // Function to create the start screen menu
 
-import { restartGameLoop, resumeGameLoop, gameState, PAUSED} from "./main.js";
+import { gameState, PAUSED } from "./main.js";
 
 export function createStartScreenMenu() {
     const startMenu = document.createElement('div');
@@ -132,7 +132,7 @@ export function hidePauseMenu() {
 }
 
 
-export function handleArrowKeys(event) {
+export function handlePauseKeys(event) {
     if (gameState.state === PAUSED) {
         const menuItems = document.getElementById('pause-menu').children;
         
@@ -146,9 +146,11 @@ export function handleArrowKeys(event) {
         } else if (event.key === ' ') {
             event.preventDefault();
             if (currentSelection === 0) {
-                resumeGameLoop(); // Resume game
+                hidePauseMenu();
+                gameState.state = 'running';
             } else if (currentSelection === 1) {
-                restartGameLoop(); // Restart game
+                hidePauseMenu();
+                gameState.state = 'restart'
             }
         }
         
@@ -162,37 +164,3 @@ export function handleArrowKeys(event) {
         });
     }
 }
-
-
-
-
-
-// ----
-
-// // Example functions for handling menu actions
-// function startGame() {
-//     hideStartScreenMenu();
-//     // Call main game initialization function
-//     main();
-// }
-
-// function showInstructions() {
-//     // Display game instructions
-// }
-
-// function resumeGame() {
-//     hidePauseMenu();
-//     // Call function to resume the game loop
-//     resumeGameLoop();
-// }
-
-// function restartGame() {
-//     hidePauseMenu();
-//     // Call functions to restart the game
-//     restartGameLoop();
-// }
-
-// function quitGame() {
-//     hidePauseMenu();
-//     // Handle quitting the game
-// }

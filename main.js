@@ -10,6 +10,7 @@ export const RUNNING = 'running';     // Game is currently running
 export const PAUSED = 'paused';       // Game is paused
 export const GAME_OVER = 'gameover';  // Game is over
 export const COMPLETE = 'complete';   // Game is complete (successfully finished)
+export const RESTART = 'restart';   // Game is complete (successfully finished)
 
 export const gameState = {
     timeDuration: 120,
@@ -59,6 +60,9 @@ function gameLoop(timestamp) {
     if (gameState.state === GAME_OVER) {
         console.log(GAME_OVER);
         // show gameover menu
+    }
+    if (gameState.state === RESTART) {
+        initGame();
     }
     requestAnimationFrame(gameLoop); // Keep the game loop running
 }
@@ -121,21 +125,6 @@ function handleKeyUp(event) {
 }
 
 //--------------- Pause Menu ------------------//
-
-// function pauseGameLoop() {
-//     isGamePaused = true;
-//     m.showPauseMenu(); 
-// }
-export function resumeGameLoop() {
-    gameState.state = RUNNING;
-    hidePauseMenu();
-}
-
-export function restartGameLoop() {
-    gameState.state = AT_START;
-    hidePauseMenu();
-    initGame();
-}
 
 // Add event listeners for keydown and keyup
 document.addEventListener('keydown', handleKeyDown);
