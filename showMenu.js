@@ -1,21 +1,23 @@
 import { gameState, PAUSED } from "./main.js";
 
-const menuLayer = document.getElementById('menuLayer');
 const pauseMenu = document.getElementById('pause-menu');
-const pauseMenuItems = document.getElementById('pause-menu').children;
+const pauseMenuText = document.getElementsByClassName('pauseText');
+const pauseMenuButton = document.getElementsByClassName('pauseButton');
+console.log(pauseMenuButton);
 const startMenu = document.getElementById('start-menu');
 const startMenuItems = document.getElementById('start-menu').children;
 
 let startMenuSelection = 0;
 
 
-export function showStartScreenMenu() {
-    pauseMenu.setAttribute('visibility', 'hidden')
-    startMenu.setAttribute('visibility', 'visible');
+export function showStartScreenMenu() {  
+    startMenu.style.display = 'block';
+    startMenu.classList.add('fade-in');
 }
 
 export function hideStartScreenMenu() {
-    startMenu.setAttribute('visibility', 'hidden');
+    startMenu.style.display = 'none';
+    startMenu.classList.remove('fade-in');
 }
 
 export function handleStartMenuKeys(event) {
@@ -41,35 +43,35 @@ export function handleStartMenuKeys(event) {
 
 }
 
-let currentSelection = 0; // Index of the currently selected menu item
-
 export function showPauseMenu() {
-    pauseMenu.setAttribute('visibility', 'visible');
-    pauseMenu.setAttribute('transform', 'translate(250, 170)')
-    startMenu.setAttribute('visibility', 'hidden')
-    menuLayer.setAttribute('transform', 'translate(0,0)'); // Move to center
+    currentSelection = 0;
+    pauseMenu.style.display = 'block';
+    pauseMenu.classList.add('fade-in');
+    pauseMenuText[0].setAttribute("fill", "green")
+    pauseMenuButton[0].setAttribute("stroke", "green")
+    pauseMenuText[1].setAttribute("fill", "grey")
+    pauseMenuButton[1].setAttribute("stroke", "grey")
+    pauseMenuText[2].setAttribute("fill", "grey")
+    pauseMenuButton[1].setAttribute("stroke", "grey")
 }
 
 export function hidePauseMenu() {
-    pauseMenu.setAttribute('visibility', 'hidden');
-    menuLayer.setAttribute('transform', 'translate(-1000, -1000)'); // Move off-screen
+    pauseMenu.style.display = 'none';
+    pauseMenu.classList.remove('fade-in');
     
-    currentSelection = 0; 
 }
 
+let currentSelection = 0; // Index of the currently selected menu item
 
 export function handlePauseKeys(event) {
     if (event.key === 'Escape') {
         gameState.state = 'running';
     }
     
-    // Filter out non-button elements (e.g., background, text)
-    const buttons = Array.from(pauseMenuItems).filter(item => item.tagName === 'rect' && item.classList.contains('button'));
-    
     if (event.key === 'ArrowUp') {
         currentSelection = Math.max(0, currentSelection - 1);
     } else if (event.key === 'ArrowDown') {
-        currentSelection = Math.min(buttons.length - 1, currentSelection + 1);
+        currentSelection = Math.min(2, currentSelection + 1);
     } else if (event.key === ' ') {
         event.preventDefault();
         if (currentSelection === 0) {
@@ -81,12 +83,14 @@ export function handlePauseKeys(event) {
         }
     }
     
-    // Visual feedback: Highlight the selected button
-    buttons.forEach((button, index) => {
-        if (index === currentSelection) {
-            button.setAttribute('fill', 'lightblue'); // Highlight selected button
+    console.log(currentSelection)
+    for (let i = 0; i < 3; i++){
+        if (i === currentSelection) {
+            pauseMenuText[i].setAttribute("fill", "green")
+            pauseMenuButton[i].setAttribute("stroke", "green")
         } else {
-            button.setAttribute('fill', 'white'); // Reset other buttons
+            pauseMenuText[i].setAttribute("fill", "grey")
+            pauseMenuButton[i].setAttribute("stroke", "grey")
         }
-    });
+    };
 }

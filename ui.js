@@ -8,6 +8,8 @@ const missDisplay = document.getElementById('miss-display');
 const hitDisplay = document.getElementById('hit-display');
 const bimDisplay = document.getElementById('bim-display');
 const timerElement = document.getElementById('timer');
+const gameOverDisplay = document.getElementById('gameover-display');
+const gameCompleteDisplay = document.getElementById('gamecomplete-display');
 
 let timerValue;
 export let isTimeUp = false;
@@ -102,4 +104,23 @@ export function updateScoreDisplay(){
         comboDisplay.textContent = `COMBO ${p.player.combo}`;
     }
     scoreDisplay.textContent = p.player.score.toString().padStart(6, '0');
+}
+
+export function showGameOver() {                     
+    gameOverDisplay.style.display = 'block';
+    gameOverDisplay.classList.add('fade-in');
+}
+
+export function showGameComplete() {                     
+    gameCompleteDisplay.style.display = 'block';
+    gameCompleteDisplay.classList.add('fade-in');
+}
+ export function hideGameOver() {
+    gameOverDisplay.style.display = 'none';
+    gameOverDisplay.classList.remove('fade-in');
+}
+
+export function hideGameComplete() {
+    gameCompleteDisplay.style.display = 'none';
+    gameCompleteDisplay.classList.remove('fade-in');
 }

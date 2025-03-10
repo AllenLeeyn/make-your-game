@@ -37,9 +37,9 @@
     <g id="bgLayer">
         <rect x="0" y="0" width="100%" height="100%" fill="url(#dot-pattern)" />
     </g>
-     <g id="targetsLayer"></g>
-     <g id="playerLayer"></g>
-     <g id="ui">
+    <g id="targetsLayer"></g>
+    <g id="playerLayer"></g>
+    <g id="ui">
         <rect x="0" y="0" width="100%" height="50" fill="dark" />
         <text id="score-display" x="10" y="35"  font-size="30" fill="limegreen">000000</text>
         <text id="combo-display" x="150" y="35"  font-size="25" fill="limegreen">COMBO 0</text>
@@ -61,21 +61,32 @@
         </text>
       </g>
 
-      <g id="menuLayer" transform="translate(-1000, -1000)">
-        <g id="pause-menu" visibility="visible">
-            <rect x="0" y="0" width="300" height="250" fill="rgba(0, 0, 0, 0.5)"></rect>
-            <text x="150" y="50" font-size="24" fill="white" text-anchor="middle">Game Paused</text>
-            <rect x="100" y="100" width="100" height="30" fill="white" class="button"></rect>
-            <text x="150" y="120" font-size="18" fill="black" text-anchor="middle">Resume</text>
-            <rect x="100" y="140" width="100" height="30" fill="lightblue" class="button"></rect>
-            <text x="150" y="160" font-size="18" fill="black" text-anchor="middle">Restart</text>
-            <rect x="100" y="180" width="100" height="30" fill="white" class="button"></rect>
-            <text x="150" y="200" font-size="18" fill="black" text-anchor="middle">Quit</text>
+    <g id="menuLayer">
+        <g id="gameover-display" style= "display: none;">
+          <rect x="150" y="200" width="500" height="200" style="fill:black; opacity:0.8; stroke:red; stroke-width:3;"/>
+          <text x="410" y="300" font-size="80" text-anchor="middle" fill="red">FAILED!</text>
+          <rect x="240" y="320" width="320" height="50" fill="transparent" stroke="red"/>
+          <text x="400" y="350" font-size="20" text-anchor="middle" fill="red">Press Spacebar to Replay</text>
         </g>
-        <g id="start-menu" visibility="visible"><rect x="0" y="0" width="800" height="600" fill="rgba(0, 0, 0, 0.5)"></rect>
+        <g id="gamecomplete-display" style= "display: none;">
+          <rect x="125" y="200" width="550" height="200" style="fill:black; opacity:0.8; stroke:GREEN; stroke-width:3;"/>
+          <text x="410" y="300" font-size="80" text-anchor="middle" fill="GREEN">SUCCEEDED!</text>
+          <rect x="240" y="320" width="320" height="50" fill="transparent" stroke="green"/>
+          <text x="400" y="350" font-size="20" text-anchor="middle" fill="green">Press Spacebar to Replay</text>
+        </g>
+        <g id="pause-menu" style= "display: none;">
+            <rect x="125" y="200" width="550" height="200" style="fill:black; opacity:0.8; stroke:grey; stroke-width:3;"/>
+            <text x="410" y="240" font-size="30" text-anchor="middle" fill="white">GAME PAUSE</text>
+            <rect x="360" y="260" width="100" height="30" fill="transparent" stroke="grey" class="pauseButton"></rect>
+            <text x="410" y="280" font-size="18" fill="grey" text-anchor="middle" class="pauseText">Resume</text>
+            <rect x="360" y="300" width="100" height="30" fill="transparent" stroke="grey" class="pauseButton"></rect>
+            <text x="410" y="320" font-size="18" fill="white" text-anchor="middle" class="pauseText">Restart</text>
+            <rect x="360" y="340" width="100" height="30" fill="transparent" stroke="grey" class="pauseButton"></rect>
+            <text x="410" y="360" font-size="18" fill="white" text-anchor="middle" class="pauseText">Quit</text>
+        </g>
+        <g id="start-menu" style= "display: none;"><rect x="0" y="0" width="800" height="600" fill="rgba(0, 0, 0, 0.5)"></rect>
             <!-- Background -->
             <rect x="0" y="0" width="800" height="600" fill="rgba(0, 0, 0, 0.5)"></rect>
-
             <!-- Title Area -->
             <text x="400" y="100" font-size="36" fill="white" text-anchor="middle">BANG BANG BIM</text>
 
@@ -90,9 +101,10 @@
             <rect x="300" y="500" width="200" height="50" fill="red" stroke="black" stroke-width="2" class="button"></rect>
             <text x="400" y="530" font-size="20" fill="white" text-anchor="middle">Start Game</text>
         </g>
-      </g>
+    </g>
+  
+  </svg>
 
-    </svg>
   <svg id="hidden-template" style="display: none;">
     <!-- This is a hidden template, you can define any SVG elements here -->
     <circle id="template-circle" cx="0" cy="0" r="20" fill="red" />

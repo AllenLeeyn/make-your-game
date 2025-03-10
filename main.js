@@ -8,6 +8,7 @@ import { getWordsAndTargets } from './words.js';
 export const AT_START = 'atStart';    // Game is in the start state (before gameplay)
 export const RUNNING = 'running';     // Game is currently running
 export const PAUSED = 'paused';       // Game is paused
+export const AT_PAUSED = 'atPaused';       // Game is paused
 export const GAME_OVER = 'gameover';  // Game is over
 export const COMPLETE = 'complete';   // Game is complete (successfully finished)
 export const RESTART = 'restart';   // Game is complete (successfully finished)
@@ -31,7 +32,6 @@ export function main() {
 }
 
 async function initGame() {
-
     // prepare game parameters and data
     [gameState.wordList, gameState.targetList] = await getWordsAndTargets(gameState.currentQuest);
 
@@ -53,6 +53,8 @@ function gameLoop(timestamp) {
         // show start screen
 
     } else if (gameState.state === RUNNING){
+        u.hideGameComplete();
+        u.hideGameOver();
         hidePauseMenu();
         p.updatePlayerPosition(); // Update player position
         t.moveTargets();           // Update target positions
@@ -61,13 +63,13 @@ function gameLoop(timestamp) {
 
     } else if (gameState.state === PAUSED) {
         showPauseMenu();
+        gameState.state = AT_PAUSED;
 
     }else if (gameState.state === GAME_OVER) {
-        console.log(GAME_OVER);
-        // show gameover menu
+        u.showGameOver();
 
     }else if (gameState.state === COMPLETE) {
-        console.log(COMPLETE)
+        u.showGameComplete();
 
     }else if (gameState.state === RESTART) {
         initGame();
@@ -87,7 +89,7 @@ let currentFPS;
 async function renderFps(timestamp) {
     frameCount++; // Increment the frame count
 
-    // Calculate FPS every second (1000ms)
+    // Calculate FPS every second (1000ms) 
     const elapsedSinceLastFPS = timestamp - lastFPSTime;
     if (elapsedSinceLastFPS >= 1000) {
         currentFPS = frameCount; // Set FPS to the number of frames in the last second
@@ -105,15 +107,15 @@ function handleKeyDown(event) {
     if (gameState.state === RUNNING ) {
         handleGameKeys(event);
 
-    } else if (gameState.state === AT_START && event.key === ' ') {
+    } else if (gameState.state === AT_START) {
         //handleStartMenuKeys(event);
         //gameStart();
 
-    } else if (gameState.state === PAUSED) {
+    } else if (gameState.state === AT_PAUSED) {
         handlePauseKeys(event);
 
     } else if (gameState.state === GAME_OVER || gameState.state === COMPLETE) {
-        if (event.key === 'Escape') initGame();
+        if (event.key === ' ') gameState.state = RESTART;
     }
 }
 
