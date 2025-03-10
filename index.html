@@ -38,7 +38,35 @@
         </text>
       </g>
 
-      <g id="menuLayer">
+      <g id="menuLayer" transform="translate(-1000, -1000)">
+        <g id="pause-menu" visibility="visible">
+          <rect x="0" y="0" width="300" height="250" fill="rgba(0, 0, 0, 0.5)"></rect>
+          <text x="150" y="50" font-size="24" fill="white" text-anchor="middle">Game Paused</text>
+          <rect x="100" y="100" width="100" height="30" fill="white" class="button"></rect>
+          <text x="150" y="120" font-size="18" fill="black" text-anchor="middle">Resume</text>
+          <rect x="100" y="140" width="100" height="30" fill="lightblue" class="button"></rect>
+          <text x="150" y="160" font-size="18" fill="black" text-anchor="middle">Restart</text>
+          <rect x="100" y="180" width="100" height="30" fill="white" class="button"></rect>
+          <text x="150" y="200" font-size="18" fill="black" text-anchor="middle">Quit</text>
+      </g>
+        <g id="start-menu" visibility="visible"><rect x="0" y="0" width="800" height="600" fill="rgba(0, 0, 0, 0.5)"></rect>
+          <!-- Background -->
+          <rect x="0" y="0" width="800" height="600" fill="rgba(0, 0, 0, 0.5)"></rect>
+
+          <!-- Title Area -->
+          <text x="400" y="100" font-size="36" fill="white" text-anchor="middle">BANG BANG BIM</text>
+
+          <!-- Instructions Area -->
+          <rect x="50" y="150" width="200" height="300" fill="rgba(255, 255, 255, 0.8)" stroke="black" stroke-width="2"></rect>
+          <text x="150" y="180" font-size="16" fill="black" text-anchor="middle">Instructions:</text>
+          <text x="150" y="210" font-size="14" fill="black" text-anchor="middle">- Use arrow keys to move</text>
+          <text x="150" y="240" font-size="14" fill="black" text-anchor="middle">- Press space to shoot</text>
+          <text x="150" y="270" font-size="14" fill="black" text-anchor="middle">- Press Esc to pause</text>
+
+          <!-- Start Game Button Area -->
+          <rect x="300" y="500" width="200" height="50" fill="red" stroke="black" stroke-width="2" class="button"></rect>
+          <text x="400" y="530" font-size="20" fill="white" text-anchor="middle">Start Game</text>
+        </g>
       </g>
 
     </svg>

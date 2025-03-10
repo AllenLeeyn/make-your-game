@@ -1,7 +1,7 @@
 import * as p from './player.js';
 import * as t from './target.js';
 import * as u from './ui.js';
-import { createPauseMenu, showPauseMenu, hidePauseMenu, handleArrowKeys } from './showMenu.js';
+import { handleStartMenuKeys, hideStartScreenMenu ,showPauseMenu, hidePauseMenu, handleArrowKeys, showStartScreenMenu } from './showMenu.js';
 import { getWordsAndTargets } from './words.js';
 
 // Constants for game states
@@ -24,7 +24,7 @@ export const gameState = {
 //--------------- initialize and start gameLoop ---------------//
 export function main() {
     // show main menu
-    createPauseMenu(); 
+    // showStartScreenMenu(); 
     initGame();
 }
 
@@ -105,7 +105,6 @@ function handleKeyDown(event) {
             gameState.state = PAUSED;
             showPauseMenu();
         } else if (gameState.state === PAUSED) {
-            //gameState.state = RUNNING;
             hidePauseMenu;
             requestAnimationFrame(gameLoop);
         };
@@ -113,6 +112,12 @@ function handleKeyDown(event) {
             initGame();
         };
         console.log(gameState.state)
+    }
+    if (gameState.state === AT_START) {
+        if (event.key === ' ') {
+            handleStartMenuKeys(event);
+            gameStart();
+        }
     }
     if (gameState.state === PAUSED) {
         handleArrowKeys(event);
@@ -128,24 +133,35 @@ function handleKeyUp(event) {
 
 //--------------- Pause Menu ------------------//
 
-// function pauseGameLoop() {
-//     isGamePaused = true;
-//     m.showPauseMenu(); 
-// }
 export function resumeGameLoop() {
     gameState.state = RUNNING;
+    console.log("Resuming Game")
     hidePauseMenu();
     requestAnimationFrame(gameLoop)
 }
 
 export function restartGameLoop() {
     gameState.state = AT_START;
+    console.log("Restarting Level")
     hidePauseMenu();
     initGame();
+}
+
+export function returnToStartScreen() {
+    gameState.state = AT_START
+    console.log("Return to Start Screen")
+    showStartScreenMenu();
+}
+
+// ----------- Start Screen Menu -------
+
+export function gameStart() {
+    gameState.state = RUNNING;
+    console.log("Game Start")
+    hideStartScreenMenu();
 }
 
 // Add event listeners for keydown and keyup
 document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
-// Add event listenders for keydown during Pause Menu
-// document.addEventListener('keydown', handleArrowKeys);
+
