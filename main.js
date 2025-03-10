@@ -32,6 +32,8 @@ export function main() {
 }
 
 async function initGame() {
+    p.player.score = 0;
+    p.player.combo = 0;
     // prepare game parameters and data
     [gameState.wordList, gameState.targetList] = await getWordsAndTargets(gameState.currentQuest);
 
