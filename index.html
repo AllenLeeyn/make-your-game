@@ -55,7 +55,20 @@
     </g>
 
     <g id="menuLayer">
+      <g id="gameover-display" style= "display: none;">
+        <rect x="150" y="200" width="500" height="200" style="fill:black; opacity:0.8; stroke:red; stroke-width:3;"/>
+        <text x="410" y="300" font-size="80" text-anchor="middle" fill="red">FAILED!</text>
+        <rect x="240" y="320" width="320" height="50" rx="10" style="fill:green;"/>
+        <text x="400" y="350" font-size="20" text-anchor="middle" fill="white">Press Spacebar to Replay</text>
+      </g>
+      <g id="gamecomplete-display" style= "display: none;">
+        <rect x="125" y="200" width="550" height="200" style="fill:black; opacity:0.8; stroke:GREEN; stroke-width:3;"/>
+        <text x="410" y="300" font-size="80" text-anchor="middle" fill="GREEN">SUCCEEDED!</text>
+        <rect x="240" y="320" width="320" height="50" rx="10" style="fill:green;"/>
+        <text x="400" y="350" font-size="20" text-anchor="middle" fill="white">Press Spacebar to Replay</text>
+      </g>
     </g>
+  
   </svg>
 
   <svg id="hidden-template" style="display: none;">

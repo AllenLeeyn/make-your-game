@@ -28,7 +28,7 @@ export function main() {
     requestAnimationFrame(gameLoop);
 }
 
-async function initGame() {
+export async function initGame() {
     // prepare game parameters and data
     [gameState.wordList, gameState.targetList] = await getWordsAndTargets(gameState.currentQuest);
 
@@ -47,6 +47,7 @@ async function initGame() {
 function gameLoop(timestamp) {
     if (gameState.state === COMPLETE) {
         console.log(COMPLETE)
+        u.showGameComplete();
     }
     if (gameState.state === RUNNING){
         p.updatePlayerPosition(); // Update player position
@@ -56,7 +57,7 @@ function gameLoop(timestamp) {
     } 
     if (gameState.state === GAME_OVER) {
         console.log(GAME_OVER);
-        // show gameover menu
+        u.showGameOver();
     }
     requestAnimationFrame(gameLoop); // Keep the game loop running
 }
@@ -72,7 +73,7 @@ let currentFPS = 0;
 async function renderFps(timestamp) {
     frameCount++; // Increment the frame count
 
-    // Calculate FPS every second (1000ms)
+    // Calculate FPS every second (1000ms) 
     const elapsedSinceLastFPS = timestamp - lastFPSTime;
     if (elapsedSinceLastFPS >= 1000) {
         currentFPS = frameCount; // Set FPS to the number of frames in the last second
@@ -91,20 +92,26 @@ function handleKeyDown(event) {
     }
     if (event.key === ' ' && gameState.state === RUNNING) {
         t.shoot(p);
-    };
-    if (event.key === 'Escape') {
+    } else if (gameState.state === GAME_OVER || gameState.state === COMPLETE) {
+        if (event.key === ' '){
+            u.hideGameOver();
+            u.hideGameComplete();
+            initGame();
+        };
+    } else if (event.key === 'Escape') {
         if (gameState.state === RUNNING) {
             gameState.state = PAUSED;
         } else if (gameState.state === PAUSED) {
             gameState.state = RUNNING;
         };
-        if (gameState.state === GAME_OVER) {
-            initGame();
-        };
         console.log(gameState.state)
     }
+    if (event.key === ' ' && gameState.state === AT_START) {
+        gameState.state = RUNNING;
+        requestAnimationFrame(gameLoop);
+    }
 }
-  
+
 // Handle keyup events
 function handleKeyUp(event) {
     if (event.key in p.keysPressed) {

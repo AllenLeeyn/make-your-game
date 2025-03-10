@@ -103,3 +103,26 @@ export function updateScoreDisplay(){
     }
     scoreDisplay.textContent = p.player.score.toString().padStart(6, '0');
 }
+
+export function showGameOver() {                     
+    const gameOverDisplay = document.getElementById('gameover-display');
+    gameOverDisplay.style.display = 'block';
+    gameOverDisplay.classList.add('fade-in');
+}
+
+export function showGameComplete() {                     
+    const gameCompleteDisplay = document.getElementById('gamecomplete-display');
+    gameCompleteDisplay.style.display = 'block';
+    gameCompleteDisplay.classList.add('fade-in');
+}
+ export function hideGameOver() {
+    const gameOverDisplay = document.getElementById('gameover-display');
+    gameOverDisplay.style.display = 'none';
+    gameOverDisplay.classList.remove('fade-in');
+}
+
+export function hideGameComplete() {
+    const gameCompleteDisplay = document.getElementById('gamecomplete-display');
+    gameCompleteDisplay.style.display = 'none';
+    gameCompleteDisplay.classList.remove('fade-in');
+}
