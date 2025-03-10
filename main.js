@@ -36,6 +36,7 @@ async function initGame() {
     t.initTargets();
     u.initTimer(gameState.timeDuration);
     u.updateWordDisplay();
+    u.updateBulletDisplay(p.player.bullets);
     
     gameState.state = RUNNING;
     requestAnimationFrame(gameLoop);

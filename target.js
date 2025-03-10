@@ -1,6 +1,6 @@
 import { player } from "./player.js";
 import * as m from "./main.js";
-import { showFeedback } from "./ui.js";
+import { showFeedback, updateBulletDisplay } from "./ui.js";
 
 const bgLayer = document.getElementById('bgLayer')
 const targetsLayer = document.getElementById('targetsLayer')
@@ -56,7 +56,7 @@ export function createTarget(letter, i) {
 
     const target = {
         index: i,
-        state: false,
+        active: false,
         circle: circle,
         text: text,
         dx: (Math.random() * speedVar.xRange) + speedVar.xMin,
@@ -76,7 +76,7 @@ export function initTargets(){
     createTargets();
 
     targets.forEach(t=>{
-        t.state = false;
+        t.active = false;
         t.circle.setAttribute('cy', -100);
         t.text.setAttribute('y', -100);
     });
@@ -104,19 +104,19 @@ function addTarget(i){
     targets[i].text.classList.remove('target-removal');
     targets[i].circle.classList.add('target-fade-in');
     targets[i].text.classList.add('target-fade-in');
-    targets[i].state = true;
+    targets[i].active = true;
 }
 
 function hideTarget(i) {
     console.log(`${targets[i].index}: ${targets[i].letter} hide`)
-    targets[i].state = false;
+    targets[i].ative = false;
     targets[i].circle.setAttribute('cy', -100);
     targets[i].text.setAttribute('y', -100);
 }
 
 export async function moveTargets() {
     targets.forEach(t => {
-        if (t.state) {
+        if (t.active) {
             t.x += t.dx;
             t.y += t.dy;
 
@@ -146,28 +146,19 @@ const HIT = 'hit';
 const MISS = 'miss';
 const BIM = 'bim';
 
-const bulletCountElement = document.getElementById('bulletCount');
-
 export function shoot(p) {
     p.player.bullets--;
-    bulletCountElement.textContent = `Bullets: ${p.player.bullets}`;
-
-    if (p.player.bullets > 0) {
-        console.log(`Bullet remaining: ${p.player.bullets}`);
-    } else {
-        m.gameState.state = m.GAME_OVER
-        console.log('No bullets left! Game over.');
-    }
-
+    updateBulletDisplay(p.player.bullets);
+    if (p.player.bullets <= 0) m.gameState.state = m.GAME_OVER;
     let targetHit = false;
     targets.forEach(target => {
+
         const dx = p.player.x - target.x;
         const dy = p.player.y - target.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
     
-        if (distance <= p.player.radius + 1) {
-            target.state = false;
-            targetHit = true;
+        if (distance <= p.player.radius + 1 && target.active) {
+            target.active = false;
             console.log(`${target.index}: ${target.letter} hit`)
             const bulletCircle = addBulletHole(player.x, player.y, targetsLayer);
             bulletCircle.classList.add('target-removal');
@@ -179,17 +170,21 @@ export function shoot(p) {
                 hideTarget(target.index);
             }, 1000);
     
-            if (result === BIM){
-                m.gameState.currentWordIndex++;
-                m.gameState.currentTargetIndex++;
-                showFeedback(BIM);
-            } else if (result === MISS) {
+            if (result === MISS) {
                 setTimeout(() => {
                     addTarget(target.index);
                 }, 1100);
             } else {
-                showFeedback(HIT)
+                targetHit = true;
                 m.gameState.currentTargetIndex++;
+                if (result === BIM) {
+                    m.gameState.currentWordIndex++;
+                    if (m.gameState.currentWordIndex >= m.gameState.wordList.length){
+                        m.gameState.state = m.COMPLETE;
+                        return;
+                    };
+                };
+                showFeedback(result)
             };
         }
     });

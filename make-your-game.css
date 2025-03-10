@@ -91,16 +91,32 @@ body {
         opacity: 1;
         transform: translateY(-45px);
     }
-    66% {
+    80% {
         opacity: 0.5;
         transform: translateY(-45px);
     }
     100% {
         opacity: 0;
-        transform: translateY(0px);
+        transform: translateY(-45px);
     }
 }
 
 .fade-in-out-up {
-    animation: fadeInOutUp 1s ease-out forwards;  
+    animation: fadeInOutUp 0.6s ease-out forwards;  
+}
+
+@keyframes flashRed {
+    0% {
+        fill: red;
+    }
+    50% {
+        fill: salmon;
+    }
+    100% {
+        fill: red;
+    }
+}
+
+.flashing-red {
+    animation: flashRed 1s infinite;
 }

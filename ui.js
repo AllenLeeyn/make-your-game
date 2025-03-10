@@ -33,12 +33,32 @@ function updateTimer() {
 }
 
 let timerInterval;
+export function updateBulletDisplay(count){
+    const bulletCountElement = document.getElementById('bulletCount');
+
+    let result = '';
+
+    for (let i = 0; i < count; i ++){
+        result += '▋';
+    }
+    bulletCountElement.textContent = result;
+
+    bulletCountElement.classList.remove('flashing-red');
+
+    // Change color based on the bullet count
+    if (count === 1) {
+        // Flashing red for 1 bullet
+        bulletCountElement.classList.add('flashing-red');
+    } else if (count <= 5) {
+        // Red for 5 or less bullets
+        bulletCountElement.setAttribute('fill', 'red');
+    } else if (count <= 10) {
+        // Yellow for 10 or less bullets
+        bulletCountElement.setAttribute('fill', 'orange');
+    }
+}
 
 export function updateWordDisplay() {
-    if (m.gameState.currentWordIndex >= m.gameState.wordList.length){
-        m.gameState.state = m.COMPLETE;
-        return;
-    };
     const [word] = Object.keys(m.gameState.wordList[m.gameState.currentWordIndex]);
     wordDisplay.textContent = word;
 }

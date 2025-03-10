@@ -78,6 +78,4 @@ export function initPlayer() {
     playerLayer.appendChild(player.circle);
 
     player.bullets = 15;
-    const bulletCountElement = document.getElementById('bulletCount');
-    bulletCountElement.textContent = `Bullets: ${player.bullets}`;
 }
