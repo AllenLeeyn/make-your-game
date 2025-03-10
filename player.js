@@ -15,6 +15,8 @@ export const player = {
     radius: 20,
     speed: 6,
     bullets: 15,
+    score: 0,
+    combo: 0
 };
 
 export const keysPressed = {

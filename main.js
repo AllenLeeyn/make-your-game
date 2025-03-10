@@ -25,6 +25,7 @@ export function main() {
     // show main menu
 
     initGame();
+    requestAnimationFrame(gameLoop);
 }
 
 async function initGame() {
@@ -36,10 +37,10 @@ async function initGame() {
     t.initTargets();
     u.initTimer(gameState.timeDuration);
     u.updateWordDisplay();
+    u.updateScoreDisplay();
     u.updateBulletDisplay(p.player.bullets);
     
     gameState.state = RUNNING;
-    requestAnimationFrame(gameLoop);
 }
 
 //--------------- game logic ---------------//
@@ -52,13 +53,12 @@ function gameLoop(timestamp) {
         t.moveTargets();           // Update target positions
         t.addTargets();
         renderFps(timestamp);
-        requestAnimationFrame(gameLoop); // Keep the game loop running
     } 
     if (gameState.state === GAME_OVER) {
-        console.log('damn');
         console.log(GAME_OVER);
         // show gameover menu
     }
+    requestAnimationFrame(gameLoop); // Keep the game loop running
 }
 
 //--------------- FPS counter ---------------//
@@ -97,7 +97,6 @@ function handleKeyDown(event) {
             gameState.state = PAUSED;
         } else if (gameState.state === PAUSED) {
             gameState.state = RUNNING;
-            requestAnimationFrame(gameLoop);
         };
         if (gameState.state === GAME_OVER) {
             initGame();

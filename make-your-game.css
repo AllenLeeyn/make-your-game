@@ -28,12 +28,12 @@ body {
 }
 
 .horizontal, .vertical {
-    stroke: green;
+    stroke: goldenrod;
     stroke-width: 1;
 }
 
 .crosshair-circle {
-    stroke: green;
+    stroke: goldenrod;
     stroke-width: 2;
     fill: transparent;
 }

@@ -1,6 +1,6 @@
 import { player } from "./player.js";
 import * as m from "./main.js";
-import { showFeedback, updateBulletDisplay } from "./ui.js";
+import { showFeedback, updateBulletDisplay, updateScoreDisplay } from "./ui.js";
 
 const bgLayer = document.getElementById('bgLayer')
 const targetsLayer = document.getElementById('targetsLayer')
@@ -184,15 +184,19 @@ export function shoot(p) {
                         return;
                     };
                 };
-                showFeedback(result)
+                player.score += Math.floor(100 * (1+(player.combo/10)));
+                player.combo++;
+                showFeedback(result);
             };
         }
     });
 
     if (!targetHit){
+        player.combo = 0;
         showFeedback(MISS)
         addBulletHole(player.x, player.y, bgLayer);
     }
+    updateScoreDisplay();
 }
 
 

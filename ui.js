@@ -1,6 +1,8 @@
 import * as m from './main.js';
 import * as p from './player.js';
 
+const scoreDisplay = document.getElementById('score-display');
+const comboDisplay = document.getElementById('combo-display');
 const wordDisplay = document.getElementById('word-display');
 const missDisplay = document.getElementById('miss-display');
 const hitDisplay = document.getElementById('hit-display');
@@ -11,6 +13,7 @@ let timerValue;
 export let isTimeUp = false;
 
 export function initTimer(){
+    clearInterval(timerInterval); 
     timerValue = m.gameState.timeDuration;
     timerElement.textContent = timerValue; 
     isTimeUp = false;
@@ -33,8 +36,11 @@ function updateTimer() {
 }
 
 let timerInterval;
+
 export function updateBulletDisplay(count){
     const bulletCountElement = document.getElementById('bulletCount');
+    bulletCountElement.setAttribute('fill', 'limegreen');
+    bulletCountElement.classList.remove('flashing-red');
 
     let result = '';
 
@@ -43,18 +49,13 @@ export function updateBulletDisplay(count){
     }
     bulletCountElement.textContent = result;
 
-    bulletCountElement.classList.remove('flashing-red');
 
-    // Change color based on the bullet count
     if (count === 1) {
-        // Flashing red for 1 bullet
         bulletCountElement.classList.add('flashing-red');
-    } else if (count <= 5) {
-        // Red for 5 or less bullets
+    } else if (count <= 3) {
         bulletCountElement.setAttribute('fill', 'red');
-    } else if (count <= 10) {
-        // Yellow for 10 or less bullets
-        bulletCountElement.setAttribute('fill', 'orange');
+    } else if (count <= 7) {
+        bulletCountElement.setAttribute('fill', 'gold');
     }
 }
 
@@ -91,4 +92,14 @@ export function showFeedback(result) {
             updateWordDisplay();
         }, 1000);
     }
+}
+
+export function updateScoreDisplay(){
+    if (p.player.combo === 0) {
+        comboDisplay.style.display = "none";
+    } else {
+        comboDisplay.style.display = "block";
+        comboDisplay.textContent = `COMBO ${p.player.combo}`;
+    }
+    scoreDisplay.textContent = p.player.score.toString().padStart(6, '0');
 }
