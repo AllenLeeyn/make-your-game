@@ -28,12 +28,12 @@ body {
 }
 
 .horizontal, .vertical {
-    stroke: green;
+    stroke: goldenrod;
     stroke-width: 1;
 }
 
 .crosshair-circle {
-    stroke: green;
+    stroke: goldenrod;
     stroke-width: 2;
     fill: transparent;
 }
@@ -82,31 +82,41 @@ body {
     animation: fadeOut 1s forwards;
 }
 
-/* Pause Menu */
-/* #pause-menu {
-    position: absolute; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%, -50%); 
-    width: 300px; 
-    height: 200px; 
-    background-color: rgba(0, 0, 0, 0.5); 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    z-index: 1; 
-    
-}
-#pause-menu > h2 {
-    margin-bottom: 20px;
+@keyframes fadeInOutUp {
+    0% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+    33% {
+        opacity: 1;
+        transform: translateY(-45px);
+    }
+    80% {
+        opacity: 0.5;
+        transform: translateY(-45px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-45px);
+    }
 }
 
-#pause-menu > button {
-    margin: 10px 0; 
+.fade-in-out-up {
+    animation: fadeInOutUp 0.6s ease-out forwards;  
 }
 
-.hidden {
-    display: none;
-} */
+@keyframes flashRed {
+    0% {
+        fill: red;
+    }
+    50% {
+        fill: salmon;
+    }
+    100% {
+        fill: red;
+    }
+}
+
+.flashing-red {
+    animation: flashRed 1s infinite;
+}

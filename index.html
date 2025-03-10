@@ -23,23 +23,47 @@
           </pattern>
       </defs>
 
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#dot-pattern)" />
+  <!-- <svg id="svg-container" width="100%" height="100%" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">-->
+  <svg id="svg-container" width="800" height="600">
+    <!-- Define the dot pattern -->
+    <defs>
+        <pattern id="dot-pattern" patternUnits="userSpaceOnUse" width="30" height="30">
+            <rect x="0" y="0" width="30" height="30" fill="#333" />
+            <circle cx="15" cy="15" r="2" fill="darkslategrey" />
+        </pattern>
+    </defs>
 
-      <!-- Game objects will be added here -->
-      <g id="targetsLayer"></g>
-      <g id="playerLayer"></g>
-      <g id="ui">
-        <rect x="0" y="0" width="100%" height="50" fill="#000000" />
-        <text id="timer" x="50%" y="40" text-anchor="middle" font-size="30" fill="red"></text>
-        <text id="bulletCount" x="90%" y="40" text-anchor="end" font-size="30" fill="red">15</text>
-        <rect x="0" y="550" width="100%" height="50" fill="#000000" />
+    <!-- Game objects will be added here -->
+    <g id="bgLayer">
+        <rect x="0" y="0" width="100%" height="100%" fill="url(#dot-pattern)" />
+    </g>
+     <g id="targetsLayer"></g>
+     <g id="playerLayer"></g>
+     <g id="ui">
+        <rect x="0" y="0" width="100%" height="50" fill="dark" />
+        <text id="score-display" x="10" y="35"  font-size="30" fill="limegreen">000000</text>
+        <text id="combo-display" x="150" y="35"  font-size="25" fill="limegreen">COMBO 0</text>
+        <text id="timer" x="50%" y="35" text-anchor="middle" font-size="30" fill="red"></text>
+        <text id="bulletCase" x="795" y="33" text-anchor="end" font-size="25" fill="grey">▋▋▋▋▋▋▋▋▋▋▋▋▋▋▋</text>
+        <text id="bulletCount" x="795" y="33" text-anchor="end" font-size="25" fill="limegreen"></text>
+        <rect x="0" y="550" width="100%" height="50" fill="dark" />
+        <text id="miss-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red" style="display: none;">
+            MISS!
+        </text>
+        <text id="hit-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="green" style="display: none;">
+            HIT!
+        </text>
+        <text id="bim-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="green" style="display: none;">
+            BIM!
+        </text>
         <text id="word-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red">
             let_there_be_words
         </text>
       </g>
 
-      <g id="menuLayer">
-      </g>
+    <g id="menuLayer">
+    </g>
+  </svg>
 
     </svg>
   <svg id="hidden-template" style="display: none;">

@@ -1,7 +1,7 @@
 import * as p from './player.js';
 import * as t from './target.js';
 import * as u from './ui.js';
-import { createPauseMenu, showPauseMenu, hidePauseMenu, handleArrowKeys } from './showMenu.js';
+import { createPauseMenu, showPauseMenu, hidePauseMenu, handlePauseKeys } from './showMenu.js';
 import { getWordsAndTargets } from './words.js';
 
 // Constants for game states
@@ -26,6 +26,7 @@ export function main() {
     // show main menu
     createPauseMenu(); 
     initGame();
+    requestAnimationFrame(gameLoop);
 }
 
 async function initGame() {
@@ -33,39 +34,33 @@ async function initGame() {
     // prepare game parameters and data
     [gameState.wordList, gameState.targetList] = await getWordsAndTargets(gameState.currentQuest);
 
-    //create all targets and bullet holes
-    t.createTargets();
-
     // initalize game 
     p.initPlayer();
     t.initTargets();
     u.initTimer(gameState.timeDuration);
-    u.showNextWord();
+    u.updateWordDisplay();
+    u.updateScoreDisplay();
+    u.updateBulletDisplay(p.player.bullets);
     
     gameState.state = RUNNING;
-    requestAnimationFrame(gameLoop);
 }
 
 //--------------- game logic ---------------//
 function gameLoop(timestamp) {
+    if (gameState.state === COMPLETE) {
+        console.log(COMPLETE)
+    }
     if (gameState.state === RUNNING){
         p.updatePlayerPosition(); // Update player position
         t.moveTargets();           // Update target positions
         t.addTargets();
         renderFps(timestamp);
-        requestAnimationFrame(gameLoop); // Keep the game loop running
-    } 
-    if (gameState.state === PAUSED) {
-        // Do nothing when paused
-        return;
     }
     if (gameState.state === GAME_OVER) {
         console.log(GAME_OVER);
         // show gameover menu
     }
-    if (gameState.state === COMPLETE) {
-        console.log(COMPLETE)
-    }
+    requestAnimationFrame(gameLoop); // Keep the game loop running
 }
 
 //--------------- FPS counter ---------------//
@@ -96,18 +91,17 @@ function handleKeyDown(event) {
     if (event.key in p.keysPressed) {
       p.keysPressed[event.key] = true; // Mark the key as pressed
     }
-    if (event.key === ' ' && gameState.state === RUNNING) {
-        t.checkTargetHit(p)
-        u.shoot();
-    };
+    if (event.key === ' ') {
+        if (gameState.state === RUNNING)
+        t.shoot(p);
+    }
     if (event.key === 'Escape') {
         if (gameState.state === RUNNING) {
             gameState.state = PAUSED;
             showPauseMenu();
         } else if (gameState.state === PAUSED) {
-            //gameState.state = RUNNING;
-            hidePauseMenu;
-            requestAnimationFrame(gameLoop);
+            gameState.state = RUNNING;
+            hidePauseMenu();
         };
         if (gameState.state === GAME_OVER) {
             initGame();
@@ -115,7 +109,7 @@ function handleKeyDown(event) {
         console.log(gameState.state)
     }
     if (gameState.state === PAUSED) {
-        handleArrowKeys(event);
+        handlePauseKeys(event);
     }
 }
 
@@ -135,7 +129,6 @@ function handleKeyUp(event) {
 export function resumeGameLoop() {
     gameState.state = RUNNING;
     hidePauseMenu();
-    requestAnimationFrame(gameLoop)
 }
 
 export function restartGameLoop() {
@@ -147,5 +140,3 @@ export function restartGameLoop() {
 // Add event listeners for keydown and keyup
 document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
-// Add event listenders for keydown during Pause Menu
-// document.addEventListener('keydown', handleArrowKeys);
