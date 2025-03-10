@@ -23,16 +23,39 @@
           </pattern>
       </defs>
 
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#dot-pattern)" />
+  <!-- <svg id="svg-container" width="100%" height="100%" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">-->
+  <svg id="svg-container" width="800" height="600">
+    <!-- Define the dot pattern -->
+    <defs>
+        <pattern id="dot-pattern" patternUnits="userSpaceOnUse" width="30" height="30">
+            <rect x="0" y="0" width="30" height="30" fill="#333" />
+            <circle cx="15" cy="15" r="2" fill="darkslategrey" />
+        </pattern>
+    </defs>
 
-      <!-- Game objects will be added here -->
-      <g id="targetsLayer"></g>
-      <g id="playerLayer"></g>
-      <g id="ui">
-        <rect x="0" y="0" width="100%" height="50" fill="#000000" />
-        <text id="timer" x="50%" y="40" text-anchor="middle" font-size="30" fill="red"></text>
-        <text id="bulletCount" x="90%" y="40" text-anchor="end" font-size="30" fill="red">15</text>
-        <rect x="0" y="550" width="100%" height="50" fill="#000000" />
+    <!-- Game objects will be added here -->
+    <g id="bgLayer">
+        <rect x="0" y="0" width="100%" height="100%" fill="url(#dot-pattern)" />
+    </g>
+     <g id="targetsLayer"></g>
+     <g id="playerLayer"></g>
+     <g id="ui">
+        <rect x="0" y="0" width="100%" height="50" fill="dark" />
+        <text id="score-display" x="10" y="35"  font-size="30" fill="limegreen">000000</text>
+        <text id="combo-display" x="150" y="35"  font-size="25" fill="limegreen">COMBO 0</text>
+        <text id="timer" x="50%" y="35" text-anchor="middle" font-size="30" fill="red"></text>
+        <text id="bulletCase" x="795" y="33" text-anchor="end" font-size="25" fill="grey">▋▋▋▋▋▋▋▋▋▋▋▋▋▋▋</text>
+        <text id="bulletCount" x="795" y="33" text-anchor="end" font-size="25" fill="limegreen"></text>
+        <rect x="0" y="550" width="100%" height="50" fill="dark" />
+        <text id="miss-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red" style="display: none;">
+            MISS!
+        </text>
+        <text id="hit-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="green" style="display: none;">
+            HIT!
+        </text>
+        <text id="bim-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="green" style="display: none;">
+            BIM!
+        </text>
         <text id="word-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red">
             let_there_be_words
         </text>
@@ -40,28 +63,28 @@
 
       <g id="menuLayer" transform="translate(-1000, -1000)">
         <g id="pause-menu" visibility="visible">
-          <rect x="0" y="0" width="300" height="250" fill="rgba(0, 0, 0, 0.5)"></rect>
-          <text x="150" y="50" font-size="24" fill="white" text-anchor="middle">Game Paused</text>
-          <rect x="100" y="100" width="100" height="30" fill="white" class="button"></rect>
-          <text x="150" y="120" font-size="18" fill="black" text-anchor="middle">Resume</text>
-          <rect x="100" y="140" width="100" height="30" fill="lightblue" class="button"></rect>
-          <text x="150" y="160" font-size="18" fill="black" text-anchor="middle">Restart</text>
-          <rect x="100" y="180" width="100" height="30" fill="white" class="button"></rect>
-          <text x="150" y="200" font-size="18" fill="black" text-anchor="middle">Quit</text>
-      </g>
+            <rect x="0" y="0" width="300" height="250" fill="rgba(0, 0, 0, 0.5)"></rect>
+            <text x="150" y="50" font-size="24" fill="white" text-anchor="middle">Game Paused</text>
+            <rect x="100" y="100" width="100" height="30" fill="white" class="button"></rect>
+            <text x="150" y="120" font-size="18" fill="black" text-anchor="middle">Resume</text>
+            <rect x="100" y="140" width="100" height="30" fill="lightblue" class="button"></rect>
+            <text x="150" y="160" font-size="18" fill="black" text-anchor="middle">Restart</text>
+            <rect x="100" y="180" width="100" height="30" fill="white" class="button"></rect>
+            <text x="150" y="200" font-size="18" fill="black" text-anchor="middle">Quit</text>
+        </g>
         <g id="start-menu" visibility="visible"><rect x="0" y="0" width="800" height="600" fill="rgba(0, 0, 0, 0.5)"></rect>
-          <!-- Background -->
-          <rect x="0" y="0" width="800" height="600" fill="rgba(0, 0, 0, 0.5)"></rect>
+            <!-- Background -->
+            <rect x="0" y="0" width="800" height="600" fill="rgba(0, 0, 0, 0.5)"></rect>
 
-          <!-- Title Area -->
-          <text x="400" y="100" font-size="36" fill="white" text-anchor="middle">BANG BANG BIM</text>
+            <!-- Title Area -->
+            <text x="400" y="100" font-size="36" fill="white" text-anchor="middle">BANG BANG BIM</text>
 
-          <!-- Instructions Area -->
-          <rect x="50" y="150" width="200" height="300" fill="rgba(255, 255, 255, 0.8)" stroke="black" stroke-width="2"></rect>
-          <text x="150" y="180" font-size="16" fill="black" text-anchor="middle">Instructions:</text>
-          <text x="150" y="210" font-size="14" fill="black" text-anchor="middle">- Use arrow keys to move</text>
-          <text x="150" y="240" font-size="14" fill="black" text-anchor="middle">- Press space to shoot</text>
-          <text x="150" y="270" font-size="14" fill="black" text-anchor="middle">- Press Esc to pause</text>
+            <!-- Instructions Area -->
+            <rect x="50" y="150" width="200" height="300" fill="rgba(255, 255, 255, 0.8)" stroke="black" stroke-width="2"></rect>
+            <text x="150" y="180" font-size="16" fill="black" text-anchor="middle">Instructions:</text>
+            <text x="150" y="210" font-size="14" fill="black" text-anchor="middle">- Use arrow keys to move</text>
+            <text x="150" y="240" font-size="14" fill="black" text-anchor="middle">- Press space to shoot</text>
+            <text x="150" y="270" font-size="14" fill="black" text-anchor="middle">- Press Esc to pause</text>
 
           <!-- Start Game Button Area -->
           <rect x="300" y="450" width="200" height="50" fill="red" stroke="white" stroke-width="2" class="button"></rect>
@@ -77,7 +100,7 @@
     <circle id="template-circle" cx="0" cy="0" r="20" fill="red" />
     <text id="template-text" text-anchor="middle" x="0" y="0" font-family="Roboto Mono, monospace" font-size="30" fill="white" text-anchor="middle">A</text>
     
-    <circle id="bullet-circle" cx="0" cy="0" r="3" fill="#000000" stroke="#333" stroke-width="1"/>
+    <circle id="bullet-circle" cx="0" cy="0" r="3" fill="dark" stroke="grey" stroke-width="1"/>
   </svg>
 
   <!-- Inline or optional: Init function might be inside the script -->

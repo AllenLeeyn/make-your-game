@@ -1,7 +1,8 @@
 import { player } from "./player.js";
-import { gameState } from "./main.js";
-import { showNextWord } from "./ui.js";
+import * as m from "./main.js";
+import { showFeedback, updateBulletDisplay, updateScoreDisplay } from "./ui.js";
 
+const bgLayer = document.getElementById('bgLayer')
 const targetsLayer = document.getElementById('targetsLayer')
 const wordDisplay = document.getElementById('word-display');
 const template = document.getElementById('hidden-template');
@@ -43,8 +44,8 @@ export function createTargets(){
         createTarget(letter, i);
     }
 
-    for (let i = 0; i < gameState.targetList.length; i++) {
-        const letter = gameState.targetList[i];
+    for (let i = 0; i < m.gameState.targetList.length; i++) {
+        const letter = m.gameState.targetList[i];
         createTarget(letter, i+5);
     }
 }
@@ -55,7 +56,7 @@ export function createTarget(letter, i) {
 
     const target = {
         index: i,
-        state: false,
+        active: false,
         circle: circle,
         text: text,
         dx: (Math.random() * speedVar.xRange) + speedVar.xMin,
@@ -72,20 +73,22 @@ export function createTarget(letter, i) {
 }
 
 export function initTargets(){
+    createTargets();
+
     targets.forEach(t=>{
-        t.state = false;
+        t.active = false;
         t.circle.setAttribute('cy', -100);
         t.text.setAttribute('y', -100);
     });
-    gameState.currentWordIndex = 0;
-    gameState.currentTargetIndex = 0;
+    m.gameState.currentWordIndex = 0;
+    m.gameState.currentTargetIndex = 0;
     lastTargetIndex = 0;
     addTargets();
 }
 
 export function addTargets(){
     if (lastTargetIndex >= targets.length) return;
-    for (let i = lastTargetIndex; lastTargetIndex < gameState.currentTargetIndex+10; i++) {
+    for (let i = lastTargetIndex; lastTargetIndex < m.gameState.currentTargetIndex+10; i++) {
         addTarget(i);
         lastTargetIndex = i+1;
     };
@@ -101,19 +104,19 @@ function addTarget(i){
     targets[i].text.classList.remove('target-removal');
     targets[i].circle.classList.add('target-fade-in');
     targets[i].text.classList.add('target-fade-in');
-    targets[i].state = true;
+    targets[i].active = true;
 }
 
 function hideTarget(i) {
     console.log(`${targets[i].index}: ${targets[i].letter} hide`)
-    targets[i].state = false;
+    targets[i].ative = false;
     targets[i].circle.setAttribute('cy', -100);
     targets[i].text.setAttribute('y', -100);
 }
 
 export async function moveTargets() {
     targets.forEach(t => {
-        if (t.state) {
+        if (t.active) {
             t.x += t.dx;
             t.y += t.dy;
 
@@ -138,48 +141,67 @@ export async function moveTargets() {
 
 };
 
+//----------- bang bang logic -------------//
 const HIT = 'hit';
 const MISS = 'miss';
 const BIM = 'bim';
 
-export function checkTargetHit(p) {
-    console.log('bang')
-    const bulletCircle = addBulletHole(player.x, player.y);
-
+export function shoot(p) {
+    p.player.bullets--;
+    updateBulletDisplay(p.player.bullets);
+    if (p.player.bullets <= 0) m.gameState.state = m.GAME_OVER;
+    let targetHit = false;
     targets.forEach(target => {
+
         const dx = p.player.x - target.x;
         const dy = p.player.y - target.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance <= p.player.radius + 1) {
-            target.state = false;
+    
+        if (distance <= p.player.radius + 1 && target.active) {
+            target.active = false;
             console.log(`${target.index}: ${target.letter} hit`)
+            const bulletCircle = addBulletHole(player.x, player.y, targetsLayer);
             bulletCircle.classList.add('target-removal');
             target.circle.classList.add('target-removal');
             target.text.classList.add('target-removal');
             const result = checkWordCompletion(target.letter);
-
-            console.log(result)
-
+    
             setTimeout(() => {
                 hideTarget(target.index);
             }, 1000);
-
-            showNextWord(result)
+    
             if (result === MISS) {
                 setTimeout(() => {
                     addTarget(target.index);
                 }, 1100);
             } else {
-                gameState.currentTargetIndex++;
-            }
-
+                targetHit = true;
+                m.gameState.currentTargetIndex++;
+                if (result === BIM) {
+                    m.gameState.currentWordIndex++;
+                    if (m.gameState.currentWordIndex >= m.gameState.wordList.length){
+                        m.gameState.state = m.COMPLETE;
+                        return;
+                    };
+                };
+                player.score += Math.floor(100 * (1+(player.combo/10)));
+                player.combo++;
+                showFeedback(result);
+            };
         }
     });
+
+    if (!targetHit){
+        player.combo = 0;
+        showFeedback(MISS)
+        addBulletHole(player.x, player.y, bgLayer);
+    }
+    updateScoreDisplay();
 }
 
+
 function checkWordCompletion(letter){
-    const wordObj = gameState.wordList[gameState.currentWordIndex];
+    const wordObj = m.gameState.wordList[m.gameState.currentWordIndex];
     let [key, value] = Object.entries(wordObj)[0];
     const word = wordDisplay.textContent;
     const parts = word.split(/(?=[_A-Z])|(?<=[_A-Z])/);
@@ -200,7 +222,7 @@ function checkWordCompletion(letter){
             if (index !== -1) {
                 value.splice(index, 1);
             }
-            gameState.wordList[gameState.currentWordIndex][key] = value;
+            m.gameState.wordList[m.gameState.currentWordIndex][key] = value;
             console.log(wordDisplay.textContent)
             if (value.length === 0) return BIM;
             return HIT;
@@ -209,17 +231,16 @@ function checkWordCompletion(letter){
     return MISS
 }
 
-function addBulletHole(x, y) {
+function addBulletHole(x, y, layer) {
     const bulletCircle = document.getElementById('bullet-circle').cloneNode();
     bulletCircle.classList.remove('target-removal');
 
     bulletCircle.setAttribute('cx', x);
     bulletCircle.setAttribute('cy', y);
-
-    targetsLayer.appendChild(bulletCircle);
+    layer.appendChild(bulletCircle);
 
     setTimeout(() => {
-        targetsLayer.removeChild(bulletCircle);
+        layer.removeChild(bulletCircle);
     }, 1000);
 
     return bulletCircle;

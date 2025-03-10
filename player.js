@@ -15,6 +15,8 @@ export const player = {
     radius: 20,
     speed: 6,
     bullets: 15,
+    score: 0,
+    combo: 0
 };
 
 export const keysPressed = {
@@ -78,6 +80,4 @@ export function initPlayer() {
     playerLayer.appendChild(player.circle);
 
     player.bullets = 15;
-    const bulletCountElement = document.getElementById('bulletCount');
-    bulletCountElement.textContent = `Bullets: ${player.bullets}`;
 }

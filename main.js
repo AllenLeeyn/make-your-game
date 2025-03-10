@@ -1,7 +1,7 @@
 import * as p from './player.js';
 import * as t from './target.js';
 import * as u from './ui.js';
-import { handleStartMenuKeys, hideStartScreenMenu ,showPauseMenu, hidePauseMenu, handleArrowKeys, showStartScreenMenu } from './showMenu.js';
+import { handleStartMenuKeys, hideStartScreenMenu ,showPauseMenu, hidePauseMenu, handlePauseKeys, showStartScreenMenu } from './showMenu.js';
 import { getWordsAndTargets } from './words.js';
 
 // Constants for game states
@@ -10,6 +10,7 @@ export const RUNNING = 'running';     // Game is currently running
 export const PAUSED = 'paused';       // Game is paused
 export const GAME_OVER = 'gameover';  // Game is over
 export const COMPLETE = 'complete';   // Game is complete (successfully finished)
+export const RESTART = 'restart';   // Game is complete (successfully finished)
 
 export const gameState = {
     timeDuration: 120,
@@ -33,39 +34,45 @@ async function initGame() {
     // prepare game parameters and data
     [gameState.wordList, gameState.targetList] = await getWordsAndTargets(gameState.currentQuest);
 
-    //create all targets and bullet holes
-    t.createTargets();
-
     // initalize game 
     p.initPlayer();
     t.initTargets();
     u.initTimer(gameState.timeDuration);
-    u.showNextWord();
+    u.updateWordDisplay();
+    u.updateScoreDisplay();
+    u.updateBulletDisplay(p.player.bullets);
     
     gameState.state = RUNNING;
-    requestAnimationFrame(gameLoop);
 }
 
 //--------------- game logic ---------------//
 function gameLoop(timestamp) {
-    if (gameState.state === RUNNING){
+    if (gameState.state === AT_START) {
+        console.log(AT_START);
+        // show start screen
+
+    } else if (gameState.state === RUNNING){
+        hidePauseMenu();
         p.updatePlayerPosition(); // Update player position
         t.moveTargets();           // Update target positions
         t.addTargets();
         renderFps(timestamp);
-        requestAnimationFrame(gameLoop); // Keep the game loop running
-    } 
-    if (gameState.state === PAUSED) {
-        // Do nothing when paused
-        return;
-    }
-    if (gameState.state === GAME_OVER) {
+
+    } else if (gameState.state === PAUSED) {
+        showPauseMenu();
+
+    }else if (gameState.state === GAME_OVER) {
         console.log(GAME_OVER);
         // show gameover menu
-    }
-    if (gameState.state === COMPLETE) {
+
+    }else if (gameState.state === COMPLETE) {
         console.log(COMPLETE)
+
+    }else if (gameState.state === RESTART) {
+        initGame();
+
     }
+    requestAnimationFrame(gameLoop); // Keep the game loop running
 }
 
 //--------------- FPS counter ---------------//
@@ -93,63 +100,33 @@ async function renderFps(timestamp) {
 //--------------- player input ---------------//
 // Handle keydown events
 function handleKeyDown(event) {
-    if (event.key in p.keysPressed) {
-      p.keysPressed[event.key] = true; // Mark the key as pressed
-    }
-    if (event.key === ' ' && gameState.state === RUNNING) {
-        t.checkTargetHit(p)
-        u.shoot();
-    };
-    if (event.key === 'Escape') {
-        if (gameState.state === RUNNING) {
-            gameState.state = PAUSED;
-            showPauseMenu();
-        } else if (gameState.state === PAUSED) {
-            hidePauseMenu;
-            requestAnimationFrame(gameLoop);
-        };
-        if (gameState.state === GAME_OVER) {
-            initGame();
-        };
-        console.log(gameState.state)
-    }
-    if (gameState.state === AT_START) {
-        if (event.key === ' ') {
-            handleStartMenuKeys(event);
-        }
-    }
-    if (gameState.state === PAUSED) {
-        handleArrowKeys(event);
+
+    if (gameState.state === RUNNING ) {
+        handleGameKeys(event);
+
+    } else if (gameState.state === AT_START && event.key === ' ') {
+        //handleStartMenuKeys(event);
+        //gameStart();
+
+    } else if (gameState.state === PAUSED) {
+        handlePauseKeys(event);
+
+    } else if (gameState.state === GAME_OVER || gameState.state === COMPLETE) {
+        if (event.key === 'Escape') initGame();
     }
 }
 
 // Handle keyup events
 function handleKeyUp(event) {
     if (event.key in p.keysPressed) {
-      p.keysPressed[event.key] = false; // Mark the key as released
+      p.keysPressed[event.key] = false;
     }
 }
 
-//--------------- Pause Menu ------------------//
-
-export function resumeGameLoop() {
-    gameState.state = RUNNING;
-    console.log("Resuming Game")
-    hidePauseMenu();
-    requestAnimationFrame(gameLoop)
-}
-
-export function restartGameLoop() {
-    gameState.state = AT_START;
-    console.log("Restarting Level")
-    hidePauseMenu();
-    initGame();
-}
-
-export function returnToStartScreen() {
-    gameState.state = AT_START
-    console.log("Return to Start Screen")
-    showStartScreenMenu();
+function handleGameKeys(event) {
+    if (event.key === ' ') t.shoot(p);
+    if (event.key === 'Escape') gameState.state = PAUSED;
+    if (event.key in p.keysPressed) p.keysPressed[event.key] = true;
 }
 
 // ----------- Start Screen Menu -------
