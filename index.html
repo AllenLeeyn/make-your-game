@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>make-your-game</title>
-  <link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;,">
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="./make-your-game.css">
@@ -14,7 +14,6 @@
 
 <body>
   <div id="fps-display"></div>
-  <div id="game-container">
     <svg id="svg-container" width="800" height="600">
       <!-- Define the dot pattern -->
       <defs>
@@ -24,43 +23,31 @@
           </pattern>
       </defs>
 
-  <!-- <svg id="svg-container" width="100%" height="100%" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">-->
-  <svg id="svg-container" width="800" height="600">
-    <!-- Define the dot pattern -->
-    <defs>
-        <pattern id="dot-pattern" patternUnits="userSpaceOnUse" width="30" height="30">
-            <rect x="0" y="0" width="30" height="30" fill="#333" />
-            <circle cx="15" cy="15" r="2" fill="darkgreen" />
-        </pattern>
-    </defs>
+      <rect x="0" y="0" width="100%" height="100%" fill="url(#dot-pattern)" />
 
-    <rect x="0" y="0" width="100%" height="100%" fill="url(#dot-pattern)" />
- 
-    <!-- Game objects will be added here -->
+      <!-- Game objects will be added here -->
       <g id="targetsLayer"></g>
       <g id="playerLayer"></g>
       <g id="ui">
-        <rect x="0" y="0" width="100%" height="50" fill="dark" />
+        <rect x="0" y="0" width="100%" height="50" fill="#000000" />
         <text id="timer" x="50%" y="40" text-anchor="middle" font-size="30" fill="red"></text>
         <text id="bulletCount" x="90%" y="40" text-anchor="end" font-size="30" fill="red">15</text>
-        <rect x="0" y="550" width="100%" height="50" fill="dark" />
+        <rect x="0" y="550" width="100%" height="50" fill="#000000" />
         <text id="word-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red">
             let_there_be_words
         </text>
-    </g>
+      </g>
 
-    <g id="menuLayer">
-    </g>
+      <g id="menuLayer">
+      </g>
 
-  </svg>
-    
-  </div>
+    </svg>
   <svg id="hidden-template" style="display: none;">
     <!-- This is a hidden template, you can define any SVG elements here -->
     <circle id="template-circle" cx="0" cy="0" r="20" fill="red" />
     <text id="template-text" text-anchor="middle" x="0" y="0" font-family="Roboto Mono, monospace" font-size="30" fill="white" text-anchor="middle">A</text>
     
-    <circle id="bullet-circle" cx="0" cy="0" r="3" fill="dark" stroke="darkgray" stroke-width="1"/>
+    <circle id="bullet-circle" cx="0" cy="0" r="3" fill="#000000" stroke="#333" stroke-width="1"/>
   </svg>
 
   <!-- Inline or optional: Init function might be inside the script -->
@@ -69,3 +56,4 @@
     main();
   </script>
 </body>
+</html>

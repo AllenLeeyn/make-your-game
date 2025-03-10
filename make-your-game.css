@@ -82,15 +82,8 @@ body {
     animation: fadeOut 1s forwards;
 }
 
-/* Game Container */
-#game-container {
-    position: relative; 
-    width: 800px; 
-    height: 600px; /
-}
-
 /* Pause Menu */
-#pause-menu {
+/* #pause-menu {
     position: absolute; 
     top: 50%; 
     left: 50%; 
@@ -104,6 +97,7 @@ body {
     justify-content: center;
     color: white;
     z-index: 1; 
+    
 }
 #pause-menu > h2 {
     margin-bottom: 20px;
@@ -115,4 +109,4 @@ body {
 
 .hidden {
     display: none;
-}
+} */

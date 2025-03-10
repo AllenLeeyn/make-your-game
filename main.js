@@ -1,6 +1,7 @@
 import * as p from './player.js';
 import * as t from './target.js';
 import * as u from './ui.js';
+import { createPauseMenu, showPauseMenu, hidePauseMenu, handleArrowKeys } from './showMenu.js';
 import { getWordsAndTargets } from './words.js';
 
 // Constants for game states
@@ -23,11 +24,12 @@ export const gameState = {
 //--------------- initialize and start gameLoop ---------------//
 export function main() {
     // show main menu
-
+    createPauseMenu(); 
     initGame();
 }
 
 async function initGame() {
+
     // prepare game parameters and data
     [gameState.wordList, gameState.targetList] = await getWordsAndTargets(gameState.currentQuest);
 
@@ -53,6 +55,10 @@ function gameLoop(timestamp) {
         renderFps(timestamp);
         requestAnimationFrame(gameLoop); // Keep the game loop running
     } 
+    if (gameState.state === PAUSED) {
+        // Do nothing when paused
+        return;
+    }
     if (gameState.state === GAME_OVER) {
         console.log(GAME_OVER);
         // show gameover menu
@@ -68,7 +74,7 @@ const fpsDisplay = document.getElementById("fps-display");
 
 let frameCount = 0;
 let lastFPSTime = 0;
-let currentFPS = 0;
+let currentFPS;
 
 async function renderFps(timestamp) {
     frameCount++; // Increment the frame count
@@ -97,14 +103,19 @@ function handleKeyDown(event) {
     if (event.key === 'Escape') {
         if (gameState.state === RUNNING) {
             gameState.state = PAUSED;
+            showPauseMenu();
         } else if (gameState.state === PAUSED) {
-            gameState.state = RUNNING;
+            //gameState.state = RUNNING;
+            hidePauseMenu;
             requestAnimationFrame(gameLoop);
         };
         if (gameState.state === GAME_OVER) {
             initGame();
         };
         console.log(gameState.state)
+    }
+    if (gameState.state === PAUSED) {
+        handleArrowKeys(event);
     }
 }
 
@@ -117,36 +128,24 @@ function handleKeyUp(event) {
 
 //--------------- Pause Menu ------------------//
 
-function pauseGameLoop() {
-    isGamePaused = true;
-    m.showPauseMenu(); 
-}
+// function pauseGameLoop() {
+//     isGamePaused = true;
+//     m.showPauseMenu(); 
+// }
 export function resumeGameLoop() {
-    isGamePaused = false;
-    m.hidePauseMenu();
+    gameState.state = RUNNING;
+    hidePauseMenu();
+    requestAnimationFrame(gameLoop)
 }
 
 export function restartGameLoop() {
-    isGamePaused = false;
-    m.hidePauseMenu();
-    
-    // Logic to restart the game (e.g., reset player position, targets, timer)
-    p.initPlayer();
-    t.initTargets();
-    u.initTimer(timeDuration);
-
-    p.initPlayer();
-    t.initTargets();
-    u.initTimer(timeDuration);
-
-    generateWordList('questOne').then((wordList) => {
-        displayWordsSequentially(wordList);
-        collectMissingLetters(wordList).then((missingLetters) => {
-            t.setValidAnswers(missingLetters);
-        });
-    });
+    gameState.state = AT_START;
+    hidePauseMenu();
+    initGame();
 }
 
 // Add event listeners for keydown and keyup
 document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
+// Add event listenders for keydown during Pause Menu
+// document.addEventListener('keydown', handleArrowKeys);
