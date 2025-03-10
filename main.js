@@ -24,8 +24,8 @@ export const gameState = {
 //--------------- initialize and start gameLoop ---------------//
 export function main() {
     // show main menu
-    // showStartScreenMenu(); 
-    initGame();
+    showStartScreenMenu(); 
+    // initGame();
 }
 
 async function initGame() {
@@ -116,7 +116,6 @@ function handleKeyDown(event) {
     if (gameState.state === AT_START) {
         if (event.key === ' ') {
             handleStartMenuKeys(event);
-            gameStart();
         }
     }
     if (gameState.state === PAUSED) {
@@ -159,6 +158,7 @@ export function gameStart() {
     gameState.state = RUNNING;
     console.log("Game Start")
     hideStartScreenMenu();
+    initGame();
 }
 
 // Add event listeners for keydown and keyup

@@ -1,6 +1,6 @@
 // Function to create the start screen menu
 
-import { returnToStartScreen, restartGameLoop, resumeGameLoop, gameState, PAUSED} from "./main.js";
+import { returnToStartScreen, restartGameLoop, resumeGameLoop, gameState, PAUSED, AT_START} from "./main.js";
 
 
 let startMenuSelection = 0;
@@ -9,7 +9,9 @@ let startMenuSelection = 0;
 export function showStartScreenMenu() {
     const pauseMenu = document.getElementById('pause-menu');
     const startMenu = document.getElementById('start-menu');
+    const menuLayer = document.getElementById('menuLayer');
 
+    menuLayer.setAttribute('transform', 'translate(0, 0)'); 
     pauseMenu.setAttribute('visibility', 'hidden')
     startMenu.setAttribute('visibility', 'visible');
 }
@@ -31,15 +33,23 @@ export function handleStartMenuKeys(event) {
             event.preventDefault();
             if (startMenuSelection === 0) {
                 // Start Game Logic
-                hideStartMenu();
-                initGame();
+                hideStartScreenMenu();
             } else if (startMenuSelection === 1) {
                 // Instructions Logic (if needed)
                 console.log("Instructions selected");
             }
         }
+        buttons.forEach((button, index) => {
+            if (index === startMenuSelection) {
+                button.setAttribute('fill', 'yellow'); // Highlight selected button
+                button.setAttribute('stroke', 'yellow'); // Add a border
+                button.setAttribute('stroke-width', '3');
+            } else {
+                button.setAttribute('fill', 'white'); // Reset other buttons
+                button.removeAttribute('stroke');
+            }
+        });
     }
-
 }
 
 let currentSelection = 0; // Index of the currently selected menu item
