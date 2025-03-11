@@ -5,7 +5,9 @@ import { showFeedback, updateBulletDisplay, updateScoreDisplay } from "./ui.js";
 const bgLayer = document.getElementById('bgLayer')
 const targetsLayer = document.getElementById('targetsLayer')
 const wordDisplay = document.getElementById('word-display');
-const template = document.getElementById('hidden-template');
+const targetCircle = document.getElementsByClassName('target-circle');
+const targetText = document.getElementsByClassName('target-text');
+const bulletCircle = document.getElementsByClassName('bullet-circle');
 
 const svgContainerSize = {
     height: 600,
@@ -15,104 +17,64 @@ const svgContainerSize = {
 const speedVar = {
     xMin: 1,
     yMin: 0.5,
-    xRange: 1,
-    yRange: 0.5,
+    xRange: 3,
+    yRange: 3.5,
 }
 
 const randomDX = () => (Math.random() * speedVar.xRange) + speedVar.xMin;
 const randomDY = () => (Math.random() * speedVar.yRange) + speedVar.yMin;
 
 let targets = [];
-let lastTargetIndex = 0;
-
-function getRandomLetter() {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const randomIndex = Math.floor(Math.random() * letters.length);
-    return letters[randomIndex];
-}
-
-export function createTargets(){
-    targets.forEach(t=>{
-        targetsLayer.removeChild(t.circle);
-        targetsLayer.removeChild(t.text);
-    });
-    targets = [];
-
-    // insert 5 random letters into target list 
-    for (let i = 0; i < 5; i++) {
-        const letter = getRandomLetter();
-        createTarget(letter, i);
-    }
-
-    for (let i = 0; i < m.gameState.targetList.length; i++) {
-        const letter = m.gameState.targetList[i];
-        createTarget(letter, i+5);
-    }
-}
-
-export function createTarget(letter, i) {
-    const circle = template.getElementById('template-circle').cloneNode();
-    const text = template.getElementById('template-text').cloneNode();
-
-    const target = {
-        index: i,
-        active: false,
-        circle: circle,
-        text: text,
-        dx: (Math.random() * speedVar.xRange) + speedVar.xMin,
-        dy: (Math.random() * speedVar.yRange) + speedVar.yMin,
-        r: 20,
-        letter: letter,
-        speed: (Math.random() * 2) + 1,
-    }
-    text.textContent = target.letter;
-
-    targetsLayer.appendChild(circle);
-    targetsLayer.appendChild(text);
-    targets.push(target);
-}
 
 export function initTargets(){
-    createTargets();
+    targets = [];
 
-    targets.forEach(t=>{
-        t.active = false;
-        t.circle.setAttribute('cy', -100);
-        t.text.setAttribute('y', -100);
-    });
+    for (let i = 0; i < 10; i++) {
+        const target = {
+            active: true,
+            circle: targetCircle[i],
+            text: targetText[i],
+            x: Math.random() * (svgContainerSize.width - 100) + 50,
+            y: Math.random() * (svgContainerSize.height - 100) + 50,
+            dx: (Math.random() * speedVar.xRange) + speedVar.xMin,
+            dy: (Math.random() * speedVar.yRange) + speedVar.yMin,
+            r: 20,
+            letter: m.gameState.targetList[i],
+            speed: (Math.random() * 2) + 1,
+        };
+        console.log(`${i}: ${target.letter} added`)
+        target.text.textContent = m.gameState.targetList[i];
+        target.circle.setAttribute('cy', target.y);
+        target.text.setAttribute('y', target.y+10);
+        target.circle.classList.remove('target-removal');
+        target.text.classList.remove('target-removal');
+        target.circle.classList.add('target-fade-in');
+        target.text.classList.add('target-fade-in');
+
+        targets.push(target);
+    }
     m.gameState.currentWordIndex = 0;
-    m.gameState.currentTargetIndex = 0;
-    lastTargetIndex = 0;
-    addTargets();
+    m.gameState.currentTargetIndex = 10;
 }
 
-export function addTargets(){
-    if (lastTargetIndex >= targets.length) return;
-    for (let i = lastTargetIndex; lastTargetIndex < m.gameState.currentTargetIndex+10; i++) {
-        addTarget(i);
-        lastTargetIndex = i+1;
-    };
-}
+function addTarget(i, letter){
+    const target = targets[i];
 
-function addTarget(i){
-    console.log(`${targets[i].index}: ${targets[i].letter} added`)
-    targets[i].x = Math.random() * (svgContainerSize.width - 100) + 50,
-    targets[i].y = Math.random() * (svgContainerSize.height - 100) + 50,
-    targets[i].circle.setAttribute('cy', targets[i].y);
-    targets[i].text.setAttribute('y', targets[i].y+10);
-    targets[i].circle.classList.remove('target-removal');
-    targets[i].text.classList.remove('target-removal');
-    targets[i].circle.classList.add('target-fade-in');
-    targets[i].text.classList.add('target-fade-in');
-    targets[i].active = true;
-}
+    target.active = true;
+    target.letter = letter;
+    target.x = Math.random() * (svgContainerSize.width - 100) + 50;
+    target.y = Math.random() * (svgContainerSize.height - 100) + 50;
+    target.dx = (Math.random() * speedVar.xRange) + speedVar.xMin;
+    target.dy = (Math.random() * speedVar.yRange) + speedVar.yMin;
 
-function hideTarget(i) {
-    console.log(`${targets[i].index}: ${targets[i].letter} hide`)
-    targets[i].ative = false;
-    targets[i].circle.setAttribute('cy', -100);
-    targets[i].text.setAttribute('y', -100);
-}
+    target.text.textContent = letter;
+    target.circle.setAttribute('cy', target.y);
+    target.text.setAttribute('y', target.y+10);
+    target.circle.classList.remove('target-removal');
+    target.text.classList.remove('target-removal');
+    target.circle.classList.add('target-fade-in');
+    target.text.classList.add('target-fade-in');
+};
 
 export async function moveTargets() {
     targets.forEach(t => {
@@ -151,31 +113,22 @@ export function shoot(p) {
     updateBulletDisplay(p.player.bullets);
     if (p.player.bullets <= 0) m.gameState.state = m.GAME_OVER;
     let targetHit = false;
-    targets.forEach(target => {
-
+    targets.forEach((target, i) => {
         const dx = p.player.x - target.x;
         const dy = p.player.y - target.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
     
         if (distance <= p.player.radius + 1 && target.active) {
+            targetHit = true;
             target.active = false;
-            console.log(`${target.index}: ${target.letter} hit`)
-            const bulletCircle = addBulletHole(player.x, player.y, targetsLayer);
-            bulletCircle.classList.add('target-removal');
+            console.log(`${i}: ${target.letter} hit`)
             target.circle.classList.add('target-removal');
             target.text.classList.add('target-removal');
+            let letter = target.letter;
             const result = checkWordCompletion(target.letter);
     
-            setTimeout(() => {
-                hideTarget(target.index);
-            }, 1000);
-    
-            if (result === MISS) {
-                setTimeout(() => {
-                    addTarget(target.index);
-                }, 1100);
-            } else {
-                targetHit = true;
+            if (result !== MISS) {
+                letter = m.gameState.targetList[m.gameState.currentTargetIndex];
                 m.gameState.currentTargetIndex++;
                 if (result === BIM) {
                     m.gameState.currentWordIndex++;
@@ -188,14 +141,18 @@ export function shoot(p) {
                 player.combo++;
                 showFeedback(result);
             };
+
+            setTimeout(() => {
+                target = addTarget(i, letter);
+            }, 1100);
         }
     });
 
     if (!targetHit){
         player.combo = 0;
-        showFeedback(MISS)
-        addBulletHole(player.x, player.y, bgLayer);
+        showFeedback(MISS);
     }
+    addBulletHole(player.x, player.y, targetHit);
     updateScoreDisplay();
 }
 
@@ -231,17 +188,27 @@ function checkWordCompletion(letter){
     return MISS
 }
 
-function addBulletHole(x, y, layer) {
-    const bulletCircle = document.getElementById('bullet-circle').cloneNode();
-    bulletCircle.classList.remove('target-removal');
+let bulletHoleIndex = 0;
+function addBulletHole(x, y, targetHit) {
+    const layer = (targetHit) ? targetsLayer : bgLayer;
+ 
+    bulletHoleIndex++;
+    if (bulletHoleIndex >= 8) bulletHoleIndex= 0;
 
-    bulletCircle.setAttribute('cx', x);
-    bulletCircle.setAttribute('cy', y);
-    layer.appendChild(bulletCircle);
+    const currentHole = bulletCircle[bulletHoleIndex];
+    console.log(bulletHoleIndex);
+
+    currentHole.classList.remove('target-removal');
+
+    currentHole.setAttribute('cx', x + (Math.random()*4)-2);
+    currentHole.setAttribute('cy', y + (Math.random()*4)-2);
+    layer.appendChild(currentHole);
+
+    if (targetHit) currentHole.classList.add('target-removal');
 
     setTimeout(() => {
-        layer.removeChild(bulletCircle);
+        currentHole.setAttribute('cy', -100);
     }, 1000);
 
-    return bulletCircle;
+    return currentHole;
 }

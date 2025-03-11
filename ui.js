@@ -4,7 +4,8 @@ import * as p from './player.js';
 const scoreDisplay = document.getElementById('score-display');
 const comboDisplay = document.getElementById('combo-display');
 const wordDisplay = document.getElementById('word-display');
-const missDisplay = document.getElementById('miss-display');
+const wordAimDisplay = document.getElementById('wordAim-display');
+const missDisplay = document.getElementsByClassName('miss-display');
 const hitDisplay = document.getElementById('hit-display');
 const bimDisplay = document.getElementById('bim-display');
 const timerElement = document.getElementById('timer');
@@ -63,17 +64,32 @@ export function updateBulletDisplay(count){
 
 export function updateWordDisplay() {
     const [word] = Object.keys(m.gameState.wordList[m.gameState.currentWordIndex]);
-    wordDisplay.textContent = word;
-}
 
+    wordDisplay.textContent = word;
+   for (const [key, value] of Object.entries(m.gameState.wordList[m.gameState.currentWordIndex])){
+        let parts = key.split('');
+        let valueIndex = 0;
+        for (let i = 0; i < parts.length; i++){
+            if (parts[i] === '_') {
+                parts[i] = value[valueIndex];
+                valueIndex++;
+            };
+        };
+        wordAimDisplay.textContent = parts.join('');
+   };
+};
+
+let missCounter= 0;
 export function showFeedback(result) {
     if (result === 'miss'){
-        missDisplay.style.display = 'block';
-        missDisplay.classList.add('fade-in-out-up');
+        missDisplay[missCounter].style.display = 'block';
+        missDisplay[missCounter].classList.add('fade-in-out-up');
         setTimeout(() => {
-            missDisplay.style.display = 'none';
-            missDisplay.classList.remove('fade-in-out-up');
-        }, 1000);
+            missDisplay[missCounter].style.display = 'none';
+            missDisplay[missCounter].classList.remove('fade-in-out-up');
+        }, 600);
+        missCounter++;
+        if (missCounter >= 10) missCounter=0;
     }
     if (result === 'hit'){
         hitDisplay.style.display = 'block';

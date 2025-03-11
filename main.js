@@ -60,7 +60,6 @@ function gameLoop(timestamp) {
         hidePauseMenu();
         p.updatePlayerPosition(); // Update player position
         t.moveTargets();           // Update target positions
-        t.addTargets();
         renderFps(timestamp);
 
     } else if (gameState.state === PAUSED) {
