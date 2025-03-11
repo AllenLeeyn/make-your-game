@@ -9,36 +9,32 @@ const missDisplay = document.getElementsByClassName('miss-display');
 const hitDisplay = document.getElementById('hit-display');
 const bimDisplay = document.getElementById('bim-display');
 const timerElement = document.getElementById('timer');
-const gameOverDisplay = document.getElementById('gameover-display');
-const gameCompleteDisplay = document.getElementById('gamecomplete-display');
 
 let timerValue;
-export let isTimeUp = false;
+let timerInterval;
 
 export function initTimer(){
     clearInterval(timerInterval); 
-    timerValue = m.gameState.timeDuration;
-    timerElement.textContent = timerValue; 
-    isTimeUp = false;
+    timerValue = m.game.timeDuration;
+    timerElement.textContent = timerValue;
     timerInterval = setInterval(updateTimer, 1000);  // Update the timer every second
 }
 
 // Function to update the timer display
 function updateTimer() {
-    if (m.gameState.state === m.RUNNING) {
+    if (m.game.state === m.RUNNING) {
         if (timerValue > 0) {
             timerValue--;
             timerElement.textContent = timerValue;  // Update the text content of the timer
         } else {
             isTimeUp = true;
-            m.gameState.state = m.GAME_OVER;
+            m.game.state = m.GAME_OVER;
             clearInterval(timerInterval);  // Stop the timer once it reaches 0
             // Additional logic to handle game over can go here
         }
     };
 }
 
-let timerInterval;
 
 export function updateBulletDisplay(count){
     const bulletCountElement = document.getElementById('bulletCount');
@@ -52,7 +48,6 @@ export function updateBulletDisplay(count){
     }
     bulletCountElement.textContent = result;
 
-
     if (count === 1) {
         bulletCountElement.classList.add('flashing-red');
     } else if (count <= 3) {
@@ -63,20 +58,19 @@ export function updateBulletDisplay(count){
 }
 
 export function updateWordDisplay() {
-    const [word] = Object.keys(m.gameState.wordList[m.gameState.currentWordIndex]);
-
+    const [word] = Object.keys(m.game.wordList[m.game.currentWordIndex]);
     wordDisplay.textContent = word;
-   for (const [key, value] of Object.entries(m.gameState.wordList[m.gameState.currentWordIndex])){
-        let parts = key.split('');
-        let valueIndex = 0;
-        for (let i = 0; i < parts.length; i++){
-            if (parts[i] === '_') {
-                parts[i] = value[valueIndex];
-                valueIndex++;
-            };
+
+    const [key, value] = Object.entries(m.game.wordList[m.game.currentWordIndex])[0];
+    let parts = key.split('');
+    let valueIndex = 0;
+    for (let i = 0; i < parts.length; i++){
+        if (parts[i] === '_') {
+            parts[i] = value[valueIndex];
+            valueIndex++;
         };
-        wordAimDisplay.textContent = parts.join('');
-   };
+    };
+    wordAimDisplay.textContent = parts.join('');
 };
 
 let missCounter= 0;
@@ -120,23 +114,4 @@ export function updateScoreDisplay(){
         comboDisplay.textContent = `COMBO ${p.player.combo}`;
     }
     scoreDisplay.textContent = p.player.score.toString().padStart(6, '0');
-}
-
-export function showGameOver() {                     
-    gameOverDisplay.style.display = 'block';
-    gameOverDisplay.classList.add('fade-in');
-}
-
-export function showGameComplete() {                     
-    gameCompleteDisplay.style.display = 'block';
-    gameCompleteDisplay.classList.add('fade-in');
-}
- export function hideGameOver() {
-    gameOverDisplay.style.display = 'none';
-    gameOverDisplay.classList.remove('fade-in');
-}
-
-export function hideGameComplete() {
-    gameCompleteDisplay.style.display = 'none';
-    gameCompleteDisplay.classList.remove('fade-in');
 }

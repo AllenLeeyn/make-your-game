@@ -1,7 +1,8 @@
 import * as p from './player.js';
-import * as t from './target.js';
-import * as u from './ui.js';
-import { hideStartScreenMenu ,showPauseMenu, hidePauseMenu, handlePauseKeys, showStartScreenMenu } from './showMenu.js';
+import * as tgt from './target.js';
+import * as ui from './ui.js';
+import * as input from './input.js';
+import * as menu from './showMenu.js'
 import { getWordsAndTargets } from './words.js';
 
 // Constants for game states
@@ -15,63 +16,67 @@ export const GAME_OVER = 'gameover';  // Game is over
 export const COMPLETE = 'complete';   // Game is complete (successfully finished)
 export const RESTART = 'restart';   // Game is complete (successfully finished)
 
-export const gameState = {
-    timeDuration: 120,
-    wordList: [],
+export const game = {
+    height: 600,
+    width: 800,
     currentQuest: 'questOne',
-    currentWordIndex: 0,
-    currentTargetIndex: 0,
-    targetList: [],
     state: START,
+    timeDuration: 60,
+    wordList: [],
+    currentWordIndex: 0,
+    targetList: [],
+    targets: [],
+    currentTargetIndex: 0,
+    pauseSelection: 0,
 };
 
-//--------------- initialize and start gameLoop ---------------//
+//--------------- start gameLoop ---------------//
 export function main() {
-    requestAnimationFrame(gameLoop);
-}
-
-async function initGame() {
-
-    [gameState.wordList, gameState.targetList] = await getWordsAndTargets(gameState.currentQuest);
-
-    // initalize game 
-    p.initPlayer();
-    t.initTargets();
-    u.initTimer(gameState.timeDuration);
-    u.updateWordDisplay();
-    u.updateScoreDisplay();
-    u.updateBulletDisplay(p.player.bullets);
-    
-    gameState.state = RUNNING;
+    gameLoop();
 }
 
 //--------------- game logic ---------------//
 function gameLoop(timestamp) {
-    if (gameState.state === START) {
-        showStartScreenMenu();
+    if (game.state === START) {
+        menu.hidePauseMenu();
+        menu.showStartScreenMenu();
 
-    } else if (gameState.state === INIT || gameState.state === RESTART){
+    } else if (game.state === INIT || game.state === RESTART){
         initGame();
 
-    } else if (gameState.state === RUNNING){
-        hideStartScreenMenu();
-        u.hideGameComplete();
-        u.hideGameOver();
-        hidePauseMenu();
+    } else if (game.state === RUNNING){
+        menu.hideStartScreenMenu();
+        menu.hideGameComplete();
+        menu.hideGameOver();
+        menu.hidePauseMenu();
         p.updatePlayerPosition(); // Update player position
-        t.moveTargets();           // Update target positions
+        tgt.moveTargets();           // Update target positions
         renderFps(timestamp);
 
-    } else if (gameState.state === PAUSED) {
-        showPauseMenu();
+    } else if (game.state === PAUSED) {
+        menu.showPauseMenu();
 
-    }else if (gameState.state === GAME_OVER) {
-        u.showGameOver();
+    }else if (game.state === GAME_OVER) {
+        menu.showGameOver();
 
-    }else if (gameState.state === COMPLETE) {
-        u.showGameComplete();
+    }else if (game.state === COMPLETE) {
+        menu.showGameComplete();
     }
     requestAnimationFrame(gameLoop); // Keep the game loop running
+}
+
+// initalize game 
+async function initGame() {
+
+    [game.wordList, game.targetList] = await getWordsAndTargets(game.currentQuest);
+    p.initPlayer();
+    tgt.initTargets();
+    ui.initTimer(game.timeDuration);
+    ui.updateWordDisplay();
+    ui.updateScoreDisplay();
+    ui.updateBulletDisplay(p.player.bullets);
+    
+    game.state = RUNNING;
 }
 
 //--------------- FPS counter ---------------//
@@ -96,37 +101,6 @@ async function renderFps(timestamp) {
     fpsDisplay.textContent = `FPS: ${currentFPS}`;
 }
 
-//--------------- player input ---------------//
-// Handle keydown events
-function handleKeyDown(event) {
-    if (gameState.state === AT_START) {
-        if (event.key === ' ') gameState.state = INIT;
-
-    } else if (gameState.state === RUNNING) {
-        handleGameKeys(event);
-
-    } else if (gameState.state === AT_PAUSED) {
-        handlePauseKeys(event);
-
-    } else if (gameState.state === GAME_OVER || gameState.state === COMPLETE) {
-        if (event.key === ' ') gameState.state = RESTART;
-    }
-}
-
-
-// Handle keyup events
-function handleKeyUp(event) {
-    if (event.key in p.keysPressed) {
-      p.keysPressed[event.key] = false;
-    }
-}
-
-function handleGameKeys(event) {
-    if (event.key === ' ') t.shoot(p);
-    if (event.key === 'Escape') gameState.state = PAUSED;
-    if (event.key in p.keysPressed) p.keysPressed[event.key] = true;
-}
-
 // Add event listeners for keydown and keyup
-document.addEventListener('keydown', handleKeyDown);
-document.addEventListener('keyup', handleKeyUp);
+document.addEventListener('keydown', input.handleKeyDown);
+document.addEventListener('keyup', input.handleKeyUp);

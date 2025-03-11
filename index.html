@@ -15,19 +15,19 @@
 <body>
   <div id="fps-display"></div>
   <svg id="svg-container" width="800" height="600">
-      <!-- Define the dot pattern -->
-      <defs>
-          <pattern id="dot-pattern" patternUnits="userSpaceOnUse" width="30" height="30">
-              <rect x="0" y="0" width="30" height="30" fill="#333" />
-              <circle cx="15" cy="15" r="2" fill="darkgreen" />
-          </pattern>
-      </defs>
+    <!-- Define the dot pattern -->
+    <defs>
+        <pattern id="dot-pattern" patternUnits="userSpaceOnUse" width="30" height="30">
+            <rect x="0" y="0" width="30" height="30" fill="#333" />
+            <circle cx="15" cy="15" r="2" fill="darkgreen" />
+        </pattern>
+    </defs>
 
-  <!-- <svg id="svg-container" width="100%" height="100%" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">-->
     <!-- Game objects will be added here -->
     <g id="bgLayer">
       <rect x="0" y="0" width="100%" height="100%" fill="url(#dot-pattern)" />
     </g>
+
     <g id="targetsLayer">
       <circle class="target-circle" cx="0" cy="-100" r="20" fill="red" />
       <text class="target-text" text-anchor="middle" x="0" y="0" font-family="Roboto Mono, monospace" font-size="30" fill="white" text-anchor="middle">A</text>
@@ -50,11 +50,13 @@
       <circle class="target-circle" cx="0" cy="-100" r="20" fill="red" />
       <text class="target-text" text-anchor="middle" x="0" y="0" font-family="Roboto Mono, monospace" font-size="30" fill="white" text-anchor="middle">A</text>
     </g>
+
     <g id="playerLayer">
       <line id="yAxis" x1="400" y1="0" x2="400" y2="600" class="horizontal"></line>
       <line id="xAxis" x1="0" y1="300" x2="800" y2="300" class="vertical"></line>
       <circle id="playerOrigin" cx="400" cy="300" r="20" class="crosshair-circle"></circle>
     </g>
+
     <g id="ui">
       <rect x="0" y="0" width="100%" height="50" fill="dark" />
       <text id="score-display" x="10" y="35"  font-size="30" fill="limegreen">000000</text>
@@ -63,27 +65,13 @@
       <text id="bulletCase" x="795" y="33" text-anchor="end" font-size="25" fill="grey">▋▋▋▋▋▋▋▋▋▋▋▋▋▋▋</text>
       <text id="bulletCount" x="795" y="33" text-anchor="end" font-size="25" fill="limegreen"></text>
       <rect x="0" y="550" width="100%" height="50" fill="dark" />
-      <text class="miss-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red" style="display: none;">
-          MISS!
-      </text>
-      <text class="miss-display" x="49%" y="583" text-anchor="middle" font-size="30" fill="red" style="display: none;">
-          MISS!
-      </text>
-      <text class="miss-display" x="48%" y="580" text-anchor="middle" font-size="30" fill="red" style="display: none;">
-          MISS!
-      </text>
-      <text class="miss-display" x="52%" y="590" text-anchor="middle" font-size="30" fill="red" style="display: none;">
-          MISS!
-      </text>
-      <text class="miss-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red" style="display: none;">
-          MISS!
-      </text>
-      <text class="miss-display" x="53%" y="580" text-anchor="middle" font-size="30" fill="red" style="display: none;">
-          MISS!
-      </text>
-      <text class="miss-display" x="47%" y="600" text-anchor="middle" font-size="30" fill="red" style="display: none;">
-          MISS!
-      </text>
+      <text class="miss-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red" style="display: none;">MISS!</text>
+      <text class="miss-display" x="49%" y="583" text-anchor="middle" font-size="30" fill="red" style="display: none;">MISS!</text>
+      <text class="miss-display" x="48%" y="580" text-anchor="middle" font-size="30" fill="red" style="display: none;">MISS!</text>
+      <text class="miss-display" x="52%" y="590" text-anchor="middle" font-size="30" fill="red" style="display: none;">MISS!</text>
+      <text class="miss-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red" style="display: none;">MISS!</text>
+      <text class="miss-display" x="53%" y="580" text-anchor="middle" font-size="30" fill="red" style="display: none;">MISS!</text>
+      <text class="miss-display" x="47%" y="600" text-anchor="middle" font-size="30" fill="red" style="display: none;">MISS!</text>
       <text class="miss-display" x="49%" y="593" text-anchor="middle" font-size="30" fill="red" style="display: none;">
           MISS!
       </text>
