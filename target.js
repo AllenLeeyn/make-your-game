@@ -200,22 +200,6 @@ export function shoot(p) {
     updateScoreDisplay();
 }
 
-function playSound(type) {
-    switch (type) {
-        case HIT:
-            document.getElementById('hit-sound').play();
-            break;
-        case BIM:
-            document.getElementById('bim-sound').play();
-            break;
-        case MISS:
-            document.getElementById('miss-sound').play();
-            break;
-        default:
-            console.log('Unknown sound type');
-    }
-}
-
 
 function checkWordCompletion(letter){
     const wordObj = m.gameState.wordList[m.gameState.currentWordIndex];

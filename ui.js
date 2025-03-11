@@ -113,19 +113,23 @@ export function updateScoreDisplay(){
 export function showGameOver() {                     
     gameOverDisplay.style.display = 'block';
     gameOverDisplay.classList.add('fade-in');
+    document.getElementById('game-over-music').play();
 }
 
 export function showGameComplete() {                     
     gameCompleteDisplay.style.display = 'block';
     gameCompleteDisplay.classList.add('fade-in');
+    document.getElementById('success-music').play();
 }
 
-export function hideGameOver() {
+export function hideGameOver() { 
     gameOverDisplay.style.display = 'none';
     gameOverDisplay.classList.remove('fade-in');
+    document.getElementById('game-over-music').pause();
 }
 
 export function hideGameComplete() {
     gameCompleteDisplay.style.display = 'none';
     gameCompleteDisplay.classList.remove('fade-in');
+    document.getElementById('success-music').pause();
 }

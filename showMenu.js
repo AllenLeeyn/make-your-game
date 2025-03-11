@@ -20,7 +20,7 @@ export function showStartScreenMenu() {
 export function hideStartScreenMenu() {
     startMenu.style.display = 'none';
     startMenu.classList.remove('fade-in');
-    //document.getElementById('start-menu-music').pause();
+    document.getElementById('start-menu-music').pause();
 }
 
 export function handleStartMenuKeys(event) {
