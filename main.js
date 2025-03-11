@@ -5,9 +5,12 @@ import { handleStartMenuKeys, hideStartScreenMenu ,showPauseMenu, hidePauseMenu,
 import { getWordsAndTargets } from './words.js';
 
 // Constants for game states
-export const AT_START = 'atStart';    // Game is in the start state (before gameplay)
+export const START = 'start';
+export const AT_START = 'atStart';
+export const INIT = 'initalize';     // Game is in the start state (before gameplay)
 export const RUNNING = 'running';     // Game is currently running
 export const PAUSED = 'paused';       // Game is paused
+export const AT_PAUSED = 'atPaused';       // Game is paused
 export const GAME_OVER = 'gameover';  // Game is over
 export const COMPLETE = 'complete';   // Game is complete (successfully finished)
 export const RESTART = 'restart';   // Game is complete (successfully finished)
@@ -19,19 +22,16 @@ export const gameState = {
     currentWordIndex: 0,
     currentTargetIndex: 0,
     targetList: [],
-    state: AT_START,
+    state: START,
 };
 
 //--------------- initialize and start gameLoop ---------------//
 export function main() {
-    // show main menu
-    showStartScreenMenu(); 
-    // initGame();
+    requestAnimationFrame(gameLoop);
 }
 
-export async function initGame() {
+async function initGame() {
 
-    // prepare game parameters and data
     [gameState.wordList, gameState.targetList] = await getWordsAndTargets(gameState.currentQuest);
 
     // initalize game 
@@ -47,11 +47,16 @@ export async function initGame() {
 
 //--------------- game logic ---------------//
 function gameLoop(timestamp) {
-    if (gameState.state === AT_START) {
-        console.log(AT_START);
-        // show start screen
+    if (gameState.state === START) {
+        showStartScreenMenu();
+
+    } else if (gameState.state === INIT || gameState.state === RESTART){
+        initGame();
 
     } else if (gameState.state === RUNNING){
+        hideStartScreenMenu();
+        u.hideGameComplete();
+        u.hideGameOver();
         hidePauseMenu();
         p.updatePlayerPosition(); // Update player position
         t.moveTargets();           // Update target positions
@@ -62,15 +67,10 @@ function gameLoop(timestamp) {
         showPauseMenu();
 
     }else if (gameState.state === GAME_OVER) {
-        console.log(GAME_OVER);
-        // show gameover menu
+        u.showGameOver();
 
     }else if (gameState.state === COMPLETE) {
-        console.log(COMPLETE)
-
-    }else if (gameState.state === RESTART) {
-        initGame();
-
+        u.showGameComplete();
     }
     requestAnimationFrame(gameLoop); // Keep the game loop running
 }
@@ -86,7 +86,7 @@ let currentFPS;
 async function renderFps(timestamp) {
     frameCount++; // Increment the frame count
 
-    // Calculate FPS every second (1000ms)
+    // Calculate FPS every second (1000ms) 
     const elapsedSinceLastFPS = timestamp - lastFPSTime;
     if (elapsedSinceLastFPS >= 1000) {
         currentFPS = frameCount; // Set FPS to the number of frames in the last second
@@ -99,31 +99,18 @@ async function renderFps(timestamp) {
 
 //--------------- player input ---------------//
 // Handle keydown events
-// function handleKeyDown(event) {
-
-//     if (gameState.state === RUNNING ) {
-//         handleGameKeys(event);
-
-//     } else if (gameState.state === AT_START && event.key === ' ') {
-//         //handleStartMenuKeys(event);
-//         //gameStart();
-
-//     } else if (gameState.state === PAUSED) {
-//         handlePauseKeys(event);
-
-//     } else if (gameState.state === GAME_OVER || gameState.state === COMPLETE) {
-//         if (event.key === 'Escape') initGame();
-//     }
-// }
 function handleKeyDown(event) {
     if (gameState.state === AT_START) {
         handleStartMenuKeys(event);
+
     } else if (gameState.state === RUNNING) {
         handleGameKeys(event);
-    } else if (gameState.state === PAUSED) {
+
+    } else if (gameState.state === AT_PAUSED) {
         handlePauseKeys(event);
+
     } else if (gameState.state === GAME_OVER || gameState.state === COMPLETE) {
-        if (event.key === 'Escape') initGame();
+        if (event.key === ' ') gameState.state = RESTART;
     }
 }
 
@@ -141,17 +128,6 @@ function handleGameKeys(event) {
     if (event.key in p.keysPressed) p.keysPressed[event.key] = true;
 }
 
-// ----------- Start Screen Menu -------
-
-export function gameStart() {
-    gameState.state = RUNNING;
-    console.log("Game Start")
-    hideStartScreenMenu();
-    initGame();
-    gameLoop();
-}
-
 // Add event listeners for keydown and keyup
 document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
-
