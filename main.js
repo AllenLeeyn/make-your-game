@@ -29,7 +29,7 @@ export function main() {
     // initGame();
 }
 
-async function initGame() {
+export async function initGame() {
 
     // prepare game parameters and data
     [gameState.wordList, gameState.targetList] = await getWordsAndTargets(gameState.currentQuest);
@@ -99,22 +99,34 @@ async function renderFps(timestamp) {
 
 //--------------- player input ---------------//
 // Handle keydown events
+// function handleKeyDown(event) {
+
+//     if (gameState.state === RUNNING ) {
+//         handleGameKeys(event);
+
+//     } else if (gameState.state === AT_START && event.key === ' ') {
+//         //handleStartMenuKeys(event);
+//         //gameStart();
+
+//     } else if (gameState.state === PAUSED) {
+//         handlePauseKeys(event);
+
+//     } else if (gameState.state === GAME_OVER || gameState.state === COMPLETE) {
+//         if (event.key === 'Escape') initGame();
+//     }
+// }
 function handleKeyDown(event) {
-
-    if (gameState.state === RUNNING ) {
+    if (gameState.state === AT_START) {
+        handleStartMenuKeys(event);
+    } else if (gameState.state === RUNNING) {
         handleGameKeys(event);
-
-    } else if (gameState.state === AT_START && event.key === ' ') {
-        //handleStartMenuKeys(event);
-        //gameStart();
-
     } else if (gameState.state === PAUSED) {
         handlePauseKeys(event);
-
     } else if (gameState.state === GAME_OVER || gameState.state === COMPLETE) {
         if (event.key === 'Escape') initGame();
     }
 }
+
 
 // Handle keyup events
 function handleKeyUp(event) {
@@ -136,6 +148,7 @@ export function gameStart() {
     console.log("Game Start")
     hideStartScreenMenu();
     initGame();
+    gameLoop();
 }
 
 // Add event listeners for keydown and keyup

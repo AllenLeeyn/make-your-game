@@ -1,4 +1,4 @@
-import { gameState, PAUSED } from "./main.js";
+import { gameStart, gameState, AT_START} from "./main.js";
 
 const menuLayer = document.getElementById('menuLayer');
 const pauseMenu = document.getElementById('pause-menu');
@@ -31,7 +31,8 @@ export function handleStartMenuKeys(event) {
             event.preventDefault();
             if (startMenuSelection === 0) {
                 // Start Game Logic
-                hideStartScreenMenu();
+                console.log("Game Start!")
+                gameStart();
             } else if (startMenuSelection === 1) {
                 // Instructions Logic (if needed)
                 console.log("Instructions selected");
@@ -39,12 +40,13 @@ export function handleStartMenuKeys(event) {
         }
         buttons.forEach((button, index) => {
             if (index === startMenuSelection) {
-                button.setAttribute('fill', 'yellow'); // Highlight selected button
+                button.setAttribute('fill', 'lightblue'); // Highlight selected button
                 button.setAttribute('stroke', 'yellow'); // Add a border
                 button.setAttribute('stroke-width', '3');
             } else {
-                button.setAttribute('fill', 'white'); // Reset other buttons
-                button.removeAttribute('stroke');
+                button.setAttribute('fill', 'red'); // Reset other buttons
+                button.removeAttribute('stroke', 'grey');
+                button.setAttribute('stroke-width', '2');
             }
         });
     }
@@ -62,8 +64,6 @@ export function showPauseMenu() {
 export function hidePauseMenu() {
     pauseMenu.setAttribute('visibility', 'hidden');
     menuLayer.setAttribute('transform', 'translate(-1000, -1000)'); // Move off-screen
-    
-    currentSelection = 0; 
 }
 
 
@@ -87,6 +87,9 @@ export function handlePauseKeys(event) {
             gameState.state = 'restart'
         } else if (currentSelection === 2) {
             gameState.state = 'atStart'
+            hidePauseMenu();
+            showStartScreenMenu();
+            startMenuSelection = 0;
         }
     }
     
