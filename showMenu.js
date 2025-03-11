@@ -21,37 +21,6 @@ export function hideStartScreenMenu() {
     startMenu.classList.remove('fade-in');
 }
 
-export function handleStartMenuKeys(event) {
-    if (gameState.state === AT_START) {
-        const buttons = Array.from(startMenuItems).filter(item => item.tagName === 'rect' && item.classList.contains('button'));
-    
-        if (event.key === 'ArrowUp') {
-            startMenuSelection = Math.max(0, startMenuSelection - 1);
-        } else if (event.key === 'ArrowDown') {
-            startMenuSelection = Math.min(buttons.length - 1, startMenuSelection + 1);
-        } else if (event.key === ' ') {
-            event.preventDefault();
-            if (startMenuSelection === 0) {
-                gameState.state = 'initalize';
-            } else if (startMenuSelection === 1) {
-                // Instructions Logic (if needed)
-                console.log("Instructions selected");
-            }
-        }
-        buttons.forEach((button, index) => {
-            if (index === startMenuSelection) {
-                button.setAttribute('fill', 'lightblue'); // Highlight selected button
-                button.setAttribute('stroke', 'yellow'); // Add a border
-                button.setAttribute('stroke-width', '3');
-            } else {
-                button.setAttribute('fill', 'red'); // Reset other buttons
-                button.removeAttribute('stroke', 'grey');
-                button.setAttribute('stroke-width', '2');
-            }
-        });
-    }
-}
-
 export function showPauseMenu() {
     gameState.state = 'atPaused';
     currentSelection = 0;

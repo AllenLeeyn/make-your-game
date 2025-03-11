@@ -130,24 +130,43 @@
           <rect x="360" y="340" width="100" height="30" fill="transparent" stroke="grey" class="pauseButton"></rect>
           <text x="410" y="360" font-size="18" fill="white" text-anchor="middle" class="pauseText">Quit</text>
       </g>
-      <g id="start-menu" style= "display: none;"><rect x="0" y="0" width="800" height="600" fill="rgba(0, 0, 0, 0.5)"></rect>
+      <g id="start-menu" style= "display: none;"><rect x="0" y="0" width="800" height="600" fill=black></rect>
           <!-- Background -->
           <rect x="0" y="0" width="800" height="600" fill="rgba(0, 0, 0, 0.5)"></rect>
           <!-- Title Area -->
-          <text x="400" y="100" font-size="36" fill="white" text-anchor="middle">BANG BANG BIM</text>
+          <text x="300" y="154" font-size="40" fill="white" transform="rotate(-3.1 300 154)">piscine-js-igen</text>
+          <circle cx="250" cy="160" r="30" fill="red" class="target-flash"></circle>
+          <circle id="gameLogo" cx="250" cy="160" r="40" class="crosshair-circle"></circle>
+          <line id="yLogo" x1="235" y1="80" x2="265" y2="220" class="horizontal"></line>
+          <line id="xLogo" x1="100" y1="165" x2="700" y2="135" class="vertical"></line>    
 
           <!-- Instructions Area -->
-          <rect x="50" y="150" width="200" height="300" fill="rgba(255, 255, 255, 0.8)" stroke="black" stroke-width="2"></rect>
-          <text x="150" y="180" font-size="16" fill="black" text-anchor="middle">Instructions:</text>
-          <text x="150" y="210" font-size="14" fill="black" text-anchor="middle">- Use arrow keys to move</text>
-          <text x="150" y="240" font-size="14" fill="black" text-anchor="middle">- Press space to shoot</text>
-          <text x="150" y="270" font-size="14" fill="black" text-anchor="middle">- Press Esc to pause</text>
+          <rect x="100" y="230" width="600" height="270" stroke="black" stroke-width="2"></rect>
+          <text x="400" y="260" font-size="18" fill="white" text-anchor="middle"> Objective: </text>
+          <text x="400" y="290" font-size="14" fill="white" text-anchor="middle"> Complete words by catching flying letters.</text>
+          <text x="400" y="320" font-size="14" fill="white" text-anchor="middle"> Warning! Letters are flying fast, and time is ticking!</text>
+          <text x="240" y="430" font-size="10" fill="white" text-anchor="middle">
+            <tspan dy="0">Use arrow keys</tspan>
+            <tspan x="240" dy="15">to move crosshair</tspan>
+          </text>
+          <text x="400" y="430" font-size="10" fill="white" text-anchor="middle">
+            <tspan dy="0">Use spacebar</tspan>
+            <tspan x="400" dy="15">to shoot</tspan>
+          </text>
+          <text x="560" y="430" font-size="10" fill="white" text-anchor="middle">
+            <tspan dy="0">Press Esc</tspan>
+            <tspan x="560" dy="15">to pause</tspan>
+          </text>
+          <g transform="translate(0, 150)">
+            <image href="https://img.icons8.com/wired/100/FFFFFF/arrow-keys.png" x="200" y="200" width="80" height="70" />
+            <image href="https://img.icons8.com/ios-filled/50/FFFFFF/space-key.png" x="360" y="220" width="80" height="50" />
+            <image href="https://img.icons8.com/ios/100/FFFFFF/esc.png" x="520" y="225" width="80" height="40" />
+          </g>
+          <text x="400" y="490" font-size="12" fill="white" text-anchor="middle"> Press spacebar to begin hunting!! </text>
 
-        <!-- Start Game Button Area -->
-        <rect x="300" y="450" width="200" height="50" fill="red" stroke="white" stroke-width="2" class="button"></rect>
-        <text x="400" y="480" font-size="20" fill="white" text-anchor="middle">Start Game</text>
-        <rect x="300" y="500" width="200" height="50" fill="red" stroke="white" stroke-width="2" class="button"></rect>
-        <text x="400" y="530" font-size="20" fill="white" text-anchor="middle">Instructions</text>
+          <!-- Start Game Button Area -->
+          <rect x="300" y="500" width="200" height="50" fill="transparent" stroke="white" stroke-width="2" class="button"></rect>
+          <text x="400" y="530" font-size="20" fill="white" text-anchor="middle">Start Game</text>
       </g>
     </g>
   </svg>

@@ -1,7 +1,7 @@
 import * as p from './player.js';
 import * as t from './target.js';
 import * as u from './ui.js';
-import { handleStartMenuKeys, hideStartScreenMenu ,showPauseMenu, hidePauseMenu, handlePauseKeys, showStartScreenMenu } from './showMenu.js';
+import { hideStartScreenMenu ,showPauseMenu, hidePauseMenu, handlePauseKeys, showStartScreenMenu } from './showMenu.js';
 import { getWordsAndTargets } from './words.js';
 
 // Constants for game states
@@ -100,7 +100,7 @@ async function renderFps(timestamp) {
 // Handle keydown events
 function handleKeyDown(event) {
     if (gameState.state === AT_START) {
-        handleStartMenuKeys(event);
+        if (event.key === ' ') gameState.state = INIT;
 
     } else if (gameState.state === RUNNING) {
         handleGameKeys(event);
