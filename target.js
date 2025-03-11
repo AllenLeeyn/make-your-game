@@ -190,6 +190,7 @@ export function shoot(p) {
             };
         }
     });
+    
 
     if (!targetHit){
         player.combo = 0;
@@ -197,6 +198,22 @@ export function shoot(p) {
         addBulletHole(player.x, player.y, bgLayer);
     }
     updateScoreDisplay();
+}
+
+function playSound(type) {
+    switch (type) {
+        case HIT:
+            document.getElementById('hit-sound').play();
+            break;
+        case BIM:
+            document.getElementById('bim-sound').play();
+            break;
+        case MISS:
+            document.getElementById('miss-sound').play();
+            break;
+        default:
+            console.log('Unknown sound type');
+    }
 }
 
 
@@ -230,6 +247,8 @@ function checkWordCompletion(letter){
     }
     return MISS
 }
+
+
 
 function addBulletHole(x, y, layer) {
     const bulletCircle = document.getElementById('bullet-circle').cloneNode();

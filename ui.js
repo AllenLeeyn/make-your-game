@@ -70,6 +70,7 @@ export function showFeedback(result) {
     if (result === 'miss'){
         missDisplay.style.display = 'block';
         missDisplay.classList.add('fade-in-out-up');
+        document.getElementById('miss-sound').play();
         setTimeout(() => {
             missDisplay.style.display = 'none';
             missDisplay.classList.remove('fade-in-out-up');
@@ -78,6 +79,7 @@ export function showFeedback(result) {
     if (result === 'hit'){
         hitDisplay.style.display = 'block';
         hitDisplay.classList.add('fade-in-out-up');
+        document.getElementById('hit-sound').play();
         setTimeout(() => {
             hitDisplay.style.display = 'none';
             hitDisplay.classList.remove('fade-in-out-up');
@@ -87,6 +89,7 @@ export function showFeedback(result) {
         wordDisplay.setAttribute('fill', 'green');
         bimDisplay.style.display = 'block';
         bimDisplay.classList.add('fade-in-out-up');
+        document.getElementById('bim-sound').play();
         setTimeout(() => {
             bimDisplay.style.display = 'none';
             bimDisplay.classList.remove('fade-in-out-up');
@@ -95,6 +98,7 @@ export function showFeedback(result) {
         }, 1000);
     }
 }
+
 
 export function updateScoreDisplay(){
     if (p.player.combo === 0) {
@@ -115,7 +119,8 @@ export function showGameComplete() {
     gameCompleteDisplay.style.display = 'block';
     gameCompleteDisplay.classList.add('fade-in');
 }
- export function hideGameOver() {
+
+export function hideGameOver() {
     gameOverDisplay.style.display = 'none';
     gameOverDisplay.classList.remove('fade-in');
 }

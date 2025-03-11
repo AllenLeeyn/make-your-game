@@ -14,11 +14,13 @@ export function showStartScreenMenu() {
     startMenu.style.display = 'block';
     startMenu.classList.add('fade-in');
     gameState.state = 'atStart';
+    document.getElementById('start-menu-music').play();
 }
 
 export function hideStartScreenMenu() {
     startMenu.style.display = 'none';
     startMenu.classList.remove('fade-in');
+    //document.getElementById('start-menu-music').pause();
 }
 
 export function handleStartMenuKeys(event) {
