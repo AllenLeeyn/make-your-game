@@ -38,13 +38,25 @@ async function generateWordList(questName) {
     return wordList;
 }
 
+function getRandomLetter() {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const randomIndex = Math.floor(Math.random() * letters.length);
+    return letters[randomIndex];
+}
+
 async function collectMissingLetters(wordList) {
     const missingLetters = [];
     
+    // add random infront of valid targets
+    for (let i = 0; i < 5; i++) missingLetters.push(getRandomLetter());
+
     wordList.forEach(wordObject => {
         const letters = Object.values(wordObject)[0];
         missingLetters.push(...letters);
     });
+
+    // add random behind of valid targets
+    for (let i = 0; i < 5; i++) missingLetters.push(getRandomLetter());
     
     return missingLetters;
 }

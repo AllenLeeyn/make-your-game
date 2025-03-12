@@ -4,40 +4,37 @@ import * as p from './player.js';
 const scoreDisplay = document.getElementById('score-display');
 const comboDisplay = document.getElementById('combo-display');
 const wordDisplay = document.getElementById('word-display');
-const missDisplay = document.getElementById('miss-display');
+const wordAimDisplay = document.getElementById('wordAim-display');
+const missDisplay = document.getElementsByClassName('miss-display');
 const hitDisplay = document.getElementById('hit-display');
 const bimDisplay = document.getElementById('bim-display');
 const timerElement = document.getElementById('timer');
-const gameOverDisplay = document.getElementById('gameover-display');
-const gameCompleteDisplay = document.getElementById('gamecomplete-display');
 
 let timerValue;
-export let isTimeUp = false;
+let timerInterval;
 
 export function initTimer(){
     clearInterval(timerInterval); 
-    timerValue = m.gameState.timeDuration;
-    timerElement.textContent = timerValue; 
-    isTimeUp = false;
+    timerValue = m.game.timeDuration;
+    timerElement.textContent = timerValue;
     timerInterval = setInterval(updateTimer, 1000);  // Update the timer every second
 }
 
 // Function to update the timer display
 function updateTimer() {
-    if (m.gameState.state === m.RUNNING) {
+    if (m.game.state === m.RUNNING) {
         if (timerValue > 0) {
             timerValue--;
             timerElement.textContent = timerValue;  // Update the text content of the timer
         } else {
             isTimeUp = true;
-            m.gameState.state = m.GAME_OVER;
+            m.game.state = m.GAME_OVER;
             clearInterval(timerInterval);  // Stop the timer once it reaches 0
             // Additional logic to handle game over can go here
         }
     };
 }
 
-let timerInterval;
 
 export function updateBulletDisplay(count){
     const bulletCountElement = document.getElementById('bulletCount');
@@ -51,7 +48,6 @@ export function updateBulletDisplay(count){
     }
     bulletCountElement.textContent = result;
 
-
     if (count === 1) {
         bulletCountElement.classList.add('flashing-red');
     } else if (count <= 3) {
@@ -62,19 +58,33 @@ export function updateBulletDisplay(count){
 }
 
 export function updateWordDisplay() {
-    const [word] = Object.keys(m.gameState.wordList[m.gameState.currentWordIndex]);
+    const [word] = Object.keys(m.game.wordList[m.game.currentWordIndex]);
     wordDisplay.textContent = word;
-}
 
+    const [key, value] = Object.entries(m.game.wordList[m.game.currentWordIndex])[0];
+    let parts = key.split('');
+    let valueIndex = 0;
+    for (let i = 0; i < parts.length; i++){
+        if (parts[i] === '_') {
+            parts[i] = value[valueIndex];
+            valueIndex++;
+        };
+    };
+    wordAimDisplay.textContent = parts.join('');
+};
+
+let missCounter= 0;
 export function showFeedback(result) {
     if (result === 'miss'){
         missDisplay.style.display = 'block';
         missDisplay.classList.add('fade-in-out-up');
         document.getElementById('miss-sound').play();
         setTimeout(() => {
-            missDisplay.style.display = 'none';
-            missDisplay.classList.remove('fade-in-out-up');
-        }, 1000);
+            missDisplay[missCounter].style.display = 'none';
+            missDisplay[missCounter].classList.remove('fade-in-out-up');
+        }, 600);
+        missCounter++;
+        if (missCounter >= 10) missCounter=0;
     }
     if (result === 'hit'){
         hitDisplay.style.display = 'block';

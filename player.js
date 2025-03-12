@@ -1,7 +1,5 @@
-const svgContainerSize = {
-    height: 600,
-    width: 800
-};
+import * as m from "./main.js";
+import * as input from "./input.js";
 
 export const player = {
     xAxis: document.getElementById('yAxis'),
@@ -16,31 +14,24 @@ export const player = {
     combo: 0
 };
 
-export const keysPressed = {
-    ArrowUp: false,
-    ArrowDown: false,
-    ArrowLeft: false,
-    ArrowRight: false,
-};
-
 // Update the player's position in the SVG
 export function updatePlayerPosition() {
-    if (keysPressed['ArrowUp']) {
+    if (input.keysPressed['ArrowUp']) {
         const newY = player.y - player.speed;
         player.y = (newY < player.radius+60) ? player.radius+60 : newY;
     };
-    if (keysPressed['ArrowDown']) {
+    if (input.keysPressed['ArrowDown']) {
         const newY = player.y + player.speed;
-        player.y = (newY > svgContainerSize.height-player.radius-60) ? svgContainerSize.height-player.radius-60 : newY;
+        player.y = (newY > m.game.height-player.radius-60) ? m.game.height-player.radius-60 : newY;
 
     };
-    if (keysPressed['ArrowLeft']) {
+    if (input.keysPressed['ArrowLeft']) {
         const newX = player.x - player.speed;
         player.x = (newX < player.radius) ? player.radius : newX;
     };
-    if (keysPressed['ArrowRight']) {
+    if (input.keysPressed['ArrowRight']) {
         const newX = player.x + player.speed;
-        player.x = (newX > svgContainerSize.width-player.radius) ? svgContainerSize.width-player.radius : newX;
+        player.x = (newX > m.game.width-player.radius) ? m.game.width-player.radius : newX;
     };
 
     player.yAxis.setAttribute('y1', player.y);
