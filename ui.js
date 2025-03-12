@@ -15,20 +15,19 @@ let timerInterval;
 
 export function initTimer(){
     clearInterval(timerInterval); 
-    timerValue = m.game.timeDuration;
+    timerValue = m.GAME.timeDuration;
     timerElement.textContent = timerValue;
     timerInterval = setInterval(updateTimer, 1000);  // Update the timer every second
 }
 
 // Function to update the timer display
 function updateTimer() {
-    if (m.game.state === m.RUNNING) {
+    if (m.GAME.state === m.RUNNING) {
         if (timerValue > 0) {
             timerValue--;
             timerElement.textContent = timerValue;  // Update the text content of the timer
         } else {
-            isTimeUp = true;
-            m.game.state = m.GAME_OVER;
+            m.GAME.state = m.GAME_OVER;
             clearInterval(timerInterval);  // Stop the timer once it reaches 0
             // Additional logic to handle game over can go here
         }
@@ -58,10 +57,12 @@ export function updateBulletDisplay(count){
 }
 
 export function updateWordDisplay() {
-    const [word] = Object.keys(m.game.wordList[m.game.currentWordIndex]);
-    wordDisplay.textContent = word;
+    // show word with missing characters
+    const [word] = Object.keys(m.GAME.wordList[m.GAME.currentWordIndex]);
+    wordDisplay.textContent = `[${word.replaceAll('_',' ')}]`;
 
-    const [key, value] = Object.entries(m.game.wordList[m.game.currentWordIndex])[0];
+    // show word with all characters
+    const [key, value] = Object.entries(m.GAME.wordList[m.GAME.currentWordIndex])[0];
     let parts = key.split('');
     let valueIndex = 0;
     for (let i = 0; i < parts.length; i++){
@@ -70,7 +71,7 @@ export function updateWordDisplay() {
             valueIndex++;
         };
     };
-    wordAimDisplay.textContent = parts.join('');
+    wordAimDisplay.textContent = `[${parts.join('')}]`;
 };
 
 let missCounter= 0;

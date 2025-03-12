@@ -10,7 +10,7 @@ const gameCompleteDisplay = document.getElementById('gamecomplete-display');
 export function showStartScreenMenu() {  
     startMenu.style.display = 'block';
     startMenu.classList.add('fade-in');
-    m.game.state = m.AT_START;
+    m.GAME.state = m.AT_START;
 }
 
 export function hideStartScreenMenu() {
@@ -19,8 +19,8 @@ export function hideStartScreenMenu() {
 }
 
 export function showPauseMenu() {
-    m.game.state = m.AT_PAUSED;
-    m.game.pauseSelection = 0;
+    m.GAME.state = m.AT_PAUSED;
+    m.GAME.pauseSelection = 0;
     pauseMenu.style.display = 'block';
     pauseMenu.classList.add('fade-in');
     pauseMenuText[0].setAttribute("fill", "green")

@@ -16,7 +16,7 @@ export const GAME_OVER = 'gameover';  // Game is over
 export const COMPLETE = 'complete';   // Game is complete (successfully finished)
 export const RESTART = 'restart';   // Game is complete (successfully finished)
 
-export const game = {
+export const GAME = {
     height: 600,
     width: 800,
     currentQuest: 'questOne',
@@ -37,46 +37,46 @@ export function main() {
 
 //--------------- game logic ---------------//
 function gameLoop(timestamp) {
-    if (game.state === START) {
+    if (GAME.state === START) {
         menu.hidePauseMenu();
         menu.showStartScreenMenu();
 
-    } else if (game.state === INIT || game.state === RESTART){
+    } else if (GAME.state === INIT || GAME.state === RESTART){
         initGame();
 
-    } else if (game.state === RUNNING){
+    } else if (GAME.state === RUNNING){
         menu.hideStartScreenMenu();
         menu.hideGameComplete();
         menu.hideGameOver();
         menu.hidePauseMenu();
-        p.updatePlayerPosition(); // Update player position
-        tgt.moveTargets();           // Update target positions
-        renderFps(timestamp);
+        p.updatePlayerPosition();
+        tgt.moveTargets();
 
-    } else if (game.state === PAUSED) {
+    } else if (GAME.state === PAUSED) {
         menu.showPauseMenu();
 
-    }else if (game.state === GAME_OVER) {
+    }else if (GAME.state === GAME_OVER) {
         menu.showGameOver();
 
-    }else if (game.state === COMPLETE) {
+    }else if (GAME.state === COMPLETE) {
         menu.showGameComplete();
     }
-    requestAnimationFrame(gameLoop); // Keep the game loop running
+    renderFps(timestamp);
+    requestAnimationFrame(gameLoop);
 }
 
 // initalize game 
 async function initGame() {
 
-    [game.wordList, game.targetList] = await getWordsAndTargets(game.currentQuest);
+    [GAME.wordList, GAME.targetList] = await getWordsAndTargets(GAME.currentQuest);
     p.initPlayer();
     tgt.initTargets();
-    ui.initTimer(game.timeDuration);
+    ui.initTimer(GAME.timeDuration);
     ui.updateWordDisplay();
     ui.updateScoreDisplay();
     ui.updateBulletDisplay(p.player.bullets);
     
-    game.state = RUNNING;
+    GAME.state = RUNNING;
 }
 
 //--------------- FPS counter ---------------//

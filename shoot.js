@@ -16,11 +16,11 @@ const BIM = 'bim';
 export function shoot() {
     player.bullets--;
     ui.updateBulletDisplay(player.bullets);
-    if (player.bullets <= 0) m.game.state = m.GAME_OVER;
+    if (player.bullets <= 0) m.GAME.state = m.GAME_OVER;
 
     let targetHit = false;
 
-    m.game.targets.forEach((target, i) => {
+    m.GAME.targets.forEach((target, i) => {
         const distance = getDistance(player, target)
     
         if (distance <= player.radius + 2 && target.active) {
@@ -30,12 +30,12 @@ export function shoot() {
             const result = checkWordCompletion(target.letter);
     
             if (result !== MISS) {
-                letter = m.game.targetList[m.game.currentTargetIndex];
-                m.game.currentTargetIndex++;
+                letter = m.GAME.targetList[m.GAME.currentTargetIndex];
+                m.GAME.currentTargetIndex++;
                 if (result === BIM) {
-                    m.game.currentWordIndex++;
-                    if (m.game.currentWordIndex >= m.game.wordList.length){
-                        m.game.state = m.COMPLETE;
+                    m.GAME.currentWordIndex++;
+                    if (m.GAME.currentWordIndex >= m.GAME.wordList.length){
+                        m.GAME.state = m.COMPLETE;
                         return;
                     };
                 };
@@ -65,7 +65,7 @@ function getDistance(player, target){
 }
 
 function checkWordCompletion(letter){
-    const wordObj = m.game.wordList[m.game.currentWordIndex];
+    const wordObj = m.GAME.wordList[m.GAME.currentWordIndex];
     let [key, value] = Object.entries(wordObj)[0];
     const word = wordDisplay.textContent;
     const parts = word.split('');
@@ -75,7 +75,7 @@ function checkWordCompletion(letter){
     for (let i = 0; i < value.length; i++) {
         if (value[i] === letter){
             for (let j = 0; j < parts.length; j++) {
-                if(parts[j] === '_') underscoreCount++;
+                if(parts[j] === ' ') underscoreCount++;
 
                 if (underscoreCount === i+1){
                     parts[j] = letter;
@@ -87,7 +87,7 @@ function checkWordCompletion(letter){
             if (index !== -1) {
                 value.splice(index, 1);
             }
-            m.game.wordList[m.game.currentWordIndex][key] = value;
+            m.GAME.wordList[m.GAME.currentWordIndex][key] = value;
             if (value.length === 0) return BIM;
             return HIT;
         }
