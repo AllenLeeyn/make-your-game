@@ -5,10 +5,10 @@ const SCORE_DISPLAY = document.getElementById('score-display');
 const COMBO_DISPLAY = document.getElementById('combo-display');
 const WRD_DISPLAY = document.getElementById('word-display');
 const WRD_AIM_DISPLAY = document.getElementById('wordAim-display');
-const MISS_DISPLAY = document.getElementsByClassName('miss-display');
-const HIT_DISPLAY = document.getElementById('hit-display');
-const BIM_DISPLAY = document.getElementById('bim-display');
+const FEEDBACK_DISPLAY = document.getElementById('feedback-display');
+const LOWER_DISPLAY = document.getElementById('lower-display');
 const TIMER_DISPLAY = document.getElementById('timer');
+const BULLET_DISPLAY = document.getElementById('bulletCount');
 
 let timerValue;
 let timerInterval;
@@ -23,10 +23,11 @@ export async function initUI(){
 export async function updateUI(result){
     updateBulletDisplay();
     updateScoreDisplay();
-    showFeedback(result);
 }
 
 async function initTimer(){
+    TIMER_DISPLAY.setAttribute('fill', 'limegreen');
+    TIMER_DISPLAY.classList.remove('flashing-red');
     clearInterval(timerInterval); 
     timerValue = game.timeDuration;
     TIMER_DISPLAY.textContent = timerValue;
@@ -37,6 +38,13 @@ async function initTimer(){
 async function updateTimer() {
     if (game.state === RUNNING) {
         if (timerValue > 0) {
+            if (timerValue < 10){
+                TIMER_DISPLAY.classList.add('flashing-red');
+            } else if (timerValue < 20){
+                TIMER_DISPLAY.setAttribute('fill', 'red');
+            } else if (timerValue < 40){
+                TIMER_DISPLAY.setAttribute('fill', 'gold');
+            }
             timerValue--;
             TIMER_DISPLAY.textContent = timerValue;  // Update the text content of the timer
         } else {
@@ -48,23 +56,22 @@ async function updateTimer() {
 }
 
 async function updateBulletDisplay(){
-    const bulletCountElement = document.getElementById('bulletCount');
-    bulletCountElement.setAttribute('fill', 'limegreen');
-    bulletCountElement.classList.remove('flashing-red');
+    BULLET_DISPLAY.setAttribute('fill', 'limegreen');
+    BULLET_DISPLAY.classList.remove('flashing-red');
 
     let result = '';
 
     for (let i = 0; i < player.bullets; i ++){
         result += '▋';
     }
-    bulletCountElement.textContent = result;
+    BULLET_DISPLAY.textContent = result;
 
     if (player.bullets === 1) {
-        bulletCountElement.classList.add('flashing-red');
+        BULLET_DISPLAY.classList.add('flashing-red');
     } else if (player.bullets <= 3) {
-        bulletCountElement.setAttribute('fill', 'red');
+        BULLET_DISPLAY.setAttribute('fill', 'red');
     } else if (player.bullets <= 7) {
-        bulletCountElement.setAttribute('fill', 'gold');
+        BULLET_DISPLAY.setAttribute('fill', 'gold');
     }
 }
 
@@ -88,36 +95,47 @@ async function updateWordDisplay() {
     WRD_AIM_DISPLAY.textContent = `[${parts.join('')}]`;
 };
 
-let missCounter= 0;
-async function showFeedback(result) {
-    if (result === 'miss'){
-        MISS_DISPLAY[missCounter].style.display = 'block';
-        MISS_DISPLAY[missCounter].classList.add('fade-in-out-up');
+let timeoutID;
+export async function showFeedback(result) {
+    if (result === 'MISS') {
+        FEEDBACK_DISPLAY.setAttribute('fill', 'red');
+        LOWER_DISPLAY.classList.add('shake');
         setTimeout(() => {
-            MISS_DISPLAY[missCounter].classList.remove('fade-in-out-up');
-            MISS_DISPLAY[missCounter].style.display = 'none';
-        }, 600);
-        missCounter++;
-        if (missCounter >= 10) missCounter=0;
-    }
-    if (result === 'hit'){
-        HIT_DISPLAY.style.display = 'block';
-        HIT_DISPLAY.classList.add('fade-in-out-up');
+            LOWER_DISPLAY.classList.remove('shake');
+        }, 300)
+    } else {
+        FEEDBACK_DISPLAY.setAttribute('fill', 'limegreen');
+        LOWER_DISPLAY.classList.add('hit');
         setTimeout(() => {
-            HIT_DISPLAY.classList.remove('fade-in-out-up');
-            HIT_DISPLAY.style.display = 'none';
-        }, 1000);
+            LOWER_DISPLAY.classList.remove('hit');
+        }, 300)
+    };
+
+    FEEDBACK_DISPLAY.textContent = result
+    if (timeoutID !== undefined){
+        clearTimeout(timeoutID);
+        FEEDBACK_DISPLAY.style.display = 'none';
+        FEEDBACK_DISPLAY.classList.remove('fade-in-out-up');
     }
-    if (result === 'bim'){
+    FEEDBACK_DISPLAY.setAttribute('x', player.x) 
+    FEEDBACK_DISPLAY.setAttribute('y', player.y)
+
+    setTimeout(() => {
+        FEEDBACK_DISPLAY.style.display = 'block';
+        FEEDBACK_DISPLAY.classList.add('fade-in-out-up');
+    }, 10)
+    timeoutID = setTimeout(() => {
+        FEEDBACK_DISPLAY.style.display = 'none';
+        FEEDBACK_DISPLAY.classList.remove('fade-in-out-up');
+        timeoutID = undefined
+    }, 610);
+    
+    if (result === 'BIM'){
         WRD_DISPLAY.setAttribute('fill', 'green');
-        BIM_DISPLAY.style.display = 'block';
-        BIM_DISPLAY.classList.add('fade-in-out-up');
         setTimeout(() => {
-            BIM_DISPLAY.classList.remove('fade-in-out-up');
             WRD_DISPLAY.setAttribute('fill', 'red');
-            BIM_DISPLAY.style.display = 'none';
             updateWordDisplay();
-        }, 1000);
+        }, 600);
     }
 }
 
