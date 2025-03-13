@@ -1,16 +1,17 @@
 import { game } from "./main.js";
 
+const TARGET_GRP = document.getElementsByClassName('target-grp');
 const TARGET_CIRCLE = document.getElementsByClassName('target-circle');
 const TARGET_TEXT = document.getElementsByClassName('target-text');
 
 const SPEED_VAR = {
     xMin: 1,
     yMin: 0.5,
-    xRange: 3,
-    yRange: 3.5,
+    xRange: 2.5,
+    yRange: 3,
 }
 
-const randomDash = () => (Math.random() < 0.1) ? 3 : 1;
+const randomDash = () => (Math.random() < 0.12) ? 3 : 1;
 const randomDX = () => ((Math.random() * SPEED_VAR.xRange) + SPEED_VAR.xMin) * randomDash();
 const randomDY = () => ((Math.random() * SPEED_VAR.yRange) + SPEED_VAR.yMin) * randomDash();
 
@@ -27,6 +28,7 @@ export async function initTargets(){
 
 export async function addTarget(i, letter){
     const t = {
+        grp: TARGET_GRP[i],
         circle: TARGET_CIRCLE[i],
         text: TARGET_TEXT[i],
         r: 20,
@@ -40,19 +42,16 @@ export async function addTarget(i, letter){
     t.dy = randomDY();
 
     t.text.textContent = letter;
-    setTargetPosition(t)
-    t.circle.classList.remove('target-removal');
-    t.text.classList.remove('target-removal');
-    t.circle.classList.add('target-fade-in');
-    t.text.classList.add('target-fade-in');
+    setTargetPosition(t);
+    t.grp.classList.remove('target-removal');
+    t.grp.classList.add('target-fade-in');
 
     game.targets[i] = t;
 };
 
 export async function hideTarget(t){
     t.active = false;
-    t.circle.classList.add('target-removal');
-    t.text.classList.add('target-removal');
+    t.grp.classList.add('target-removal');
 }
 
 export async function moveTargets() {
@@ -71,6 +70,11 @@ export async function moveTargets() {
                 t.dy = (t.dy > 0) ? -randomDY() : randomDY() ;
                 t.y = (t.y < 72) ? 72 : game.height-72;
             }
+            if ((Math.abs(t.dx) + Math.abs(t.dy)) > 10) {
+                t.circle.setAttribute('fill', 'purple');
+            } else {
+                t.circle.setAttribute('fill', 'red');
+            };
             setTargetPosition(t)
         };
     });
@@ -80,5 +84,5 @@ async function setTargetPosition(t){
     t.circle.setAttribute("cx", t.x);
     t.circle.setAttribute("cy", t.y);
     t.text.setAttribute("x", t.x);
-    t.text.setAttribute("y", t.y+10);
+    t.text.setAttribute("y", t.y);
 }
