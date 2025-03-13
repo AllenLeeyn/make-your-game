@@ -27,15 +27,43 @@ body {
     background-color: black;
 }
 
-.horizontal, .vertical {
-    stroke: goldenrod;
-    stroke-width: 1;
-}
-
-.crosshair-circle {
+.crosshair {
     stroke: goldenrod;
     stroke-width: 2;
     fill: transparent;
+}
+
+.shoot {
+    animation: shootAnimation 0.2s ease-in-out;
+}
+
+.target-grp {
+    will-change: transform, opacity;
+}
+
+@keyframes shootAnimation {
+    0% {
+        transform: translate(0, 0); /* Starting position */
+    }
+    25% {
+        transform: translate(2px, -2px); /* Slight move up and right */
+    }
+    50% {
+        transform: translate(-2px, 2px); /* Slight move down and left */
+    }
+    75% {
+        transform: translate(2px, 2px); /* Slight move down and right */
+    }
+    100% {
+        transform: translate(0, 0); /* Return to original position */
+    }
+}
+
+.feedback-display {
+    text-anchor: middle;
+    font-size: 30px;
+    display: none;
+    will-change: transform, opacity;
 }
 
 #fps-display {
@@ -88,15 +116,13 @@ body {
     }
     33% {
         opacity: 1;
-        transform: translateY(-45px);
     }
     80% {
         opacity: 0.5;
-        transform: translateY(-45px);
     }
     100% {
         opacity: 0;
-        transform: translateY(-45px);
+        transform: translateY(-10px);
     }
 }
 
@@ -109,7 +135,7 @@ body {
         fill: red;
     }
     50% {
-        fill: salmon;
+        fill: transparent;
     }
     100% {
         fill: red;
@@ -134,4 +160,51 @@ body {
     100% {
         opacity: 1;
     }
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+        stroke: red;
+        stroke-width: 5;
+    }
+    25% {
+        transform: translateX(-3px);
+    }
+    50% {
+        transform: translateX(3px);
+        stroke: grey;
+        stroke-width: 1;
+    }
+    75% {
+        transform: translateX(-3px);
+    }
+    100% {
+        transform: translateX(3px);
+        stroke: red;
+        stroke-width: 3;
+    }
+}
+
+.shake {
+    animation: shake 0.3s ease infinite;
+}
+
+@keyframes hit {
+    0% {
+        stroke: green;
+        stroke-width: 5;
+    }
+    50% {
+        stroke: green;
+        stroke-width: 3;
+    }
+    100% {
+        stroke: green;
+        stroke-width: 5;
+    }
+}
+    
+.hit {
+    animation: hit 0.6s ease infinite;
 }

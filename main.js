@@ -3,6 +3,7 @@ import { moveTargets, initTargets } from './target.js';
 import { initUI } from './ui.js';
 import { handleKeyDown, handleKeyUp } from './input.js';
 import { hideAllMenus, showMenu } from './showMenu.js'
+import { initBlock, moveBlock } from './block.js';
 import { getWordsAndTargets } from './words.js';
 
 // Constants for game states
@@ -48,6 +49,7 @@ function gameLoop(timestamp) {
         hideAllMenus();
         updatePlayerPosition();
         moveTargets();
+        moveBlock();
 
     } else if (game.state === PAUSED) {
         showMenu();
@@ -68,6 +70,7 @@ async function initGame() {
     [game.wordList, game.targetList] = await getWordsAndTargets(game.currentQuest);
     initPlayer();
     initTargets();
+    initBlock();
     initUI();
     
     game.state = RUNNING;
