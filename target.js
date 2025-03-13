@@ -1,9 +1,9 @@
-import * as m from "./main.js";
+import { game } from "./main.js";
 
-const targetCircle = document.getElementsByClassName('target-circle');
-const targetText = document.getElementsByClassName('target-text');
+const TARGET_CIRCLE = document.getElementsByClassName('target-circle');
+const TARGET_TEXT = document.getElementsByClassName('target-text');
 
-const speedVar = {
+const SPEED_VAR = {
     xMin: 1,
     yMin: 0.5,
     xRange: 3,
@@ -11,34 +11,31 @@ const speedVar = {
 }
 
 const randomDash = () => (Math.random() < 0.1) ? 3 : 1;
-const randomDX = () => ((Math.random() * speedVar.xRange) + speedVar.xMin) * randomDash();
-const randomDY = () => ((Math.random() * speedVar.yRange) + speedVar.yMin) * randomDash();
+const randomDX = () => ((Math.random() * SPEED_VAR.xRange) + SPEED_VAR.xMin) * randomDash();
+const randomDY = () => ((Math.random() * SPEED_VAR.yRange) + SPEED_VAR.yMin) * randomDash();
 
-export function initTargets(){
-    m.GAME.targets = [];
+export async function initTargets(){
+    game.targets = new Array(10).fill({});
 
     for (let i = 0; i < 10; i++) {
-        const t = {
-            circle: targetCircle[i],
-            text: targetText[i],
-            r: 20,
-        };
-        m.GAME.targets.push(t);
-        addTarget(i, m.GAME.targetList[i])
-
-        console.log(`${i}: ${t.letter} added`)
+        addTarget(i, game.targetList[i])
+        console.log(`${i}: ${game.targets[i].letter} added`)
     }
-    m.GAME.currentWordIndex = 0;
-    m.GAME.currentTargetIndex = 10;
+    game.currentWordIndex = 0;
+    game.currentTargetIndex = 10;
 }
 
-export function addTarget(i, letter){
-    const t = m.GAME.targets[i];
+export async function addTarget(i, letter){
+    const t = {
+        circle: TARGET_CIRCLE[i],
+        text: TARGET_TEXT[i],
+        r: 20,
+    };
 
     t.active = true;
     t.letter = letter;
-    t.x = Math.random() * (m.GAME.width - 100) + 50;
-    t.y = Math.random() * (m.GAME.height - 100) + 50;
+    t.x = Math.random() * (game.width - 100) + 50;
+    t.y = Math.random() * (game.height - 100) + 50;
     t.dx = randomDX();
     t.dy = randomDY();
 
@@ -48,36 +45,38 @@ export function addTarget(i, letter){
     t.text.classList.remove('target-removal');
     t.circle.classList.add('target-fade-in');
     t.text.classList.add('target-fade-in');
+
+    game.targets[i] = t;
 };
 
-export function hideTarget(t){
+export async function hideTarget(t){
     t.active = false;
     t.circle.classList.add('target-removal');
     t.text.classList.add('target-removal');
 }
 
 export async function moveTargets() {
-    m.GAME.targets.forEach(t => {
+    game.targets.forEach(async t => {
         if (t.active) {
             t.x += t.dx;
             t.y += t.dy;
 
-            if (t.x > m.GAME.width-20 || t.x < 20) {
+            if (t.x > game.width-20 || t.x < 20) {
                 t.dx = (t.dx > 0) ? -randomDX() : randomDX() ;
                 t.dy = (t.dy > 0) ? randomDY() : -randomDY() ;
-                t.x = (t.x < 20) ? 20 : m.GAME.width-20;
+                t.x = (t.x < 20) ? 20 : game.width-20;
             };
-            if (t.y > m.GAME.height-72 || t.y < 72) {
+            if (t.y > game.height-72 || t.y < 72) {
                 t.dx = (t.dx > 0) ? randomDX() : -randomDX() ;
                 t.dy = (t.dy > 0) ? -randomDY() : randomDY() ;
-                t.y = (t.y < 72) ? 72 : m.GAME.height-72;
+                t.y = (t.y < 72) ? 72 : game.height-72;
             }
             setTargetPosition(t)
         };
     });
 };
 
-function setTargetPosition(t){
+async function setTargetPosition(t){
     t.circle.setAttribute("cx", t.x);
     t.circle.setAttribute("cy", t.y);
     t.text.setAttribute("x", t.x);

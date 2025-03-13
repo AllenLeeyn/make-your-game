@@ -1,22 +1,22 @@
-import * as p from './player.js';
-import * as tgt from './target.js';
-import * as ui from './ui.js';
-import * as input from './input.js';
-import * as menu from './showMenu.js'
+import { initPlayer, updatePlayerPosition } from './player.js';
+import { moveTargets, initTargets } from './target.js';
+import { initUI } from './ui.js';
+import { handleKeyDown, handleKeyUp } from './input.js';
+import { hideAllMenus, showMenu } from './showMenu.js'
 import { getWordsAndTargets } from './words.js';
 
 // Constants for game states
 export const START = 'start';
 export const AT_START = 'atStart';
-export const INIT = 'initalize';     // Game is in the start state (before gameplay)
-export const RUNNING = 'running';     // Game is currently running
-export const PAUSED = 'paused';       // Game is paused
-export const AT_PAUSED = 'atPaused';       // Game is paused
-export const GAME_OVER = 'gameover';  // Game is over
-export const COMPLETE = 'complete';   // Game is complete (successfully finished)
-export const RESTART = 'restart';   // Game is complete (successfully finished)
+export const INIT = 'initalize';
+export const RUNNING = 'running';
+export const PAUSED = 'paused';
+export const AT_PAUSED = 'atPaused';
+export const GAME_OVER = 'gameover';
+export const COMPLETE = 'complete';
+export const RESTART = 'restart';
 
-export const GAME = {
+export const game = {
     height: 600,
     width: 800,
     currentQuest: 'questOne',
@@ -37,29 +37,26 @@ export function main() {
 
 //--------------- game logic ---------------//
 function gameLoop(timestamp) {
-    if (GAME.state === START) {
-        menu.hidePauseMenu();
-        menu.showStartScreenMenu();
+    if (game.state === START) {
+        hideAllMenus();
+        showMenu();
 
-    } else if (GAME.state === INIT || GAME.state === RESTART){
+    } else if (game.state === INIT || game.state === RESTART){
         initGame();
 
-    } else if (GAME.state === RUNNING){
-        menu.hideStartScreenMenu();
-        menu.hideGameComplete();
-        menu.hideGameOver();
-        menu.hidePauseMenu();
-        p.updatePlayerPosition();
-        tgt.moveTargets();
+    } else if (game.state === RUNNING){
+        hideAllMenus();
+        updatePlayerPosition();
+        moveTargets();
 
-    } else if (GAME.state === PAUSED) {
-        menu.showPauseMenu();
+    } else if (game.state === PAUSED) {
+        showMenu();
 
-    }else if (GAME.state === GAME_OVER) {
-        menu.showGameOver();
+    }else if (game.state === GAME_OVER) {
+        showMenu();
 
-    }else if (GAME.state === COMPLETE) {
-        menu.showGameComplete();
+    }else if (game.state === COMPLETE) {
+        showMenu();
     }
     renderFps(timestamp);
     requestAnimationFrame(gameLoop);
@@ -68,19 +65,15 @@ function gameLoop(timestamp) {
 // initalize game 
 async function initGame() {
 
-    [GAME.wordList, GAME.targetList] = await getWordsAndTargets(GAME.currentQuest);
-    p.initPlayer();
-    tgt.initTargets();
-    ui.initTimer(GAME.timeDuration);
-    ui.updateWordDisplay();
-    ui.updateScoreDisplay();
-    ui.updateBulletDisplay(p.player.bullets);
+    [game.wordList, game.targetList] = await getWordsAndTargets(game.currentQuest);
+    initPlayer();
+    initTargets();
+    initUI();
     
-    GAME.state = RUNNING;
+    game.state = RUNNING;
 }
 
 //--------------- FPS counter ---------------//
-// Create an SVG element to show FPS
 const fpsDisplay = document.getElementById("fps-display");
 
 let frameCount = 0;
@@ -88,19 +81,18 @@ let lastFPSTime = 0;
 let currentFPS;
 
 async function renderFps(timestamp) {
-    frameCount++; // Increment the frame count
+    frameCount++;
 
-    // Calculate FPS every second (1000ms) 
     const elapsedSinceLastFPS = timestamp - lastFPSTime;
     if (elapsedSinceLastFPS >= 1000) {
-        currentFPS = frameCount; // Set FPS to the number of frames in the last second
-        frameCount = 0; // Reset frame count for the next second
-        lastFPSTime = timestamp; // Reset the last FPS time
+        currentFPS = frameCount;
+        frameCount = 0;
+        lastFPSTime = timestamp;
     }
 
     fpsDisplay.textContent = `FPS: ${currentFPS}`;
 }
 
-// Add event listeners for keydown and keyup
-document.addEventListener('keydown', input.handleKeyDown);
-document.addEventListener('keyup', input.handleKeyUp);
+//--------------- Add eventListener for user input ---------------//
+document.addEventListener('keydown', handleKeyDown);
+document.addEventListener('keyup', handleKeyUp);

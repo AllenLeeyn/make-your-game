@@ -1,56 +1,71 @@
-import * as m from "./main.js";
+import { game, START, AT_START, PAUSED, AT_PAUSED, GAME_OVER, COMPLETE } from "./main.js";
 
-const pauseMenu = document.getElementById('pause-menu');
-const pauseMenuText = document.getElementsByClassName('pauseText');
-const pauseMenuButton = document.getElementsByClassName('pauseButton');
-const startMenu = document.getElementById('start-menu');
-const gameOverDisplay = document.getElementById('gameover-display');
-const gameCompleteDisplay = document.getElementById('gamecomplete-display');
+const PAUSE_MENU = document.getElementById('pause-menu');
+const PAUSE_BTN_TEXT = document.getElementsByClassName('pauseText');
+const PAUSE_BTN_RECT = document.getElementsByClassName('pauseButton');
+const START_MENU = document.getElementById('start-menu');
+const GAME_OVER_DISPLAY = document.getElementById('gameover-display');
+const GAME_COMPLETE_DISPLAY = document.getElementById('gamecomplete-display');
 
-export function showStartScreenMenu() {  
-    startMenu.style.display = 'block';
-    startMenu.classList.add('fade-in');
-    m.GAME.state = m.AT_START;
+function showStartScreenMenu() {  
+    START_MENU.style.display = 'block';
+    START_MENU.classList.add('fade-in');
+    game.state = AT_START;
 }
 
-export function hideStartScreenMenu() {
-    startMenu.style.display = 'none';
-    startMenu.classList.remove('fade-in');
+function hideStartScreenMenu() {
+    START_MENU.style.display = 'none';
+    START_MENU.classList.remove('fade-in');
 }
 
-export function showPauseMenu() {
-    m.GAME.state = m.AT_PAUSED;
-    m.GAME.pauseSelection = 0;
-    pauseMenu.style.display = 'block';
-    pauseMenu.classList.add('fade-in');
-    pauseMenuText[0].setAttribute("fill", "green")
-    pauseMenuButton[0].setAttribute("stroke", "green")
-    pauseMenuText[1].setAttribute("fill", "grey")
-    pauseMenuButton[1].setAttribute("stroke", "grey")
-    pauseMenuText[2].setAttribute("fill", "grey")
-    pauseMenuButton[2].setAttribute("stroke", "grey")
+function showPauseMenu() {
+    PAUSE_MENU.style.display = 'block';
+    PAUSE_MENU.classList.add('fade-in');
+    game.pauseSelection = 0;
+    PAUSE_BTN_TEXT[0].setAttribute("fill", "green")
+    PAUSE_BTN_RECT[0].setAttribute("stroke", "green")
+    PAUSE_BTN_TEXT[1].setAttribute("fill", "grey")
+    PAUSE_BTN_RECT[1].setAttribute("stroke", "grey")
+    PAUSE_BTN_TEXT[2].setAttribute("fill", "grey")
+    PAUSE_BTN_RECT[2].setAttribute("stroke", "grey")
+    game.state = AT_PAUSED;
 }
 
-export function hidePauseMenu() {
-    pauseMenu.style.display = 'none';
-    pauseMenu.classList.remove('fade-in');
+function hidePauseMenu(){
+    PAUSE_MENU.style.display = 'none';
+    PAUSE_MENU.classList.remove('fade-in');
 }
 
-export function showGameOver() {                     
-    gameOverDisplay.style.display = 'block';
-    gameOverDisplay.classList.add('fade-in');
+function showGameOver() {                     
+    GAME_OVER_DISPLAY.style.display = 'block';
+    GAME_OVER_DISPLAY.classList.add('fade-in');
 }
 
-export function showGameComplete() {                     
-    gameCompleteDisplay.style.display = 'block';
-    gameCompleteDisplay.classList.add('fade-in');
-}
- export function hideGameOver() {
-    gameOverDisplay.style.display = 'none';
-    gameOverDisplay.classList.remove('fade-in');
+function hideGameOver() {
+    GAME_OVER_DISPLAY.style.display = 'none';
+    GAME_OVER_DISPLAY.classList.remove('fade-in');
 }
 
-export function hideGameComplete() {
-    gameCompleteDisplay.style.display = 'none';
-    gameCompleteDisplay.classList.remove('fade-in');
+function showGameComplete() {                     
+    GAME_COMPLETE_DISPLAY.style.display = 'block';
+    GAME_COMPLETE_DISPLAY.classList.add('fade-in');
+}
+
+function hideGameComplete() {
+    GAME_COMPLETE_DISPLAY.style.display = 'none';
+    GAME_COMPLETE_DISPLAY.classList.remove('fade-in');
+}
+
+export function hideAllMenus(){
+    hideStartScreenMenu();
+    hidePauseMenu();
+    hideGameOver();
+    hideGameComplete();
+};
+
+export function showMenu(){
+    if (game.state === START) showStartScreenMenu();
+    if (game.state === PAUSED) showPauseMenu();
+    if (game.state === GAME_OVER) showGameOver();
+    if (game.state === COMPLETE) showGameComplete();
 }

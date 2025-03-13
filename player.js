@@ -1,5 +1,5 @@
-import * as m from "./main.js";
-import * as input from "./input.js";
+import { game } from "./main.js";
+import { keysPressed } from "./input.js";
 
 export const player = {
     xAxis: document.getElementById('yAxis'),
@@ -7,7 +7,7 @@ export const player = {
     circle: document.getElementById('playerOrigin'),
     y: 300,
     x: 400,
-    radius: 25,
+    r: 25,
     speed: 6,
     bullets: 15,
     score: 0,
@@ -15,28 +15,28 @@ export const player = {
 };
 
 // Update the player's position in the SVG
-export function updatePlayerPosition() {
-    if (input.keysPressed['ArrowUp']) {
+export async function updatePlayerPosition() {
+    if (keysPressed['ArrowUp']) {
         const newY = player.y - player.speed;
-        player.y = (newY < player.radius+50) ? player.radius+50 : newY;
+        player.y = (newY < player.r+50) ? player.r+50 : newY;
     };
-    if (input.keysPressed['ArrowDown']) {
+    if (keysPressed['ArrowDown']) {
         const newY = player.y + player.speed;
-        player.y = (newY > m.GAME.height-player.radius-50) ? m.GAME.height-player.radius-50 : newY;
+        player.y = (newY > game.height-player.r-50) ? game.height-player.r-50 : newY;
     };
-    if (input.keysPressed['ArrowLeft']) {
+    if (keysPressed['ArrowLeft']) {
         const newX = player.x - player.speed;
-        player.x = (newX < player.radius) ? player.radius : newX;
+        player.x = (newX < player.r) ? player.r : newX;
     };
-    if (input.keysPressed['ArrowRight']) {
+    if (keysPressed['ArrowRight']) {
         const newX = player.x + player.speed;
-        player.x = (newX > m.GAME.width-player.radius) ? m.GAME.width-player.radius : newX;
+        player.x = (newX > game.width-player.r) ? game.width-player.r : newX;
     };
     setPlayerPostion();
 }
 
 // Function to initialize the player
-export function initPlayer() {
+export async function initPlayer() {
     player.score = 0;
     player.combo = 0;
     player.bullets = 15;

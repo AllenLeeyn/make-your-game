@@ -24,7 +24,7 @@ body {
 }
 
 #svg-container {
-    background-color: white;
+    background-color: black;
 }
 
 .horizontal, .vertical {
@@ -48,10 +48,9 @@ body {
     z-index: 10; 
 }
 
-/* Optional: Styling for the top bar */
 #ui rect {
-        stroke: gray;  /* White border for the top bar (optional) */
-        stroke-width: 1px;  /* Optional: border thickness */
+        stroke: gray;
+        stroke-width: 1px;
 }
 
 @keyframes fadeIn {
@@ -64,7 +63,7 @@ body {
 }
 
 .target-fade-in {
-    animation: fadeIn 1s ease-out forwards; /* Fade in over 1 second */
+    animation: fadeIn 1s ease-out forwards;
 }
 
 @keyframes fadeOut {

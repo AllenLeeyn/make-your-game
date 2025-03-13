@@ -1,5 +1,10 @@
-import * as m from "./main.js";
-import * as s from './shoot.js';
+import { shoot } from './shoot.js';
+import { game, 
+    START, AT_START, 
+    INIT, RUNNING, RESTART,
+    PAUSED, AT_PAUSED,
+    GAME_OVER, COMPLETE 
+} from "./main.js";
 
 export const keysPressed = {
     ArrowUp: false,
@@ -8,27 +13,24 @@ export const keysPressed = {
     ArrowRight: false,
 };
 
-const pauseMenuText = document.getElementsByClassName('pauseText');
-const pauseMenuButton = document.getElementsByClassName('pauseButton');
+const PAUSE_BTN_TEXT = document.getElementsByClassName('pauseText');
+const PAUSE_BTN_RECT = document.getElementsByClassName('pauseButton');
 
-//--------------- player input ---------------//
-// Handle keydown events
 export function handleKeyDown(event) {
-    if (m.GAME.state === m.AT_START) {
-        if (event.key === ' ') m.GAME.state = m.INIT;
+    if (game.state === AT_START) {
+        if (event.key === ' ') game.state = INIT;
 
-    } else if (m.GAME.state === m.RUNNING) {
+    } else if (game.state === RUNNING) {
         handleGameKeys(event);
 
-    } else if (m.GAME.state === m.AT_PAUSED) {
+    } else if (game.state === AT_PAUSED) {
         handlePauseKeys(event);
 
-    } else if (m.GAME.state === m.GAME_OVER || m.GAME.state === m.COMPLETE) {
-        if (event.key === ' ') m.GAME.state = m.RESTART;
+    } else if (game.state === GAME_OVER || game.state === COMPLETE) {
+        if (event.key === ' ') game.state = RESTART;
     }
 }
 
-// Handle keyup events
 export function handleKeyUp(event) {
     if (event.key in keysPressed) {
       keysPressed[event.key] = false;
@@ -36,33 +38,29 @@ export function handleKeyUp(event) {
 }
 
 function handleGameKeys(event) {
-    if (event.key === ' ') s.shoot();
-    if (event.key === 'Escape') m.GAME.state = m.PAUSED;
+    if (event.key === ' ') shoot();
+    if (event.key === 'Escape') game.state = PAUSED;
     if (event.key in keysPressed) keysPressed[event.key] = true;
 }
 
-export function handlePauseKeys(event) {
-    if (event.key === 'Escape') m.GAME.state = m.RUNNING;
+function handlePauseKeys(event) {
+    if (event.key === 'Escape') game.state = RUNNING;
+    const prevSelection = game.pauseSelection;
     
     if (event.key === 'ArrowUp') {
-        m.GAME.pauseSelection = Math.max(0, m.GAME.pauseSelection - 1);
+        game.pauseSelection = Math.max(0, game.pauseSelection - 1);
     } else if (event.key === 'ArrowDown') {
-        m.GAME.pauseSelection = Math.min(2, m.GAME.pauseSelection + 1);
+        game.pauseSelection = Math.min(2, game.pauseSelection + 1);
     } else if (event.key === ' ') {
         event.preventDefault();
-        if (m.GAME.pauseSelection === 0) m.GAME.state = m.RUNNING;
-        if (m.GAME.pauseSelection === 1) m.GAME.state = m.RESTART;
-        if (m.GAME.pauseSelection === 2) m.GAME.state = m.START;
+        if (game.pauseSelection === 0) game.state = RUNNING;
+        if (game.pauseSelection === 1) game.state = RESTART;
+        if (game.pauseSelection === 2) game.state = START;
     }
 
-    for (let i = 0; i < 3; i++){
-        if (i === m.GAME.pauseSelection) {
-            pauseMenuText[i].setAttribute("fill", "green");
-            pauseMenuButton[i].setAttribute("stroke", "green");
-        } else {
-            pauseMenuText[i].setAttribute("fill", "grey");
-            pauseMenuButton[i].setAttribute("stroke", "grey");
-        }
-    };
-}
+    PAUSE_BTN_TEXT[prevSelection].setAttribute("fill", "grey");
+    PAUSE_BTN_RECT[prevSelection].setAttribute("stroke", "grey");
 
+    PAUSE_BTN_TEXT[game.pauseSelection].setAttribute("fill", "green");
+    PAUSE_BTN_RECT[game.pauseSelection].setAttribute("stroke", "green");
+}

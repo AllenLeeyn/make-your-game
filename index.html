@@ -9,12 +9,12 @@
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="./make-your-GAME.css">
+  <link rel="stylesheet" type="text/css" href="./make-your-game.css">
 </head>
 
 <body>
   <div id="fps-display"></div>
-  <svg id="svg-container" width="800" height="600">
+  <svg id="svg-container" width="800" height="600" viewBox="0 0 800 600">
     <!-- Define the dot pattern -->
     <defs>
         <pattern id="dot-pattern" patternUnits="userSpaceOnUse" width="30" height="30">
@@ -29,26 +29,26 @@
     </g>
 
     <g id="targetsLayer">
-      <circle class="target-circle" cx="0" cy="-100" r="20" fill="red" />
-      <text class="target-text" text-anchor="middle" x="0" y="0" font-size="30" fill="white" text-anchor="middle">A</text>
-      <circle class="target-circle" cx="0" cy="-100" r="20" fill="red" />
-      <text class="target-text" text-anchor="middle" x="0" y="0" font-size="30" fill="white" text-anchor="middle">A</text>
-      <circle class="target-circle" cx="0" cy="-100" r="20" fill="red" />
-      <text class="target-text" text-anchor="middle" x="0" y="0" font-size="30" fill="white" text-anchor="middle">A</text>
-      <circle class="target-circle" cx="0" cy="-100" r="20" fill="red" />
-      <text class="target-text" text-anchor="middle" x="0" y="0" font-size="30" fill="white" text-anchor="middle">A</text>
-      <circle class="target-circle" cx="0" cy="-100" r="20" fill="red" />
-      <text class="target-text" text-anchor="middle" x="0" y="0" font-size="30" fill="white" text-anchor="middle">A</text>
-      <circle class="target-circle" cx="0" cy="-100" r="20" fill="red" />
-      <text class="target-text" text-anchor="middle" x="0" y="0" font-size="30" fill="white" text-anchor="middle">A</text>
-      <circle class="target-circle" cx="0" cy="-100" r="20" fill="red" />
-      <text class="target-text" text-anchor="middle" x="0" y="0" font-size="30" fill="white" text-anchor="middle">A</text>
-      <circle class="target-circle" cx="0" cy="-100" r="20" fill="red" />
-      <text class="target-text" text-anchor="middle" x="0" y="0" font-size="30" fill="white" text-anchor="middle">A</text>
-      <circle class="target-circle" cx="0" cy="-100" r="20" fill="red" />
-      <text class="target-text" text-anchor="middle" x="0" y="0" font-size="30" fill="white" text-anchor="middle">A</text>
-      <circle class="target-circle" cx="0" cy="-100" r="20" fill="red" />
-      <text class="target-text" text-anchor="middle" x="0" y="0" font-size="30" fill="white" text-anchor="middle">A</text>
+      <circle class="target-circle" cx="-100" cy="-100" r="20" fill="red" />
+      <text class="target-text" text-anchor="middle" x="-100" y="-100" font-size="30" fill="white" text-anchor="middle">A</text>
+      <circle class="target-circle" cx="-100" cy="-100" r="20" fill="red" />
+      <text class="target-text" text-anchor="middle" x="-100" y="-100" font-size="30" fill="white" text-anchor="middle">A</text>
+      <circle class="target-circle" cx="-100" cy="-100" r="20" fill="red" />
+      <text class="target-text" text-anchor="middle" x="-100" y="-100" font-size="30" fill="white" text-anchor="middle">A</text>
+      <circle class="target-circle" cx="-100" cy="-100" r="20" fill="red" />
+      <text class="target-text" text-anchor="middle" x="-100" y="-100" font-size="30" fill="white" text-anchor="middle">A</text>
+      <circle class="target-circle" cx="-100" cy="-100" r="20" fill="red" />
+      <text class="target-text" text-anchor="middle" x="-100" y="-100" font-size="30" fill="white" text-anchor="middle">A</text>
+      <circle class="target-circle" cx="-100" cy="-100" r="20" fill="red" />
+      <text class="target-text" text-anchor="middle" x="-100" y="-100" font-size="30" fill="white" text-anchor="middle">A</text>
+      <circle class="target-circle" cx="-100" cy="-100" r="20" fill="red" />
+      <text class="target-text" text-anchor="middle" x="-100" y="-100" font-size="30" fill="white" text-anchor="middle">A</text>
+      <circle class="target-circle" cx="-100" cy="-100" r="20" fill="red" />
+      <text class="target-text" text-anchor="middle" x="-100" y="-100" font-size="30" fill="white" text-anchor="middle">A</text>
+      <circle class="target-circle" cx="-100" cy="-100" r="20" fill="red" />
+      <text class="target-text" text-anchor="middle" x="-100" y="-100" font-size="30" fill="white" text-anchor="middle">A</text>
+      <circle class="target-circle" cx="-100" cy="-100" r="20" fill="red" />
+      <text class="target-text" text-anchor="middle" x="-100" y="-100" font-size="30" fill="white" text-anchor="middle">A</text>
     </g>
 
     <g id="playerLayer">
@@ -57,14 +57,7 @@
       <circle id="playerOrigin" cx="400" cy="300" r="20" class="crosshair-circle"></circle>
     </g>
 
-    <g id="ui">
-      <rect x="0" y="0" width="100%" height="50" fill="dark" />
-      <text id="score-display" x="10" y="35"  font-size="30" fill="limegreen">000000</text>
-      <text id="combo-display" x="150" y="35"  font-size="25" fill="limegreen">COMBO 0</text>
-      <text id="timer" x="50%" y="35" text-anchor="middle" font-size="30" fill="red"></text>
-      <text id="bulletCase" x="795" y="33" text-anchor="end" font-size="25" fill="grey">▋▋▋▋▋▋▋▋▋▋▋▋▋▋▋</text>
-      <text id="bulletCount" x="795" y="33" text-anchor="end" font-size="25" fill="limegreen"></text>
-      <rect x="0" y="550" width="100%" height="50" fill="dark" />
+    <g id="ui" >
       <text class="miss-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red" style="display: none;">MISS!</text>
       <text class="miss-display" x="49%" y="583" text-anchor="middle" font-size="30" fill="red" style="display: none;">MISS!</text>
       <text class="miss-display" x="48%" y="580" text-anchor="middle" font-size="30" fill="red" style="display: none;">MISS!</text>
@@ -76,6 +69,14 @@
       <text class="miss-display" x="51%" y="588" text-anchor="middle" font-size="30" fill="red" style="display: none;">MISS!</text>
       <text class="miss-display" x="50%" y="598" text-anchor="middle" font-size="30" fill="red" style="display: none;">MISS!</text>
       <text id="hit-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="limegreen" style="display: none;">HIT!</text>
+      
+      <rect x="0" y="0" width="100%" height="50" fill="dark" />
+      <rect x="0" y="550" width="100%" height="50" fill="dark" />
+      <text id="score-display" x="10" y="35"  font-size="30" fill="limegreen">000000</text>
+      <text id="combo-display" x="150" y="35"  font-size="25" fill="limegreen">COMBO 0</text>
+      <text id="timer" x="50%" y="35" text-anchor="middle" font-size="30" fill="red"></text>
+      <text id="bulletCase" x="795" y="33" text-anchor="end" font-size="25" fill="grey">▋▋▋▋▋▋▋▋▋▋▋▋▋▋▋</text>
+      <text id="bulletCount" x="795" y="33" text-anchor="end" font-size="25" fill="limegreen"></text>
       <text id="bim-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="limegreen" style="display: none;">BIM!</text>
       <text id="wordAim-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="grey">let_there_be_words</text>
       <text id="word-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red" style="white-space: pre">let_there_be_words</text>
@@ -115,7 +116,6 @@
           <line id="xLogo" x1="100" y1="165" x2="700" y2="135" class="vertical"></line>    
 
           <!-- Instructions Area -->
-          <rect x="100" y="230" width="600" height="270" stroke="black" stroke-width="2"></rect>
           <text x="400" y="260" font-size="18" fill="white" text-anchor="middle"> Objective: </text>
           <text x="400" y="290" font-size="14" fill="white" text-anchor="middle"> Complete words by catching flying letters.</text>
           <text x="400" y="320" font-size="14" fill="white" text-anchor="middle"> Warning! Letters are flying fast, and time is ticking!</text>
@@ -131,11 +131,9 @@
             <tspan dy="0">Press Esc</tspan>
             <tspan x="560" dy="15">to pause</tspan>
           </text>
-          <g transform="translate(0, 150)">
-            <image href="https://img.icons8.com/wired/100/FFFFFF/arrow-keys.png" x="200" y="200" width="80" height="70" />
-            <image href="https://img.icons8.com/ios-filled/50/FFFFFF/space-key.png" x="360" y="220" width="80" height="50" />
-            <image href="https://img.icons8.com/ios/100/FFFFFF/esc.png" x="520" y="225" width="80" height="40" />
-          </g>
+          <image href="https://img.icons8.com/wired/100/FFFFFF/arrow-keys.png" x="200" y="350" width="80" height="70" />
+          <image href="https://img.icons8.com/ios-filled/50/FFFFFF/space-key.png" x="360" y="370" width="80" height="50" />
+          <image href="https://img.icons8.com/ios/100/FFFFFF/esc.png" x="520" y="375" width="80" height="40" />
           <text x="400" y="490" font-size="12" fill="white" text-anchor="middle"> Press spacebar to begin hunting!! </text>
 
           <!-- Start Game Button Area -->
