@@ -37,9 +37,6 @@ export function handleKeyUp(event) {
     if (event.key in keysPressed) {
         keysPressed[event.key] = false;
     }
-    if (game.state === AT_PAUSED) {
-        playSFX('UP')
-    };
 }
 
 function handleGameKeys(event) {
@@ -51,17 +48,18 @@ function handleGameKeys(event) {
 function handlePauseKeys(event) {
     if (event.key === 'Escape') game.state = RUNNING;
     const prevSelection = game.pauseSelection;
-
     if (event.key === 'ArrowUp') {
         if (!keysPressed['ArrowUp']) {
             game.pauseSelection = Math.max(0, game.pauseSelection - 1 + 3) % 3;
             playSFX('MENU');
+            playSFX('UP');
             updateSelection(prevSelection);
         }
     } else if (event.key === 'ArrowDown') {
         if (!keysPressed['ArrowDown']) {
             game.pauseSelection = (game.pauseSelection + 1) % 3; 
             playSFX('MENU');
+            playSFX('UP');
             updateSelection(prevSelection);
         }
     } else if (event.key === ' ') {

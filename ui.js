@@ -108,6 +108,7 @@ export async function showFeedback(result) {
     } else {
         FEEDBACK_DISPLAY.setAttribute('fill', 'limegreen');
         LOWER_DISPLAY.classList.add('hit');
+        playSFX('HIT')
         setTimeout(() => {
             LOWER_DISPLAY.classList.remove('hit');
         }, 300)
@@ -121,8 +122,6 @@ export async function showFeedback(result) {
     }
     FEEDBACK_DISPLAY.setAttribute('x', player.x) 
     FEEDBACK_DISPLAY.setAttribute('y', player.y)
-
-    playSFX('HIT')
     setTimeout(() => {
         FEEDBACK_DISPLAY.style.display = 'block';
         FEEDBACK_DISPLAY.classList.add('fade-in-out-up');

@@ -65,20 +65,6 @@ export function resetAudioFlags() {
     }
 }
 
-
-// function playSoundEffect(effectName) {
-//     // If the sound effect is already played, do nothing
-//     if (audioFlags[effectName]) return; 
-    
-//     // Assuming you have an element for the sound effect
-//     const soundEffect = document.getElementById(effectName);
-//     if (soundEffect) {
-//         soundEffect.play();
-//         audioFlags[effectName] = true;
-//     }
-// }
-
-
 // -- Player UI Feedback --- //
 
 export function playSFX(type) {
@@ -86,8 +72,8 @@ export function playSFX(type) {
         MISS: document.getElementById('miss-sound'),
         HIT: document.getElementById('bim-sound'),
         BIM: document.getElementById('bim-sound'),
-        MENU: document.getElementById('up-sound'),
-        UP: document.getElementById('menu-sound'),
+        MENU: document.getElementById('menu-sound'),
+        UP: document. getElementById('up-sound'),
         SELECT: document.getElementById('select-sound'),
     };
 
@@ -113,3 +99,20 @@ export function initAutoplayPolicy() {
         }, { once: true });
     });
 }
+
+
+
+
+
+// function playSoundEffect(effectName) {
+//     // If the sound effect is already played, do nothing
+//     if (audioFlags[effectName]) return; 
+    
+//     // Assuming you have an element for the sound effect
+//     const soundEffect = document.getElementById(effectName);
+//     if (soundEffect) {
+//         soundEffect.play();
+//         audioFlags[effectName] = true;
+//     }
+// }
+
