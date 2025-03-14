@@ -30,36 +30,41 @@ export function shoot() {
     let targetHit = false;
     let result = MISS;
 
-    if (!((player.x >= block.x && player.x <= block.x+150) && (player.y >= block.y && player.y <= block.y+150))){
-        game.targets.forEach((t, i) => {
-            const distance = getDistance(player, t)
-        
-            if (distance <= t.r + 5 && t.active) {
-                targetHit = true;
-                hideTarget(t);
-                let letter = t.letter;
+    const hitBlock = (player.x >= block.x && player.x <= block.x+150) && (player.y >= block.y && player.y <= block.y+150);
+
+    if (!hitBlock)
+    game.targets.forEach((t, i) => {
+        const distance = getDistance(player, t)
+    
+        if (distance <= t.r + 5 && t.active) {
+            targetHit = true;
+            hideTarget(t);
+            let letter = t.letter;
+
+            // if current word not completed
+            if (result !== BIM) {
                 result = checkWordCompletion(t.letter);
         
+                // update stats if hit a valid target
                 if (result !== MISS) {
-                    letter = game.targetList[game.currentTargetIndex];
-                    game.currentTargetIndex++;
-                    if (result === BIM) {
-                        game.currentWordIndex++;
-                        if (game.currentWordIndex >= game.wordList.length){
-                            game.state = COMPLETE;
-                        };
-                    };
-                    showFeedback(result)
                     player.score += Math.floor(100 * (1+(player.combo/10)));
                     player.combo++;
+
+                    letter = game.targetList[game.currentTargetIndex];
+
+                    game.currentTargetIndex++;
+                    if (result === BIM) game.currentWordIndex++;
+                    if (game.currentWordIndex >= game.wordList.length) game.state = COMPLETE;
+
+                    showFeedback(result)
                 };
-    
-                setTimeout(() => {
-                    t = addTarget(i, letter);
-                }, 1100);
-            }
-        });
-    }
+            };
+
+            setTimeout(() => {
+                t = addTarget(i, letter);
+            }, 1100);
+        }
+    });
 
     if (!targetHit || result === MISS){
         player.combo = 0;
@@ -75,6 +80,7 @@ function getDistance(player, t){
     return Math.sqrt(dx * dx + dy * dy);
 }
 
+// check if current word is completed and change word display accordingly
 function checkWordCompletion(letter){
     const wordObj = game.wordList[game.currentWordIndex];
     let [key, value] = Object.entries(wordObj)[0];
