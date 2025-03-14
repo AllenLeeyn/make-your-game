@@ -1,4 +1,5 @@
 import { game, START, AT_START, PAUSED, AT_PAUSED, GAME_OVER, COMPLETE } from "./main.js";
+import { playBGM } from "./audio.js";
 
 const PAUSE_MENU = document.getElementById('pause-menu');
 const PAUSE_BTN_TEXT = document.getElementsByClassName('pauseText');

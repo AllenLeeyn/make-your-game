@@ -1,5 +1,6 @@
 import { game, RUNNING, GAME_OVER } from './main.js';
 import { player } from './player.js';
+import { playSFX } from './audio.js';
 
 const SCORE_DISPLAY = document.getElementById('score-display');
 const COMBO_DISPLAY = document.getElementById('combo-display');
@@ -100,6 +101,7 @@ export async function showFeedback(result) {
     if (result === 'MISS') {
         FEEDBACK_DISPLAY.setAttribute('fill', 'red');
         LOWER_DISPLAY.classList.add('shake');
+        playSFX('MISS')
         setTimeout(() => {
             LOWER_DISPLAY.classList.remove('shake');
         }, 300)
@@ -120,6 +122,7 @@ export async function showFeedback(result) {
     FEEDBACK_DISPLAY.setAttribute('x', player.x) 
     FEEDBACK_DISPLAY.setAttribute('y', player.y)
 
+    playSFX('HIT');
     setTimeout(() => {
         FEEDBACK_DISPLAY.style.display = 'block';
         FEEDBACK_DISPLAY.classList.add('fade-in-out-up');
@@ -132,6 +135,7 @@ export async function showFeedback(result) {
     
     if (result === 'BIM'){
         WRD_DISPLAY.setAttribute('fill', 'green');
+        playSFX('BIM');
         setTimeout(() => {
             WRD_DISPLAY.setAttribute('fill', 'red');
             updateWordDisplay();
