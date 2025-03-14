@@ -13,7 +13,7 @@ function showStartScreenMenu() {
     game.state = AT_START;
 }
 
-export function hideStartScreenMenu() {
+function hideStartScreenMenu() {
     START_MENU.style.display = 'none';
     START_MENU.classList.remove('fade-in');
 }
