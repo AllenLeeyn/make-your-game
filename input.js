@@ -66,9 +66,10 @@ function handlePauseKeys(event) {
         }
     } else if (event.key === ' ') {
         event.preventDefault();
-        if (game.pauseSelection === 0) game.state = RUNNING;
-        if (game.pauseSelection === 1) game.state = RESTART;
-        if (game.pauseSelection === 2) game.state = START;
+        if (game.pauseSelection === 0) game.state = RUNNING; 
+        if (game.pauseSelection === 1) game.state = RESTART; 
+        if (game.pauseSelection === 2) game.state = START;  
+        playSFX('SELECT');
     }
 }
 

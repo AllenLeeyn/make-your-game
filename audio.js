@@ -8,6 +8,8 @@ let audioFlags = {
     success: false,
 };
 
+
+
 export function playMusic(){
     if (game.state === START) playBGM();
     if (game.state === PAUSED) playPauseMenuMusic();
@@ -85,7 +87,8 @@ export function playSFX(type) {
         HIT: document.getElementById('bim-sound'),
         BIM: document.getElementById('bim-sound'),
         MENU: document.getElementById('up-sound'),
-        UP: document.getElementById('menu-sound')
+        UP: document.getElementById('menu-sound'),
+        SELECT: document.getElementById('select-sound'),
     };
 
     if (soundMap[type]) {
