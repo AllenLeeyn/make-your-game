@@ -5,6 +5,7 @@ import { handleKeyDown, handleKeyUp } from './input.js';
 import { hideAllMenus, showMenu } from './showMenu.js'
 import { initBlock, moveBlock } from './block.js';
 import { getWordsAndTargets } from './words.js';
+import { playMusic, resetAudioFlags, initAutoplayPolicy } from './audio.js'
 
 // Constants for game states
 export const START = 'start';
@@ -33,12 +34,14 @@ export const game = {
 
 //--------------- start gameLoop ---------------//
 export function main() {
+    initAutoplayPolicy();
     gameLoop();
 }
 
 //--------------- game logic ---------------//
 function gameLoop(timestamp) {
     if (game.state === START) {
+        playMusic();
         hideAllMenus();
         showMenu();
 
@@ -50,14 +53,18 @@ function gameLoop(timestamp) {
         updatePlayerPosition();
         moveTargets();
         moveBlock();
+        playMusic();
 
     } else if (game.state === PAUSED) {
+        playMusic();
         showMenu();
 
     }else if (game.state === GAME_OVER) {
+        playMusic();
         showMenu();
 
     }else if (game.state === COMPLETE) {
+        playMusic();
         showMenu();
     }
     renderFps(timestamp);
@@ -66,13 +73,14 @@ function gameLoop(timestamp) {
 
 // initalize game 
 async function initGame() {
+    resetAudioFlags();
 
     [game.wordList, game.targetList] = await getWordsAndTargets(game.currentQuest);
     initPlayer();
     initTargets();
     initBlock();
     initUI();
-    
+
     game.state = RUNNING;
 }
 

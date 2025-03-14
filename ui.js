@@ -1,5 +1,6 @@
 import { game, RUNNING, GAME_OVER } from './main.js';
 import { player } from './player.js';
+import { playSFX } from './audio.js';
 
 const SCORE_DISPLAY = document.getElementById('score-display');
 const COMBO_DISPLAY = document.getElementById('combo-display');
@@ -31,10 +32,9 @@ async function initTimer(){
     clearInterval(timerInterval); 
     timerValue = game.timeDuration;
     TIMER_DISPLAY.textContent = timerValue;
-    timerInterval = setInterval(updateTimer, 1000);  // Update the timer every second
+    timerInterval = setInterval(updateTimer, 1000);
 }
 
-// Function to update the timer display
 async function updateTimer() {
     if (game.state === RUNNING) {
         if (timerValue > 0) {
@@ -46,11 +46,10 @@ async function updateTimer() {
                 TIMER_DISPLAY.setAttribute('fill', 'gold');
             }
             timerValue--;
-            TIMER_DISPLAY.textContent = timerValue;  // Update the text content of the timer
+            TIMER_DISPLAY.textContent = timerValue;
         } else {
             game.state = GAME_OVER;
-            clearInterval(timerInterval);  // Stop the timer once it reaches 0
-            // Additional logic to handle game over can go here
+            clearInterval(timerInterval);
         }
     };
 }
@@ -100,12 +99,14 @@ export async function showFeedback(result) {
     if (result === 'MISS') {
         FEEDBACK_DISPLAY.setAttribute('fill', 'red');
         LOWER_DISPLAY.classList.add('shake');
+        playSFX('MISS')
         setTimeout(() => {
             LOWER_DISPLAY.classList.remove('shake');
         }, 300)
     } else {
         FEEDBACK_DISPLAY.setAttribute('fill', 'limegreen');
         LOWER_DISPLAY.classList.add('hit');
+        playSFX('HIT')
         setTimeout(() => {
             LOWER_DISPLAY.classList.remove('hit');
         }, 300)
@@ -119,7 +120,6 @@ export async function showFeedback(result) {
     }
     FEEDBACK_DISPLAY.setAttribute('x', player.x) 
     FEEDBACK_DISPLAY.setAttribute('y', player.y)
-
     setTimeout(() => {
         FEEDBACK_DISPLAY.style.display = 'block';
         FEEDBACK_DISPLAY.classList.add('fade-in-out-up');
@@ -132,6 +132,7 @@ export async function showFeedback(result) {
     
     if (result === 'BIM'){
         WRD_DISPLAY.setAttribute('fill', 'green');
+        playSFX('BIM');
         setTimeout(() => {
             WRD_DISPLAY.setAttribute('fill', 'red');
             updateWordDisplay();
@@ -148,3 +149,4 @@ async function updateScoreDisplay(){
     }
     SCORE_DISPLAY.textContent = player.score.toString().padStart(6, '0');
 }
+
