@@ -3,6 +3,7 @@ import { game, START, RUNNING, PAUSED, GAME_OVER, COMPLETE } from "./main.js";
 const bgm = document.getElementById('start-menu-music');
 const music = document.getElementById('start-menu-music');
 const gameOverMusic = document.getElementById('game-over-music');
+const successMusic = document.getElementById('success-music');
 
 // -- In-Game Music --- //
 
@@ -49,7 +50,6 @@ function playGameOverMusic() {
 function playSuccessMusic() {
     music.pause();
     
-    const successMusic = document.getElementById('success-music');
     if (!audioFlags.success) {
         successMusic.play();
         audioFlags.success = true;  
