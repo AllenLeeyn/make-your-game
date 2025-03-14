@@ -84,7 +84,8 @@ export function playSFX(type) {
         MISS: document.getElementById('miss-sound'),
         HIT: document.getElementById('bim-sound'),
         BIM: document.getElementById('bim-sound'),
-        MENU: document.getElementById('menu-sound'),
+        MENU: document.getElementById('up-sound'),
+        UP: document.getElementById('menu-sound')
     };
 
     if (soundMap[type]) {

@@ -31,21 +31,21 @@ export function handleKeyDown(event) {
         if (event.key === ' ') game.state = RESTART;
     }
 
-    if (event.key in keysPressed) {
-        keysPressed[event.key] = true;
-    }
 }
 
 export function handleKeyUp(event) {
     if (event.key in keysPressed) {
         keysPressed[event.key] = false;
     }
+    if (game.state === AT_PAUSED) {
+        playSFX('UP')
+    };
 }
 
 function handleGameKeys(event) {
     if (event.key === ' ') shoot();
     if (event.key === 'Escape') game.state = PAUSED;
-    // if (event.key in keysPressed) keysPressed[event.key] = true;
+    if (event.key in keysPressed) keysPressed[event.key] = true;
 }
 
 function handlePauseKeys(event) {
