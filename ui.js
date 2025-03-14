@@ -96,18 +96,21 @@ async function updateWordDisplay() {
     WRD_AIM_DISPLAY.textContent = `[${parts.join('')}]`;
 };
 
-let timeoutID;
-export async function showFeedback(result) {
-    if (result === 'MISS') {
-        FEEDBACK_DISPLAY.setAttribute('fill', 'red');
-        LOWER_DISPLAY.classList.add('shake');
-        playSFX('MISS')
+let missCounter= 0;
+export function showFeedback(result) {
+    if (result === 'miss'){
+        missDisplay[missCounter].style.display = 'block';
+        missDisplay[missCounter].classList.add('fade-in-out-up');
         setTimeout(() => {
-            LOWER_DISPLAY.classList.remove('shake');
-        }, 300)
-    } else {
-        FEEDBACK_DISPLAY.setAttribute('fill', 'limegreen');
-        LOWER_DISPLAY.classList.add('hit');
+            missDisplay[missCounter].style.display = 'none';
+            missDisplay[missCounter].classList.remove('fade-in-out-up');
+        }, 600);
+        missCounter++;
+        if (missCounter >= 10) missCounter=0;
+    }
+    if (result === 'hit'){
+        hitDisplay.style.display = 'block';
+        hitDisplay.classList.add('fade-in-out-up');
         setTimeout(() => {
             LOWER_DISPLAY.classList.remove('hit');
         }, 300)
@@ -143,6 +146,7 @@ export async function showFeedback(result) {
     }
 }
 
+
 async function updateScoreDisplay(){
     if (player.combo === 0) {
         COMBO_DISPLAY.style.display = "none";
@@ -151,4 +155,52 @@ async function updateScoreDisplay(){
         COMBO_DISPLAY.textContent = `COMBO ${player.combo}`;
     }
     SCORE_DISPLAY.textContent = player.score.toString().padStart(6, '0');
+}
+
+export function showGameOver() {                     
+    gameOverDisplay.style.display = 'block';
+    gameOverDisplay.classList.add('fade-in');
+    document.getElementById('game-over-music').play();
+}
+
+export function showGameComplete() {                     
+    gameCompleteDisplay.style.display = 'block';
+    gameCompleteDisplay.classList.add('fade-in');
+    document.getElementById('success-music').play();
+}
+
+export function hideGameOver() { 
+    gameOverDisplay.style.display = 'none';
+    gameOverDisplay.classList.remove('fade-in');
+    document.getElementById('game-over-music').pause();
+}
+
+export function hideGameComplete() {
+    gameCompleteDisplay.style.display = 'none';
+    gameCompleteDisplay.classList.remove('fade-in');
+    document.getElementById('success-music').pause();
+}
+
+export function showGameOver() {                     
+    gameOverDisplay.style.display = 'block';
+    gameOverDisplay.classList.add('fade-in');
+    document.getElementById('game-over-music').play();
+}
+
+export function showGameComplete() {                     
+    gameCompleteDisplay.style.display = 'block';
+    gameCompleteDisplay.classList.add('fade-in');
+    document.getElementById('success-music').play();
+}
+
+export function hideGameOver() { 
+    gameOverDisplay.style.display = 'none';
+    gameOverDisplay.classList.remove('fade-in');
+    document.getElementById('game-over-music').pause();
+}
+
+export function hideGameComplete() {
+    gameCompleteDisplay.style.display = 'none';
+    gameCompleteDisplay.classList.remove('fade-in');
+    document.getElementById('success-music').pause();
 }
