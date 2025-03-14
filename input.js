@@ -66,7 +66,12 @@ function handlePauseKeys(event) {
         event.preventDefault();
         if (game.pauseSelection === 0) game.state = RUNNING; 
         if (game.pauseSelection === 1) game.state = RESTART; 
-        if (game.pauseSelection === 2) game.state = START;  
+        if (game.pauseSelection === 2) {
+            game.state = START; 
+            const startMenuMusic  = document.getElementById('start-menu-music');
+            startMenuMusic.currentTime = 0;
+            startMenuMusic.pause();
+        } 
         playSFX('SELECT');
     }
 }

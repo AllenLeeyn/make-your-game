@@ -1,5 +1,4 @@
 import { game, START, RUNNING, PAUSED, GAME_OVER, COMPLETE } from "./main.js";
-// import { } from './ui.js'
 
 // -- In-Game Music --- //
 
@@ -7,8 +6,6 @@ let audioFlags = {
     gameOver: false,
     success: false,
 };
-
-
 
 export function playMusic(){
     if (game.state === START) playBGM();
