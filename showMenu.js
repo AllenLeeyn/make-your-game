@@ -1,5 +1,4 @@
 import { game, START, AT_START, PAUSED, AT_PAUSED, GAME_OVER, COMPLETE } from "./main.js";
-import { playBGM } from "./audio.js";
 
 const PAUSE_MENU = document.getElementById('pause-menu');
 const PAUSE_BTN_TEXT = document.getElementsByClassName('pauseText');
@@ -15,8 +14,8 @@ function showStartScreenMenu() {
 }
 
 export function hideStartScreenMenu() {
-    startMenu.style.display = 'none';
-    startMenu.classList.remove('fade-in');
+    START_MENU.style.display = 'none';
+    START_MENU.classList.remove('fade-in');
 }
 
 function showPauseMenu() {
