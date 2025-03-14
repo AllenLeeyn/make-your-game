@@ -56,9 +56,7 @@ export const words = {
         "TERNARY",
         "TRUTHY",
         "FALSY",
-        "TYPEOF"
-    ],
-    "questTwo": [
+        "TYPEOF",
         "ASYNCHRONOUS",
         "SYNCHRONOUS",
         "CONSTRUCTOR",

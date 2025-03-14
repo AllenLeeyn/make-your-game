@@ -76,7 +76,6 @@ function handlePauseKeys(event) {
     }
 }
 
-
 function updateSelection(prevSelection) {
     PAUSE_BTN_TEXT[prevSelection].setAttribute("fill", "grey");
     PAUSE_BTN_RECT[prevSelection].setAttribute("stroke", "grey");
@@ -84,32 +83,3 @@ function updateSelection(prevSelection) {
     PAUSE_BTN_TEXT[game.pauseSelection].setAttribute("fill", "green");
     PAUSE_BTN_RECT[game.pauseSelection].setAttribute("stroke", "green");
 }
-
-
-
-
-// function handlePauseKeys(event) {
-//     if (event.key === 'Escape') game.state = RUNNING;
-//     const prevSelection = game.pauseSelection;
-    
-//     if (event.key === 'ArrowUp') {
-//         // game.pauseSelection = Math.max(0, game.pauseSelection - 1);
-//         game.pauseSelection = (game.pauseSelection - 1 + 3) % 3;
-//         playSFX('MENU');
-//     } else if (event.key === 'ArrowDown') {
-//         // game.pauseSelection = Math.min(2, game.pauseSelection + 1);
-//         game.pauseSelection = (game.pauseSelection + 1) % 3;
-//         playSFX('MENU');
-//     } else if (event.key === ' ') {
-//         event.preventDefault();
-//         if (game.pauseSelection === 0) game.state = RUNNING;
-//         if (game.pauseSelection === 1) game.state = RESTART;
-//         if (game.pauseSelection === 2) game.state = START;
-//     }
-
-//     PAUSE_BTN_TEXT[prevSelection].setAttribute("fill", "grey");
-//     PAUSE_BTN_RECT[prevSelection].setAttribute("stroke", "grey");
-
-//     PAUSE_BTN_TEXT[game.pauseSelection].setAttribute("fill", "green");
-//     PAUSE_BTN_RECT[game.pauseSelection].setAttribute("stroke", "green");
-// }

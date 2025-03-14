@@ -1,5 +1,9 @@
 import { game, START, RUNNING, PAUSED, GAME_OVER, COMPLETE } from "./main.js";
 
+const bgm = document.getElementById('start-menu-music');
+const music = document.getElementById('start-menu-music');
+const gameOverMusic = document.getElementById('game-over-music');
+
 // -- In-Game Music --- //
 
 let audioFlags = {
@@ -16,7 +20,6 @@ export function playMusic(){
 }
 
 export function playBGM() {
-    const bgm = document.getElementById('start-menu-music');
     bgm.volume = 0.8
     const playPromise = bgm.play();
 
@@ -30,15 +33,12 @@ export function playBGM() {
 }
 
 function playPauseMenuMusic() {
-    const music = document.getElementById('start-menu-music')
     music.volume = 0.1;
     music.play();
 }
 
 function playGameOverMusic() {
-    document.getElementById('start-menu-music').pause();
-
-    const gameOverMusic = document.getElementById('game-over-music');
+    music.pause();
 
     if (!audioFlags.gameOver) {
         gameOverMusic.play();    
@@ -47,7 +47,7 @@ function playGameOverMusic() {
 }
 
 function playSuccessMusic() {
-    document.getElementById('start-menu-music').pause();
+    music.pause();
     
     const successMusic = document.getElementById('success-music');
     if (!audioFlags.success) {
@@ -96,20 +96,3 @@ export function initAutoplayPolicy() {
         }, { once: true });
     });
 }
-
-
-
-
-
-// function playSoundEffect(effectName) {
-//     // If the sound effect is already played, do nothing
-//     if (audioFlags[effectName]) return; 
-    
-//     // Assuming you have an element for the sound effect
-//     const soundEffect = document.getElementById(effectName);
-//     if (soundEffect) {
-//         soundEffect.play();
-//         audioFlags[effectName] = true;
-//     }
-// }
-

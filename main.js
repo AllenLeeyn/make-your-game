@@ -104,7 +104,6 @@ async function renderFps(timestamp) {
     fpsDisplay.textContent = `FPS: ${currentFPS}`;
 }
 
-
 //--------------- Add eventListener for user input ---------------//
 document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
