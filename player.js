@@ -16,19 +16,19 @@ export const player = {
 
 // Update the player's position in the SVG
 export async function updatePlayerPosition() {
-    if (keysPressed['ArrowUp']) {
+    if (keysPressed['ArrowUp'] || keysPressed['w']) {
         const newY = player.y - player.speed;
         player.y = (newY < player.r+50) ? player.r+50 : newY;
     };
-    if (keysPressed['ArrowDown']) {
+    if (keysPressed['ArrowDown'] || keysPressed['s']) {
         const newY = player.y + player.speed;
         player.y = (newY > game.height-player.r-50) ? game.height-player.r-50 : newY;
     };
-    if (keysPressed['ArrowLeft']) {
+    if (keysPressed['ArrowLeft'] || keysPressed['a']) {
         const newX = player.x - player.speed;
         player.x = (newX < player.r) ? player.r : newX;
     };
-    if (keysPressed['ArrowRight']) {
+    if (keysPressed['ArrowRight'] || keysPressed['d']) {
         const newX = player.x + player.speed;
         player.x = (newX > game.width-player.r) ? game.width-player.r : newX;
     };
