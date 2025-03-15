@@ -1,4 +1,4 @@
-import * as w from '/piscineWords.js';
+import * as w from './piscineWords.js';
 
 async function createWordObject(questName) {
     const words = w.words[questName];
