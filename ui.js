@@ -61,7 +61,7 @@ async function updateBulletDisplay(){
     let result = '';
 
     for (let i = 0; i < player.bullets; i ++){
-        result += '▋';
+        result += '❚';
     }
     BULLET_DISPLAY.textContent = result;
 
