@@ -9,12 +9,12 @@ export const block = {
     grp: BLOCK_GRP,
     x: 0,
     y: 0,
+    size: 150,
     dx: randomDX(),
     dy: randomDY(),
 }
 
 export async function initBlock(){
-    console.log(BLOCK_GRP)
     block.x = Math.random() * (game.width - 300) + 150;
     block.y = Math.random() * (game.height - 400) + 200;
     setBlockPosition();
@@ -24,15 +24,15 @@ export async function moveBlock() {
     block.x += block.dx;
     block.y += block.dy;
 
-    if (block.x > game.width-150 || block.x < 0) {
+    if (block.x > game.width-block.size || block.x < 0) {
         block.dx = (block.dx > 0) ? -randomDX() : randomDX() ;
         block.dy = (block.dy > 0) ? randomDY() : -randomDY() ;
-        block.x = (block.x < 0) ? 0 : game.width-150;
+        block.x = (block.x < 0) ? 0 : game.width-block.size;
     };
-    if (block.y > game.height-202 || block.y < 52) {
+    if (block.y > game.height-block.size-52 || block.y < 52) {
         block.dx = (block.dx > 0) ? randomDX() : -randomDX() ;
         block.dy = (block.dy > 0) ? -randomDY() : randomDY() ;
-        block.y = (block.y < 52) ? 52 : game.height-202;
+        block.y = (block.y < 52) ? 52 : game.height-block.size-52;
     }
     setBlockPosition();
 };

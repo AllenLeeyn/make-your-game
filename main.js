@@ -1,4 +1,4 @@
-import { initPlayer, updatePlayerPosition } from './player.js';
+import { initPlayer, player, updatePlayerPosition } from './player.js';
 import { moveTargets, initTargets } from './target.js';
 import { initUI } from './ui.js';
 import { handleKeyDown, handleKeyUp } from './input.js';
@@ -17,6 +17,7 @@ export const AT_PAUSED = 'atPaused';
 export const GAME_OVER = 'gameover';
 export const COMPLETE = 'complete';
 export const RESTART = 'restart';
+export const NEXT_LEVEL = 'nextLevel';
 
 export const game = {
     height: 600,
@@ -30,6 +31,7 @@ export const game = {
     targets: [],
     currentTargetIndex: 0,
     pauseSelection: 0,
+    difficulty: 0
 };
 
 //--------------- start gameLoop ---------------//
@@ -45,8 +47,9 @@ function gameLoop(timestamp) {
         hideAllMenus();
         showMenu();
 
-    } else if (game.state === INIT || game.state === RESTART){
-        initGame();
+    } else if (game.state === INIT || game.state === RESTART || game.state === NEXT_LEVEL){
+        const points = (game.state === NEXT_LEVEL) ? player.score : 0;
+        initGame(points);
 
     } else if (game.state === RUNNING){
         hideAllMenus();
@@ -72,11 +75,11 @@ function gameLoop(timestamp) {
 }
 
 // initalize game 
-async function initGame() {
+async function initGame(points) {
     resetAudioFlags();
 
     [game.wordList, game.targetList] = await getWordsAndTargets(game.currentQuest);
-    initPlayer();
+    initPlayer(points);
     initTargets();
     initBlock();
     initUI();

@@ -3,7 +3,7 @@ import { game,
     START, AT_START, 
     INIT, RUNNING, RESTART,
     PAUSED, AT_PAUSED,
-    GAME_OVER, COMPLETE 
+    GAME_OVER, COMPLETE, NEXT_LEVEL
 } from "./main.js";
 import { playSFX } from './audio.js';
 
@@ -31,8 +31,12 @@ export function handleKeyDown(event) {
     } else if (game.state === AT_PAUSED) {
         handlePauseKeys(event);
 
-    } else if (game.state === GAME_OVER || game.state === COMPLETE) {
+    } else if (game.state === GAME_OVER) {
+        game.difficulty = 0;
         if (event.key === ' ') game.state = RESTART;
+    } else if (game.state === COMPLETE) {
+        game.difficulty++;
+        if (event.key === ' ') game.state = NEXT_LEVEL;
     }
 
 }

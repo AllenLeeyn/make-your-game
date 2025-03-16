@@ -36,8 +36,8 @@ export async function updatePlayerPosition() {
 }
 
 // Function to initialize the player
-export async function initPlayer() {
-    player.score = 0;
+export async function initPlayer(points) {
+    player.score = points;
     player.combo = 0;
     player.bullets = 15;
     player.y = 300;

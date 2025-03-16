@@ -7,13 +7,14 @@ const TARGET_TEXT = document.getElementsByClassName('target-text');
 const SPEED_VAR = {
     xMin: 1,
     yMin: 0.5,
-    xRange: 2.5,
-    yRange: 3,
+    xRange: 2,
+    yRange: 2.5,
 }
 
 const randomDash = () => (Math.random() < 0.12) ? 3 : 1;
-const randomDX = () => ((Math.random() * SPEED_VAR.xRange) + SPEED_VAR.xMin) * randomDash();
-const randomDY = () => ((Math.random() * SPEED_VAR.yRange) + SPEED_VAR.yMin) * randomDash();
+const difficultySpd = () => 1 + (game.difficulty/3);
+const randomDX = () => ((Math.random() * SPEED_VAR.xRange) + SPEED_VAR.xMin) * randomDash() * difficultySpd();
+const randomDY = () => ((Math.random() * SPEED_VAR.yRange) + SPEED_VAR.yMin) * randomDash() * difficultySpd();
 
 export async function initTargets(){
     game.targets = new Array(10).fill({});
