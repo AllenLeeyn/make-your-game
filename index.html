@@ -47,44 +47,44 @@
       <rect x="0" y="0" width="100%" height="100%" fill="url(#dot-pattern)" />
     </g>
 
-    <g id="targetsLayer" >
-      <g class="target-grp">
+    <g id="targetsLayer" style="will-change: transform;">
+      <g id="target-grp">
         <circle class="target-circle"r="20" fill="red" />
         <text class="target-text" text-anchor="middle" dominant-baseline="middle" font-size="30" fill="white" text-anchor="middle">A</text>
       </g>
-      <g class="target-grp">
+      <g id="target-grp">
         <circle class="target-circle"r="20" fill="red" />
         <text class="target-text" text-anchor="middle" dominant-baseline="middle" font-size="30" fill="white" text-anchor="middle">A</text>
       </g>
-      <g class="target-grp">
+      <g id="target-grp">
         <circle class="target-circle"r="20" fill="red" />
         <text class="target-text" text-anchor="middle" dominant-baseline="middle" font-size="30" fill="white" text-anchor="middle">A</text>
       </g>
-      <g class="target-grp">
+      <g id="target-grp">
         <circle class="target-circle"r="20" fill="red" />
         <text class="target-text" text-anchor="middle" dominant-baseline="middle" font-size="30" fill="white" text-anchor="middle">A</text>
       </g>
-      <g class="target-grp">
+      <g id="target-grp">
         <circle class="target-circle"r="20" fill="red" />
         <text class="target-text" text-anchor="middle" dominant-baseline="middle" font-size="30" fill="white" text-anchor="middle">A</text>
       </g>
-      <g class="target-grp">
+      <g id="target-grp">
         <circle class="target-circle"r="20" fill="red" />
         <text class="target-text" text-anchor="middle" dominant-baseline="middle" font-size="30" fill="white" text-anchor="middle">A</text>
       </g>
-      <g class="target-grp">
+      <g id="target-grp">
         <circle class="target-circle"r="20" fill="red" />
         <text class="target-text" text-anchor="middle" dominant-baseline="middle" font-size="30" fill="white" text-anchor="middle">A</text>
       </g>
-      <g class="target-grp">
+      <g id="target-grp">
         <circle class="target-circle"r="20" fill="red" />
         <text class="target-text" text-anchor="middle" dominant-baseline="middle" font-size="30" fill="white" text-anchor="middle">A</text>
       </g>
-      <g class="target-grp">
+      <g id="target-grp">
         <circle class="target-circle"r="20" fill="red" />
         <text class="target-text" text-anchor="middle" dominant-baseline="middle" font-size="30" fill="white" text-anchor="middle">A</text>
       </g>
-      <g class="target-grp">
+      <g id="target-grp">
         <circle class="target-circle"r="20" fill="red" />
         <text class="target-text" text-anchor="middle" dominant-baseline="middle" font-size="30" fill="white" text-anchor="middle">A</text>
       </g>
@@ -99,18 +99,20 @@
       </g>
     </g>
 
-    <g id="ui" >
-      <line id="yAxis" x1="400" y1="50" x2="400" y2="550" class="crosshair"></line>
-      <line id="xAxis" x1="0" y1="300" x2="800" y2="300" class="crosshair"></line>
-      <circle id="playerOrigin" cx="400" cy="300" r="20" class="crosshair"></circle>
+    <g id="ui" style="will-change: transform;">
+      <g id="playerGroup">
+        <line id="yAxis" x1="400" y1="50" x2="400" y2="550" class="crosshair"></line>
+        <line id="xAxis" x1="0" y1="300" x2="800" y2="300" class="crosshair"></line>
+        <circle id="playerOrigin" cx="400" cy="300" r="20" class="crosshair"></circle>
+      </g>
       <text id="feedback-display" x="50%" y="540" class="feedback-display">MISS!</text>
       <rect x="0" y="0" width="100%" height="50" fill="dark" />
       <rect id="lower-display" x="0" y="550" width="100%" height="50" fill="dark" />
       <text id="score-display" x="10" y="35" font-size="30" fill="limegreen">000000</text>
       <text id="combo-display" x="150" y="35" font-size="25" fill="limegreen">COMBO 0</text>
       <text id="timer" x="50%" y="40" text-anchor="middle" font-size="40" fill="red"></text>
-      <text id="bulletCase" x="795" y="38" text-anchor="end" font-size="40" fill="grey">❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚</text>
-      <text id="bulletCount" x="795" y="38" text-anchor="end" font-size="40" fill="limegreen"></text>
+      <text id="bulletCase" x="795" y="33" text-anchor="end" font-size="30" fill="grey">❚❚❚❚❚❚❚❚❚❚❚❚❚❚❚</text>
+      <text id="bulletCount" x="795" y="33" text-anchor="end" font-size="30" fill="limegreen"></text>
       <text id="wordAim-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="grey">let_there_be_words</text>
       <text id="word-display" x="50%" y="585" text-anchor="middle" font-size="30" fill="red" style="white-space: pre">let_there_be_words</text>
     </g>

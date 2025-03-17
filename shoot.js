@@ -14,14 +14,10 @@ const MISS = 'MISS';
 const BIM = 'BIM';
 
 export function shoot() {
-    player.xAxis.classList.add('shoot');
-    player.yAxis.classList.add('shoot');
-    player.circle.classList.add('shoot');
+    player.group.classList.add('shoot');
 
     setTimeout(() => {
-        player.xAxis.classList.remove('shoot');
-        player.yAxis.classList.remove('shoot');
-        player.circle.classList.remove('shoot');
+        player.group.classList.remove('shoot');
     }, 300);  
 
     player.bullets--;

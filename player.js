@@ -5,6 +5,7 @@ export const player = {
     xAxis: document.getElementById('yAxis'),
     yAxis: document.getElementById('xAxis'),
     circle: document.getElementById('playerOrigin'),
+    group:  document.getElementById('playerGroup'),
     y: 300,
     x: 400,
     r: 25,

@@ -1,6 +1,6 @@
 import { game } from "./main.js";
 
-const TARGET_GRP = document.getElementsByClassName('target-grp');
+const TARGET_GRP = document.querySelectorAll('#target-grp');
 const TARGET_CIRCLE = document.getElementsByClassName('target-circle');
 const TARGET_TEXT = document.getElementsByClassName('target-text');
 
@@ -21,7 +21,6 @@ export async function initTargets(){
 
     for (let i = 0; i < 10; i++) {
         addTarget(i, game.targetList[i])
-        console.log(`${i}: ${game.targets[i].letter} added`)
     }
     game.currentWordIndex = 0;
     game.currentTargetIndex = 10;
@@ -46,6 +45,10 @@ export async function addTarget(i, letter){
     setTargetPosition(t);
     t.grp.classList.remove('target-removal');
     t.grp.classList.add('target-fade-in');
+
+    setTimeout(()=>{
+        t.grp.classList.remove('target-fade-in');
+    }, 1000);
 
     game.targets[i] = t;
 };
